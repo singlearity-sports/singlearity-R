@@ -5,7 +5,6 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**GetGameSim**](APIsApi.md#GetGameSim) | **POST** /game_sim | Get Game Sim
-[**GetInningSim**](APIsApi.md#GetInningSim) | **POST** /inning_runs_sim/ | Get Inning Sim
 [**GetPaSim**](APIsApi.md#GetPaSim) | **POST** /pa_sim/ | Get Pa Sim
 [**GetPlayers**](APIsApi.md#GetPlayers) | **GET** /players/ | Get Players
 [**GetTeams**](APIsApi.md#GetTeams) | **GET** /teams/ | Get Teams
@@ -46,54 +45,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**array[GameSimResults]**](GameSimResults.md)
-
-### Authorization
-
-[APIKeyHeader](../README.md#APIKeyHeader), [APIKeyQuery](../README.md#APIKeyQuery)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Successful Response |  -  |
-| **422** | Validation Error |  -  |
-
-# **GetInningSim**
-> array[integer] GetInningSim(game, num.sims=100)
-
-Get Inning Sim
-
-### Example
-```R
-library(singlearity)
-
-var.game <- Game$new(Lineup$new(list(LineupPos$new(Player$new("full_name_example", "position_example", 123, "debut_date_example", 123, "team_abbrev_example", "active_example", "bat_side_example", "pitch_hand_example", "birth_country_example", "birth_date_example", 123, "photo_url_example"), "position_example"))), Lineup$new(list(LineupPos$new(Player$new("full_name_example", "position_example", 123, "debut_date_example", 123, "team_abbrev_example", "active_example", "bat_side_example", "pitch_hand_example", "birth_country_example", "birth_date_example", 123, "photo_url_example"), "position_example"))), Atmosphere$new(Venue$new(123, "name_example", "home_team_abbrev_example", 123), Team$new("abbreviation_example", "division_example", "league_example", 123, "name_example", "team_name_example", Venue$new(123, "name_example", "home_team_abbrev_example", 123)), 123), "date_example") # Game | 
-var.num.sims <- 100 # integer | 
-
-#Get Inning Sim
-api.instance <- APIsApi$new()
-# Configure API key authorization: APIKeyHeader
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-# Configure API key authorization: APIKeyQuery
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-result <- api.instance$GetInningSim(var.game, num.sims=var.num.sims)
-dput(result)
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **game** | [**Game**](Game.md)|  | 
- **num.sims** | **integer**|  | [optional] [default to 100]
-
-### Return type
-
-**array[integer]**
 
 ### Authorization
 

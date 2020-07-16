@@ -57,7 +57,6 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *APIsApi* | [**GetGameSim**](docs/APIsApi.md#GetGameSim) | **POST** /game_sim | Get Game Sim
-*APIsApi* | [**GetInningSim**](docs/APIsApi.md#GetInningSim) | **POST** /inning_runs_sim/ | Get Inning Sim
 *APIsApi* | [**GetPaSim**](docs/APIsApi.md#GetPaSim) | **POST** /pa_sim/ | Get Pa Sim
 *APIsApi* | [**GetPlayers**](docs/APIsApi.md#GetPlayers) | **GET** /players/ | Get Players
 *APIsApi* | [**GetTeams**](docs/APIsApi.md#GetTeams) | **GET** /teams/ | Get Teams

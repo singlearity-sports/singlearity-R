@@ -17,18 +17,6 @@ test_that("GetGameSim", {
   #expect_equal(result, "EXPECTED_RESULT")
 })
 
-test_that("GetInningSim", {
-  # tests for GetInningSim
-  # base path: http://localhost
-  # Get Inning Sim
-  # @param Game  game   
-  # @param integer  num.sims    (optional)
-  # @return [array[integer]]
-
-  # uncomment below to test the operation
-  #expect_equal(result, "EXPECTED_RESULT")
-})
-
 test_that("GetPaSim", {
   # tests for GetPaSim
   # base path: http://localhost

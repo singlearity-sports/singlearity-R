@@ -39,30 +39,6 @@
 #' }
 #' }
 #'
-#' \strong{ GetInningSim } \emph{ Get Inning Sim }
-#' 
-#'
-#' \itemize{
-#' \item \emph{ @param } game \link{Game}
-#' \item \emph{ @param } num.sims integer
-#'
-#'
-#' \item status code : 200 | Successful Response
-#'
-#' \item return type : array[integer] 
-#' \item response headers :
-#'
-#' \tabular{ll}{
-#' }
-#' \item status code : 422 | Validation Error
-#'
-#' \item return type : HTTPValidationError 
-#' \item response headers :
-#'
-#' \tabular{ll}{
-#' }
-#' }
-#'
 #' \strong{ GetPaSim } \emph{ Get Pa Sim }
 #' 
 #'
@@ -206,145 +182,127 @@
 #' \donttest{
 #' ####################  GetGameSim  ####################
 #'
-library(singlearity)
-var.body.get.game.sim.game.sim.post <- BodyGetGameSimGameSimPost$new() # BodyGetGameSimGameSimPost |
-var.num.sims <- 100 # integer |
-
-#Get Game Sim
-api.instance <- APIsApi$new()
-
-#Configure API key authorization: APIKeyHeader
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-#Configure API key authorization: APIKeyQuery
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-result <- api.instance$GetGameSim(var.body.get.game.sim.game.sim.post, num.sims=var.num.sims)
-
-
-####################  GetInningSim  ####################
-
-library(singlearity)
-var.game <- Game$new() # Game |
-var.num.sims <- 100 # integer |
-
-#Get Inning Sim
-api.instance <- APIsApi$new()
-
-#Configure API key authorization: APIKeyHeader
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-#Configure API key authorization: APIKeyQuery
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-result <- api.instance$GetInningSim(var.game, num.sims=var.num.sims)
-
-
-####################  GetPaSim  ####################
-
-library(singlearity)
-var.matchup <- [Matchup$new()] # array[Matchup] |
-var.return.features <- FALSE # character |
-
-#Get Pa Sim
-api.instance <- APIsApi$new()
-
-#Configure API key authorization: APIKeyHeader
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-#Configure API key authorization: APIKeyQuery
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-result <- api.instance$GetPaSim(var.matchup, return.features=var.return.features)
-
-
-####################  GetPlayers  ####################
-
-library(singlearity)
-var.name <- 'name_example' # character |
-var.id <- 56 # integer |
-var.team.name <- 'team.name_example' # character |
-var.team.id <- 56 # integer |
-var.position <- ['position_example'] # array[character] |
-var.age.min <- 56 # integer |
-var.age.max <- 56 # integer |
-var.pitch.hand <- ['pitch.hand_example'] # array[character] |
-var.bat.side <- ['bat.side_example'] # array[character] |
-var.active <- 'active_example' # character |
-
-#Get Players
-api.instance <- APIsApi$new()
-
-#Configure API key authorization: APIKeyHeader
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-#Configure API key authorization: APIKeyQuery
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-result <- api.instance$GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active)
-
-
-####################  GetTeams  ####################
-
-library(singlearity)
-var.name <- 'name_example' # character |
-
-#Get Teams
-api.instance <- APIsApi$new()
-
-#Configure API key authorization: APIKeyHeader
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-#Configure API key authorization: APIKeyQuery
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-result <- api.instance$GetTeams(name=var.name)
-
-
-####################  GetVenues  ####################
-
-library(singlearity)
-var.stadium.name <- 'stadium.name_example' # character |
-var.team.name <- 'team.name_example' # character |
-
-#Get Venues
-api.instance <- APIsApi$new()
-
-#Configure API key authorization: APIKeyHeader
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-#Configure API key authorization: APIKeyQuery
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-result <- api.instance$GetVenues(stadium.name=var.stadium.name, team.name=var.team.name)
-
-
-####################  Hello  ####################
-
-library(singlearity)
-
-#Hello
-api.instance <- APIsApi$new()
-
-result <- api.instance$Hello()
-
-
-####################  HelloWithKey  ####################
-
-library(singlearity)
-
-#Hello With Key
-api.instance <- APIsApi$new()
-
-#Configure API key authorization: APIKeyHeader
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-#Configure API key authorization: APIKeyQuery
-api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-
-result <- api.instance$HelloWithKey()
-
-
+#' library(singlearity)
+#' var.body.get.game.sim.game.sim.post <- BodyGetGameSimGameSimPost$new() # BodyGetGameSimGameSimPost | 
+#' var.num.sims <- 100 # integer | 
+#'
+#' #Get Game Sim
+#' api.instance <- APIsApi$new()
+#'
+#' #Configure API key authorization: APIKeyHeader
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' #Configure API key authorization: APIKeyQuery
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' result <- api.instance$GetGameSim(var.body.get.game.sim.game.sim.post, num.sims=var.num.sims)
+#'
+#'
+#' ####################  GetPaSim  ####################
+#'
+#' library(singlearity)
+#' var.matchup <- [Matchup$new()] # array[Matchup] | 
+#' var.return.features <- FALSE # character | 
+#'
+#' #Get Pa Sim
+#' api.instance <- APIsApi$new()
+#'
+#' #Configure API key authorization: APIKeyHeader
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' #Configure API key authorization: APIKeyQuery
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' result <- api.instance$GetPaSim(var.matchup, return.features=var.return.features)
+#'
+#'
+#' ####################  GetPlayers  ####################
+#'
+#' library(singlearity)
+#' var.name <- 'name_example' # character | 
+#' var.id <- 56 # integer | 
+#' var.team.name <- 'team.name_example' # character | 
+#' var.team.id <- 56 # integer | 
+#' var.position <- ['position_example'] # array[character] | 
+#' var.age.min <- 56 # integer | 
+#' var.age.max <- 56 # integer | 
+#' var.pitch.hand <- ['pitch.hand_example'] # array[character] | 
+#' var.bat.side <- ['bat.side_example'] # array[character] | 
+#' var.active <- 'active_example' # character | 
+#'
+#' #Get Players
+#' api.instance <- APIsApi$new()
+#'
+#' #Configure API key authorization: APIKeyHeader
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' #Configure API key authorization: APIKeyQuery
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' result <- api.instance$GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active)
+#'
+#'
+#' ####################  GetTeams  ####################
+#'
+#' library(singlearity)
+#' var.name <- 'name_example' # character | 
+#'
+#' #Get Teams
+#' api.instance <- APIsApi$new()
+#'
+#' #Configure API key authorization: APIKeyHeader
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' #Configure API key authorization: APIKeyQuery
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' result <- api.instance$GetTeams(name=var.name)
+#'
+#'
+#' ####################  GetVenues  ####################
+#'
+#' library(singlearity)
+#' var.stadium.name <- 'stadium.name_example' # character | 
+#' var.team.name <- 'team.name_example' # character | 
+#'
+#' #Get Venues
+#' api.instance <- APIsApi$new()
+#'
+#' #Configure API key authorization: APIKeyHeader
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' #Configure API key authorization: APIKeyQuery
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' result <- api.instance$GetVenues(stadium.name=var.stadium.name, team.name=var.team.name)
+#'
+#'
+#' ####################  Hello  ####################
+#'
+#' library(singlearity)
+#'
+#' #Hello
+#' api.instance <- APIsApi$new()
+#'
+#' result <- api.instance$Hello()
+#'
+#'
+#' ####################  HelloWithKey  ####################
+#'
+#' library(singlearity)
+#'
+#' #Hello With Key
+#' api.instance <- APIsApi$new()
+#'
+#' #Configure API key authorization: APIKeyHeader
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' #Configure API key authorization: APIKeyQuery
+#' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
+#'
+#' result <- api.instance$HelloWithKey()
+#'
+#'
 #' }
 #' @importFrom R6 R6Class
 #' @importFrom caTools base64encode
@@ -412,70 +370,6 @@ APIsApi <- R6::R6Class(
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         deserializedRespObj <- tryCatch(
           self$apiClient$deserialize(resp, "array[GameSimResults]", loadNamespace("singlearity")),
-          error = function(e){
-             stop("Failed to deserialize response")
-          }
-        )
-        ApiResponse$new(deserializedRespObj, resp)
-      } else if (httr::status_code(resp) >= 300 && httr::status_code(resp) <= 399) {
-        ApiResponse$new(paste("Server returned " , httr::status_code(resp) , " response status code."), resp)
-      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-        ApiResponse$new("API client error", resp)
-      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-        ApiResponse$new("API server error", resp)
-      }
-    },
-    GetInningSim = function(game, num.sims=100, ...){
-      apiResponse <- self$GetInningSimWithHttpInfo(game, num.sims, ...)
-      resp <- apiResponse$response
-      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        apiResponse$content
-      } else if (httr::status_code(resp) >= 300 && httr::status_code(resp) <= 399) {
-        apiResponse
-      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-        apiResponse
-      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-        apiResponse
-      }
-    },
-
-    GetInningSimWithHttpInfo = function(game, num.sims=100, ...){
-      args <- list(...)
-      queryParams <- list()
-      headerParams <- c()
-
-      if (missing(`game`)) {
-        stop("Missing required parameter `game`.")
-      }
-
-      queryParams['num_sims'] <- num.sims
-
-      if (!missing(`game`)) {
-        body <- `game`$toJSONString()
-      } else {
-        body <- NULL
-      }
-
-      urlPath <- "/inning_runs_sim/"
-      # API key authentication
-      if ("SINGLEARITY_API_KEY" %in% names(self$apiClient$apiKeys) && nchar(self$apiClient$apiKeys["SINGLEARITY_API_KEY"]) > 0) {
-        headerParams['SINGLEARITY_API_KEY'] <- paste(unlist(self$apiClient$apiKeys["SINGLEARITY_API_KEY"]), collapse='')
-      }
-      # API key authentication
-      if ("SINGLEARITY_API_KEY" %in% names(self$apiClient$apiKeys) && nchar(self$apiClient$apiKeys["SINGLEARITY_API_KEY"]) > 0) {
-        queryParams['SINGLEARITY_API_KEY'] <- paste(unlist(self$apiClient$apiKeys["SINGLEARITY_API_KEY"]), collapse='')
-      }
-
-      resp <- self$apiClient$CallApi(url = paste0(self$apiClient$basePath, urlPath),
-                                 method = "POST",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
-
-      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        deserializedRespObj <- tryCatch(
-          self$apiClient$deserialize(resp, "array[integer]", loadNamespace("singlearity")),
           error = function(e){
              stop("Failed to deserialize response")
           }
@@ -834,42 +728,3 @@ APIsApi <- R6::R6Class(
     }
   )
 )
-
-
-
-GetPlayers = function(name=NULL, id=NULL, team.name=NULL, team.id=NULL, position=NULL, age.min=NULL, age.max=NULL, pitch.hand=NULL, bat.side=NULL, active=NULL){
-  apiResponse <- self$GetPlayersWithHttpInfo(name, id, team.name, team.id, position, age.min, age.max, pitch.hand, bat.side, active)
-  resp <- apiResponse$response
-  if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-    apiResponse$content
-  } else if (httr::status_code(resp) >= 300 && httr::status_code(resp) <= 399) {
-    apiResponse
-  } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-    apiResponse
-  } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-    apiResponse
-  }
-}
-
-
-
-
-
-
-GetPlayers <- function(name=NULL){
-  apiResponse <- self$GetPlayersWithHttpInfo(name)
-  resp <- apiResponse$response
-  if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-    apiResponse$content
-  } else if (httr::status_code(resp) >= 300 && httr::status_code(resp) <= 399) {
-    apiResponse
-  } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-    apiResponse
-  } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-    apiResponse
-  }
-}
-
-
-
-
