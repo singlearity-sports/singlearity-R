@@ -18,7 +18,7 @@ There are two closely related types of predictions that can be obtained:
 
 # Requirements
 
-Python 3.6+
+R
 
 ## Installation
 
@@ -60,11 +60,7 @@ install_github("GIT_USER_ID/GIT_REPO_ID")
 
 ```R
 library(singlearity)
-```
 
-Create a file ```pa_pred_simple.R``` with:
-
-```
 key = Sys.getenv('SINGLEARITY_API_KEY')
 if (nchar(key) == 0)
 {
@@ -74,8 +70,12 @@ if (nchar(key) == 0)
 
 sing = APIsApi$new()
 sing$apiClient$apiKeys['SINGLEARITY_API_KEY'] = key
-sing$apiClient$basePath='https://beta3.singlearity.com'
+sing$apiClient$basePath='https://api.singlearity.com'
+```
 
+Create a file ```pa_pred_simple.R``` with:
+
+```
 ##########################################
 # Make predictions for groups of batters vs groups of pitchers
 ##########################################
@@ -111,10 +111,6 @@ for (b in candidate_batters)
     matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, atmosphere = atmosphere, state = State$new()))
   }
 }
-
-results <- sing$GetPaSim(matchup = matchups)
-results = results[order(results$woba_exp, decreasing = TRUE), ]
-print(results)
 ```
 
 **Run it**
