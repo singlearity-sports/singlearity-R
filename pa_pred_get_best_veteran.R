@@ -2,6 +2,8 @@
 # Let's try to sign a veteran RH 1B or DH to platoon against the Yankees lefty pitchers 
 ###############################################################
 
+source(file = 'common.R')
+
 pitcher_list = c('J.A. Happ', 'James Paxton', 'Jordan Montgomery')
 
 candidate_batters <- list()

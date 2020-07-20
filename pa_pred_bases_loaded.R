@@ -3,6 +3,7 @@
 # against Aaron Judge in the 9th with two outs and the bases loaded
 ###############################################################
 
+source(file = 'common.R')
 
 batter = sing$GetPlayers(name = 'Aaron Judge')[[1]]
 pitching_team = "Rays"

@@ -2,6 +2,8 @@
 # Demonstrate making plate appearance predictions based on a game state
 ##########################################
 
+source(file = 'common.R')
+
 #list of batters
 batter_list = c('Juan Soto', 'Tim Anderson', 'Derek Dietrich', 'Khris Davis')
 

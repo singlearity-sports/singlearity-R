@@ -2,6 +2,8 @@
 # Show the input features used to form the prediction
 ##########################################
 
+source(file = 'common.R')
+
 #list of batters
 batter_list = c('Alex Bregman')
 
