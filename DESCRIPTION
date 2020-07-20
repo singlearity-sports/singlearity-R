@@ -1,9 +1,9 @@
 Package: singlearity
 Title: R Package Client for Singlearity Baseball API
-Version: 1.0.0
-Authors@R: person("OpenAPI Generator community", email = "team@openapitools.org", role = c("aut", "cre"))
+Version: 0.1.3
+Authors@R: person("Joshua Silver", email = "joshua.silver@singlearity.com", role = c("aut", "cre"))
 Description: Baseball optimization API using machine learning
-URL: https://github.com/GIT_USER_ID/GIT_REPO_ID
+URL: https://www.singlearity.com
 BugReports: https://github.com/GIT_USER_ID/GIT_REPO_ID/issues
 Depends: R (>= 3.3)
 Encoding: UTF-8

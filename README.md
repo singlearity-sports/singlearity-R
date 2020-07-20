@@ -18,7 +18,7 @@ There are two closely related types of predictions that can be obtained:
 
 # Requirements
 
-R 3.4.3+, R 4.0+
+R 3.3+, R 4.0+
 
 ## Installation
 
