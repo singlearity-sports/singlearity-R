@@ -8,10 +8,12 @@
 
 #' @docType class
 #' @title Lineup
-#' @description Lineup Class
-#' @format An \code{R6Class} generator object
-#' @field lineup Lineup list( \link{LineupPos} ) 
 #'
+#' @description Lineup Class
+#'
+#' @format An \code{R6Class} generator object
+#'
+#' @field lineup Lineup list( \link{LineupPos} ) 
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -20,8 +22,13 @@ Lineup <- R6::R6Class(
   'Lineup',
   public = list(
     `lineup` = NULL,
-    initialize = function(`lineup`, ...){
+    initialize = function(
+        `lineup`, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object Lineup:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`lineup`)) {
         stopifnot(is.vector(`lineup`), length(`lineup`) != 0)
         sapply(`lineup`, function(x) stopifnot(R6::is.R6(x)))
@@ -42,6 +49,7 @@ Lineup <- R6::R6Class(
       if (!is.null(LineupObject$`lineup`)) {
         self$`lineup` <- ApiClient$new()$deserializeObj(LineupObject$`lineup`, "array[LineupPos]", loadNamespace("singlearity"))
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

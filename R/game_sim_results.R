@@ -8,12 +8,14 @@
 
 #' @docType class
 #' @title GameSimResults
+#'
 #' @description GameSimResults Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field home_score Home Score integer 
 #'
 #' @field away_score Away Score integer 
-#'
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -23,8 +25,13 @@ GameSimResults <- R6::R6Class(
   public = list(
     `home_score` = NULL,
     `away_score` = NULL,
-    initialize = function(`home_score`, `away_score`, ...){
+    initialize = function(
+        `home_score`, `away_score`, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object GameSimResults:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`home_score`)) {
         stopifnot(is.numeric(`home_score`), length(`home_score`) == 1)
         self$`home_score` <- `home_score`
@@ -55,6 +62,7 @@ GameSimResults <- R6::R6Class(
       if (!is.null(GameSimResultsObject$`away_score`)) {
         self$`away_score` <- GameSimResultsObject$`away_score`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

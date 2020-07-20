@@ -8,8 +8,11 @@
 
 #' @docType class
 #' @title Game
+#'
 #' @description Game Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field home_lineup  \link{Lineup} 
 #'
 #' @field visit_lineup  \link{Lineup} 
@@ -17,7 +20,6 @@
 #' @field atmosphere  \link{Atmosphere} 
 #'
 #' @field date Date character [optional]
-#'
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -29,8 +31,13 @@ Game <- R6::R6Class(
     `visit_lineup` = NULL,
     `atmosphere` = NULL,
     `date` = NULL,
-    initialize = function(`home_lineup`, `visit_lineup`, `atmosphere`, `date`='2019-09-29', ...){
+    initialize = function(
+        `home_lineup`, `visit_lineup`, `atmosphere`, `date`='2019-09-29', ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object Game:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`home_lineup`)) {
         stopifnot(R6::is.R6(`home_lineup`))
         self$`home_lineup` <- `home_lineup`
@@ -89,6 +96,7 @@ Game <- R6::R6Class(
       if (!is.null(GameObject$`date`)) {
         self$`date` <- GameObject$`date`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

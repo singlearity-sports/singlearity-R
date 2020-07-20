@@ -8,14 +8,16 @@
 
 #' @docType class
 #' @title Atmosphere
+#'
 #' @description Atmosphere Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field venue  \link{Venue} 
 #'
 #' @field home_team  \link{Team} 
 #'
 #' @field temperature Temperature integer [optional]
-#'
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -26,8 +28,13 @@ Atmosphere <- R6::R6Class(
     `venue` = NULL,
     `home_team` = NULL,
     `temperature` = NULL,
-    initialize = function(`venue`, `home_team`, `temperature`=70, ...){
+    initialize = function(
+        `venue`, `home_team`, `temperature`=70, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object Atmosphere:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`venue`)) {
         stopifnot(R6::is.R6(`venue`))
         self$`venue` <- `venue`
@@ -73,6 +80,7 @@ Atmosphere <- R6::R6Class(
       if (!is.null(AtmosphereObject$`temperature`)) {
         self$`temperature` <- AtmosphereObject$`temperature`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

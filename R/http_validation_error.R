@@ -8,10 +8,12 @@
 
 #' @docType class
 #' @title HTTPValidationError
-#' @description HTTPValidationError Class
-#' @format An \code{R6Class} generator object
-#' @field detail Detail list( \link{ValidationError} ) [optional]
 #'
+#' @description HTTPValidationError Class
+#'
+#' @format An \code{R6Class} generator object
+#'
+#' @field detail Detail list( \link{ValidationError} ) [optional]
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -20,8 +22,13 @@ HTTPValidationError <- R6::R6Class(
   'HTTPValidationError',
   public = list(
     `detail` = NULL,
-    initialize = function(`detail`=NULL, ...){
+    initialize = function(
+        `detail`=NULL, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object HTTPValidationError:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!is.null(`detail`)) {
         stopifnot(is.vector(`detail`), length(`detail`) != 0)
         sapply(`detail`, function(x) stopifnot(R6::is.R6(x)))
@@ -42,6 +49,7 @@ HTTPValidationError <- R6::R6Class(
       if (!is.null(HTTPValidationErrorObject$`detail`)) {
         self$`detail` <- ApiClient$new()$deserializeObj(HTTPValidationErrorObject$`detail`, "array[ValidationError]", loadNamespace("singlearity"))
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

@@ -8,8 +8,11 @@
 
 #' @docType class
 #' @title Player
+#'
 #' @description Player Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field full_name Full Name character 
 #'
 #' @field position Position character 
@@ -36,7 +39,6 @@
 #'
 #' @field photo_url Photo Url character 
 #'
-#'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -56,8 +58,13 @@ Player <- R6::R6Class(
     `birth_date` = NULL,
     `current_age` = NULL,
     `photo_url` = NULL,
-    initialize = function(`full_name`, `position`, `mlb_id`, `debut_date`, `team_id`, `team_abbrev`, `active`, `bat_side`, `pitch_hand`, `birth_country`, `birth_date`, `current_age`, `photo_url`, ...){
+    initialize = function(
+        `full_name`, `position`, `mlb_id`, `debut_date`, `team_id`, `team_abbrev`, `active`, `bat_side`, `pitch_hand`, `birth_country`, `birth_date`, `current_age`, `photo_url`, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object Player:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`full_name`)) {
         stopifnot(is.character(`full_name`), length(`full_name`) == 1)
         self$`full_name` <- `full_name`
@@ -208,6 +215,7 @@ Player <- R6::R6Class(
       if (!is.null(PlayerObject$`photo_url`)) {
         self$`photo_url` <- PlayerObject$`photo_url`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

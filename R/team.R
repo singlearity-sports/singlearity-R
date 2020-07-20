@@ -8,8 +8,11 @@
 
 #' @docType class
 #' @title Team
+#'
 #' @description Team Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field abbreviation Abbreviation character 
 #'
 #' @field division Division character 
@@ -24,7 +27,6 @@
 #'
 #' @field venue  \link{Venue} 
 #'
-#'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -38,8 +40,13 @@ Team <- R6::R6Class(
     `name` = NULL,
     `team_name` = NULL,
     `venue` = NULL,
-    initialize = function(`abbreviation`, `division`, `league`, `id`, `name`, `team_name`, `venue`, ...){
+    initialize = function(
+        `abbreviation`, `division`, `league`, `id`, `name`, `team_name`, `venue`, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object Team:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`abbreviation`)) {
         stopifnot(is.character(`abbreviation`), length(`abbreviation`) == 1)
         self$`abbreviation` <- `abbreviation`
@@ -127,6 +134,7 @@ Team <- R6::R6Class(
         venueObject$fromJSON(jsonlite::toJSON(TeamObject$venue, auto_unbox = TRUE, digits = NA))
         self$`venue` <- venueObject
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

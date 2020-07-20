@@ -8,14 +8,16 @@
 
 #' @docType class
 #' @title ValidationError
+#'
 #' @description ValidationError Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field loc Location list( character ) 
 #'
 #' @field msg Message character 
 #'
 #' @field type Error Type character 
-#'
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -26,8 +28,13 @@ ValidationError <- R6::R6Class(
     `loc` = NULL,
     `msg` = NULL,
     `type` = NULL,
-    initialize = function(`loc`, `msg`, `type`, ...){
+    initialize = function(
+        `loc`, `msg`, `type`, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object ValidationError:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`loc`)) {
         stopifnot(is.vector(`loc`), length(`loc`) != 0)
         sapply(`loc`, function(x) stopifnot(is.character(x)))
@@ -70,6 +77,7 @@ ValidationError <- R6::R6Class(
       if (!is.null(ValidationErrorObject$`type`)) {
         self$`type` <- ValidationErrorObject$`type`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

@@ -8,8 +8,11 @@
 
 #' @docType class
 #' @title Venue
+#'
 #' @description Venue Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field id Id integer 
 #'
 #' @field name Name character 
@@ -17,7 +20,6 @@
 #' @field home_team_abbrev Home Team Abbrev character 
 #'
 #' @field home_team_id Home Team Id integer 
-#'
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -29,8 +31,13 @@ Venue <- R6::R6Class(
     `name` = NULL,
     `home_team_abbrev` = NULL,
     `home_team_id` = NULL,
-    initialize = function(`id`, `name`, `home_team_abbrev`, `home_team_id`, ...){
+    initialize = function(
+        `id`, `name`, `home_team_abbrev`, `home_team_id`, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object Venue:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`id`)) {
         stopifnot(is.numeric(`id`), length(`id`) == 1)
         self$`id` <- `id`
@@ -83,6 +90,7 @@ Venue <- R6::R6Class(
       if (!is.null(VenueObject$`home_team_id`)) {
         self$`home_team_id` <- VenueObject$`home_team_id`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

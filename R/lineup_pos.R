@@ -8,12 +8,14 @@
 
 #' @docType class
 #' @title LineupPos
+#'
 #' @description LineupPos Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field player  \link{Player} 
 #'
 #' @field position Position character 
-#'
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -23,8 +25,13 @@ LineupPos <- R6::R6Class(
   public = list(
     `player` = NULL,
     `position` = NULL,
-    initialize = function(`player`, `position`, ...){
+    initialize = function(
+        `player`, `position`, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object LineupPos:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`player`)) {
         stopifnot(R6::is.R6(`player`))
         self$`player` <- `player`
@@ -57,6 +64,7 @@ LineupPos <- R6::R6Class(
       if (!is.null(LineupPosObject$`position`)) {
         self$`position` <- LineupPosObject$`position`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

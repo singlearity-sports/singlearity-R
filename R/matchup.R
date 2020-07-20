@@ -8,8 +8,11 @@
 
 #' @docType class
 #' @title Matchup
+#'
 #' @description Matchup Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field batter  \link{Player} 
 #'
 #' @field pitcher  \link{Player} 
@@ -19,7 +22,6 @@
 #' @field state  \link{State} 
 #'
 #' @field date Date character [optional]
-#'
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -32,8 +34,13 @@ Matchup <- R6::R6Class(
     `atmosphere` = NULL,
     `state` = NULL,
     `date` = NULL,
-    initialize = function(`batter`, `pitcher`, `atmosphere`, `state`, `date`='2019-09-28', ...){
+    initialize = function(
+        `batter`, `pitcher`, `atmosphere`, `state`, `date`='2019-09-28', ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object Matchup:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`batter`)) {
         stopifnot(R6::is.R6(`batter`))
         self$`batter` <- `batter`
@@ -105,6 +112,7 @@ Matchup <- R6::R6Class(
       if (!is.null(MatchupObject$`date`)) {
         self$`date` <- MatchupObject$`date`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

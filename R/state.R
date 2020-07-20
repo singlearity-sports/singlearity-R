@@ -8,8 +8,11 @@
 
 #' @docType class
 #' @title State
+#'
 #' @description State Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field on_1b On 1B character [optional]
 #'
 #' @field on_2b On 2B character [optional]
@@ -34,7 +37,6 @@
 #'
 #' @field frame_runs_scored Frame Runs Scored integer [optional]
 #'
-#'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -53,8 +55,13 @@ State <- R6::R6Class(
     `fld_lineup_order` = NULL,
     `pitch_number` = NULL,
     `frame_runs_scored` = NULL,
-    initialize = function(`on_1b`=FALSE, `on_2b`=FALSE, `on_3b`=FALSE, `inning`=1, `outs`=0, `top`=TRUE, `bat_score`=0, `fld_score`=0, `bat_lineup_order`=1, `fld_lineup_order`=1, `pitch_number`=0, `frame_runs_scored`=0, ...){
+    initialize = function(
+        `on_1b`=FALSE, `on_2b`=FALSE, `on_3b`=FALSE, `inning`=1, `outs`=0, `top`=TRUE, `bat_score`=0, `fld_score`=0, `bat_lineup_order`=1, `fld_lineup_order`=1, `pitch_number`=0, `frame_runs_scored`=0, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object State:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!is.null(`on_1b`)) {
         self$`on_1b` <- `on_1b`
       }
@@ -191,6 +198,7 @@ State <- R6::R6Class(
       if (!is.null(StateObject$`frame_runs_scored`)) {
         self$`frame_runs_scored` <- StateObject$`frame_runs_scored`
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(

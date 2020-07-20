@@ -8,12 +8,14 @@
 
 #' @docType class
 #' @title BodyGetGameSimGameSimPost
+#'
 #' @description BodyGetGameSimGameSimPost Class
+#'
 #' @format An \code{R6Class} generator object
+#'
 #' @field game  \link{Game} 
 #'
 #' @field start_state Start State \link{State} [optional]
-#'
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -23,8 +25,13 @@ BodyGetGameSimGameSimPost <- R6::R6Class(
   public = list(
     `game` = NULL,
     `start_state` = NULL,
-    initialize = function(`game`, `start_state`=NULL, ...){
+    initialize = function(
+        `game`, `start_state`=NULL, ...
+    ) {
       local.optional.var <- list(...)
+      if (length(local.optional.var) > 0) {
+        stop(paste("Unknown argument(s) in initialize of object BodyGetGameSimGameSimPost:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+      }
       if (!missing(`game`)) {
         stopifnot(R6::is.R6(`game`))
         self$`game` <- `game`
@@ -59,6 +66,7 @@ BodyGetGameSimGameSimPost <- R6::R6Class(
         start_stateObject$fromJSON(jsonlite::toJSON(BodyGetGameSimGameSimPostObject$start_state, auto_unbox = TRUE, digits = NA))
         self$`start_state` <- start_stateObject
       }
+      self
     },
     toJSONString = function() {
       jsoncontent <- c(
