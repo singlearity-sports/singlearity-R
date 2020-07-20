@@ -18,7 +18,7 @@ There are two closely related types of predictions that can be obtained:
 
 # Requirements
 
-R
+R 3.4.3+, R 4.0+
 
 ## Installation
 
@@ -27,34 +27,19 @@ R
 Install the dependencies
 
 ```R
-install.packages("jsonlite")
-install.packages("httr")
-install.packages("caTools")
+install.packages("devtools")
+library(devtools)
 ```
 
-### Build the package
-
-```sh
-git clone https://github.com/GIT_USER_ID/GIT_REPO_ID
-cd GIT_REPO_ID
-R CMD build .
-R CMD check singlearity_1.0.0.tar.gz
-R CMD INSTALL singlearity_1.0.0.tar.gz
-```
-
-### Install the package
-
-```R
-install.packages("singlearity")
-```
 
 To install directly from Github, use `devtools`:
 ```R
-install.packages("devtools")
-library(devtools)
-install_github("GIT_USER_ID/GIT_REPO_ID")
+
+install_github("singlearity-sports/singlearity-R")
 ```
 
+## Setting API key
+Set a tr
 
 ## Usage
 
@@ -73,7 +58,7 @@ sing$apiClient$apiKeys['SINGLEARITY_API_KEY'] = key
 sing$apiClient$basePath='https://api.singlearity.com'
 ```
 
-Create a file ```pa_pred_simple.R``` with:
+Create a file ```pa_pred_very_simple.R``` with:
 
 ```
 ##########################################
@@ -111,13 +96,15 @@ for (b in candidate_batters)
     matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, atmosphere = atmosphere, state = State$new()))
   }
 }
+
+results <- sing$GetPaSim(matchup = matchups)
+results = results[order(results$woba_exp, decreasing = TRUE), ]
+print(results)
 ```
 
 **Run it**
 ```
-results <- sing$GetPaSim(matchup = matchups)
-results = results[order(results$woba_exp, decreasing = TRUE), ]
-print(results)
+env SINGLEARITY_API_KEY=<API_KEY> r -f pa_pred_very_simple.R
 ```
 **Results**
 ```
