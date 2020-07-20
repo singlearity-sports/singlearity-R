@@ -22,5 +22,5 @@ for (p in candidate_pitchers)
 }
 
 results <- sing$GetPaSim(matchup = matchups)
-results = results[order(results$woba_exp, decreasing = TRUE), ]
+results = results[order(results$obp_exp, decreasing = TRUE), ]
 print(results)

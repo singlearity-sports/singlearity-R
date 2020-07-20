@@ -4,7 +4,7 @@
 
 Singlearity is a web-based service for baseball analytics.  It uses machine learning to make predictions based on a wide range of player and historical data.    These predictions can be used to make more effective pre-game and in-game strategy decisions and to provide for more accurate game simulations.
 
-You can view the technical description of Singlearity at [Baseball Prospectus](https://www.baseballprospectus.com)
+You can view the technical description of Singlearity at [Baseball Prospectus](https://www.baseballprospectus.com/news/article/59993/singlearity-using-a-neural-network-to-predict-the-outcome-of-plate-appearances/)
 
 # Description
 
@@ -18,52 +18,40 @@ There are two closely related types of predictions that can be obtained:
 
 # Requirements
 
-R 3.3+, R 4.0+
+R 3.3+
 
 ## Installation
+
+Obtain a Trial API key through the [Singlearity Contact Form](https://docs.google.com/forms/d/e/1FAIpQLSdO_K9_6cGBG_iStuSMKbqUBRX3Z8RAYzNVFRBVIXuumVSjAg/viewform?usp=sf_link)
+
+
 
 ### Prerequisites
 
 Install the dependencies
 
-```R
+```
+#R code
 install.packages("devtools")
-library(devtools)
+devtools::install_github("singlearity-sports/singlearity-R")
 ```
 
 
-To install directly from Github, use `devtools`:
-```R
+## Example Usage
 
-install_github("singlearity-sports/singlearity-R")
-```
+**Create it**
 
-## Setting API key
-Set a tr
+Copy ```examples/common.R``` to a local directory.
 
-## Usage
-
-```R
-library(singlearity)
-
-key = Sys.getenv('SINGLEARITY_API_KEY')
-if (nchar(key) == 0)
-{
-  stop("You need to set an API KEY in your environment.  Modify (or create) a .Renviron file with a line containing your API KEY, for instance:
-       SINGLEARITY_API_KEY=myveryspecialkey")
-}
-
-sing = APIsApi$new()
-sing$apiClient$apiKeys['SINGLEARITY_API_KEY'] = key
-sing$apiClient$basePath='https://api.singlearity.com'
-```
-
-Create a file ```pa_pred_very_simple.R``` with:
+Create a file ```pa_pred_very_simple.R``` in the same local directory with:
 
 ```
+#pa_pred_very_simple.R
+
 ##########################################
 # Make predictions for groups of batters vs groups of pitchers
 ##########################################
+source('common.R')
 
 #list of batters
 batter_list = c('Mookie Betts', 'Justin Turner', 'Max Muncy', 'Cody Bellinger')
@@ -89,7 +77,7 @@ venue <- sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]]
 atmosphere <- Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
 
 matchups <- list()
-for (b in candidate_batters) 
+for (b in candidate_batters)
 {
   for (p in candidate_pitchers)
   {
@@ -98,13 +86,14 @@ for (b in candidate_batters)
 }
 
 results <- sing$GetPaSim(matchup = matchups)
-results = results[order(results$woba_exp, decreasing = TRUE), ]
+results <- results[c('batter_name', 'pitcher_name', 'hr_exp', 'so_exp', 'ba_exp', 'ops_exp', 'woba_exp')]
+results <- results[order(results$woba_exp, decreasing = TRUE), ]
 print(results)
 ```
 
 **Run it**
 ```
-env SINGLEARITY_API_KEY=<API_KEY> r -f pa_pred_very_simple.R
+env SINGLEARITY_API_KEY=YOUR_API_KEY R -f pa_pred_very_simple.R
 ```
 **Results**
 ```

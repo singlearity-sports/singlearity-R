@@ -1,41 +1,30 @@
-library(singlearity)
+source(file='common.R')
 library(glue)
-key = Sys.getenv('SINGLEARITY_API_KEY')
-
-if (nchar(key) == 0)
-{
-  stop("You need to set an API KEY in your environment.  Modify (or create) a .Renviron file with a line containing your API KEY, for instance:
-       SINGLEARITY_API_KEY=myveryspecialkey")
-}
-
-sing = APIsApi$new()
-sing$apiClient$apiKeys['SINGLEARITY_API_KEY'] = key
-sing$apiClient$basePath='https://beta3.singlearity.com'
 
 home_lineup_pos=c(
     LineupPos$new(player=sing$GetPlayers(name='Mookie Betts')[[1]], position='CF'),
     LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Justin Verlander')[[1]], position='P')
+    LineupPos$new(player=sing$GetPlayers(name='Max Muncy')[[1]], position='1B'),
+    LineupPos$new(player=sing$GetPlayers(name='Justin Turner')[[1]], position='3B'),
+    LineupPos$new(player=sing$GetPlayers(name='Cody Bellinger')[[1]], position='RF'),
+    LineupPos$new(player=sing$GetPlayers(name='Corey Seager')[[1]], position='SS'),
+    LineupPos$new(player=sing$GetPlayers(name='A.J. Pollock')[[1]], position='DH'),
+    LineupPos$new(player=sing$GetPlayers(name='Joc Pederson')[[1]], position='LF'),
+    LineupPos$new(player=sing$GetPlayers(name='Will Smith', position='C')[[1]], position='C'),
+    LineupPos$new(player=sing$GetPlayers(name='Clayton Kershaw')[[1]], position='P')
 )
 
 visit_lineup_pos=c(
-    LineupPos$new(player=sing$GetPlayers(name='Mookie Betts')[[1]], position='CF'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Justin Verlander')[[1]], position='P')
+    LineupPos$new(player=sing$GetPlayers(name='Yastrzemski')[[1]], position='LF'),
+    LineupPos$new(player=sing$GetPlayers(name='Brandon Belt')[[1]], position='1B'),
+    LineupPos$new(player=sing$GetPlayers(name='Evan Longoria')[[1]], position='3B'),
+    LineupPos$new(player=sing$GetPlayers(name='Alex Dickerson')[[1]], position='RF'),
+    LineupPos$new(player=sing$GetPlayers(name='Brandon Crawford')[[1]], position='SS'),
+    LineupPos$new(player=sing$GetPlayers(name='Mauricio Dubon')[[1]], position='2B'),
+    LineupPos$new(player=sing$GetPlayers(name='Wilmer Flores')[[1]], position='DH'),
+    LineupPos$new(player=sing$GetPlayers(name='Billy Hamilton')[[1]], position='CF'),
+    LineupPos$new(player=sing$GetPlayers(name='Tyler Heineman')[[1]], position='C'),
+    LineupPos$new(player=sing$GetPlayers(name='Johnny Cueto')[[1]], position='P')
 )
 venue <- sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]]
 atmosphere <- Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
