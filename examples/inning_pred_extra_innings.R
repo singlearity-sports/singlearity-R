@@ -8,7 +8,7 @@ home_lineup_pos=c(
     LineupPos$new(player=sing$GetPlayers(name='Justin Turner')[[1]], position='3B'),
     LineupPos$new(player=sing$GetPlayers(name='Cody Bellinger')[[1]], position='RF'),
     LineupPos$new(player=sing$GetPlayers(name='Corey Seager')[[1]], position='SS'),
-    LineupPos$new(player=sing$GetPlayers(name='A.J. Pollock')[[1]], position='DH'),
+    LineupPos$new(player=sing$GetPlayers(name='Pollock')[[1]], position='DH'),
     LineupPos$new(player=sing$GetPlayers(name='Joc Pederson')[[1]], position='LF'),
     LineupPos$new(player=sing$GetPlayers(name='Will Smith', position='C')[[1]], position='C'),
     LineupPos$new(player=sing$GetPlayers(name='Clayton Kershaw')[[1]], position='P')
