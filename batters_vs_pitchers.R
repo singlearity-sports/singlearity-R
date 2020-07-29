@@ -1,3 +1,6 @@
+# This code generates heat maps of expected wOBA and K% values for every possible
+# matchup from a list of batters and pitchers
+
 source(file='common.R')
 
 # load required packages
@@ -15,7 +18,10 @@ candidate_batters <- append(candidate_batters, sing$GetPlayers("Enrique Hernande
 candidate_batters <- append(candidate_batters, sing$GetPlayers("Joc Pederson"))
 candidate_batters <- append(candidate_batters, sing$GetPlayers("Pollock"))
 candidate_batters <- append(candidate_batters, sing$GetPlayers("Austin Barnes"))
-candidate_batters <- append(candidate_batters, sing$GetPlayers(team.name=batting_team, position = "3B", active = TRUE))
+candidate_batters <- append(candidate_batters, sing$GetPlayers("Terrance Gore"))
+candidate_batters <- append(candidate_batters, sing$GetPlayers("Chris Taylor"))
+candidate_batters <- append(candidate_batters, sing$GetPlayers("Will Smith", team.name = batting_team))
+candidate_batters <- append(candidate_batters, sing$GetPlayers("Matt Beaty"))
 
 
 pitching_team = "Giants"
