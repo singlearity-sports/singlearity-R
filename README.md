@@ -1,4 +1,4 @@
-![enter image description here](http://beta3.singlearity.com/static/assets/Logo-PNG.png)
+![enter image description here](https://www.singlearity.com/static/assets/Logo-PNG.png)
 # Welcome to Singlearity!
 
 
@@ -109,11 +109,10 @@ env SINGLEARITY_API_KEY=YOUR_API_KEY R -f pa_pred_very_simple.R
 ```
 
 ## Example Visualizations
+It is easy to combine the Singlearity prediction outputs with libraries such as ggplot to create visualizations which communicate the important information efficiently.  [Here is an example in R](https://github.com/singlearity-sports/singlearity-R/blob/master/examples/wOBA_by_pitch_count.R "Here is an example") showing each batter's expected wOBA as Max Scherzer's pitch count increases.
 
-Created with the wOBA_by_pitch_count example
-![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/dtucker-initial/Screen%20Shot%202020-07-29%20at%204.34.10%20PM.png)
+![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/master/resources/woba_batter_vs_pitcher.png)
 
-Created with the batters_vs_pitchers example
-![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/dtucker-initial/Screen%20Shot%202020-07-29%20at%204.50.32%20PM.png)
+It is also easy to create visualizations which efficiently represent the data needed to make player substitutions.   [Here is an example in R](https://github.com/singlearity-sports/singlearity-R/blob/master/examples/batters_vs_pitchers.R "Here is an example in R") showing the predicted wOBA for each Dodgers batter vs. each Padres pitcher.  These predictions and their visualizations take only a few seconds to produce. 
 
-
+![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/master/resources/woba_batter_vs_pitcher.png)
