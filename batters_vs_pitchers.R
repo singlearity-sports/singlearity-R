@@ -1,5 +1,7 @@
 # This code generates heat maps of expected wOBA and K% values for every possible
-# matchup from a list of batters and pitchers
+# matchup from a list of batters and pitchers. In this case, it creates graphs that
+# could be used by the Giants to select a relief pitcher, or the Dodgers to select
+# a pinch hitter.
 
 source(file='common.R')
 
