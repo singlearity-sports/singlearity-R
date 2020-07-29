@@ -52,8 +52,8 @@ print(results)
 
 # Generate wOBA heatmap
 ggplot(results, aes(pitcher_name, batter_name, fill = woba_exp)) + geom_tile() + scale_fill_distiller(palette = "Spectral") + 
-  geom_text(aes(label = round(woba_exp, 3))) + theme(legend.position = "none", axis.text=element_text(size=6)) + labs(title = "wOBA by Batter and Pitcher") 
+  geom_text(aes(label = round(woba_exp, 3))) + theme(legend.position = "none", axis.text=element_text(size=6)) + labs(title = "wOBA by Batter vs. Pitcher") 
 
 # Generate strikeout heatmap
 ggplot(results, aes(pitcher_name, batter_name, fill = so_exp)) + geom_tile() + scale_fill_distiller(palette = "Spectral") + 
-  geom_text(aes(label = round(so_exp, 3)*100)) + theme(axis.text=element_text(size=6)) + labs(title = "K% by Batter and Pitcher")
+  geom_text(aes(label = round(so_exp, 3)*100)) + theme(axis.text=element_text(size=6)) + labs(title = "K% by Batter vs. Pitcher")
