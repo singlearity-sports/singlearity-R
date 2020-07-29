@@ -32,7 +32,7 @@ atmosphere <- Atmosphere$new(venue = venue, temperature = 70, home_team = sing$G
 j = 0
 matchups <- list()
 for (i in seq(0,105, by = 15)) {
-  j = j + 1
+  j = j+ 1
   for (b in candidate_batters) 
   {
     for (p in candidate_pitchers)
@@ -47,5 +47,5 @@ results <- sing$GetPaSim(matchup = matchups)
 results = results[order(results$woba_exp, decreasing = TRUE), ]
 print(results)
 
-ggplot(results, aes(p_pitch_no, woba_exp, color = batter_name)) + geom_smooth() + labs(title = "wOBA by pitch count")
-ggplot(results, aes(p_pitch_no, so_exp, color = batter_name)) + geom_smooth() + labs(title = "K% by pitch count")
+ggplot(results, aes(p_pitch_no, woba_exp, color = batter_name)) + geom_smooth() + labs(title = "Batters vs. Max Scherzer wOBA by pitch count")
+ggplot(results, aes(p_pitch_no, so_exp, color = batter_name)) + geom_smooth() + labs(title = "Batters vs. Max Scherzer K% by pitch count")
