@@ -108,3 +108,12 @@ env SINGLEARITY_API_KEY=YOUR_API_KEY R -f pa_pred_very_simple.R
 8      Max Muncy Chris Paddack 0.04582457 0.3740999 0.2098127 0.7025451 0.3065602
 ```
 
+## Example Visualizations
+
+## Created with the wOBA_by_pitch_count example
+![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/dtucker-initial/Screen%20Shot%202020-07-29%20at%204.34.10%20PM.png)
+
+## Created with the batters_vs_pitchers example
+![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/dtucker-initial/Screen%20Shot%202020-07-29%20at%204.50.32%20PM.png)
+
+
