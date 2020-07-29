@@ -76,6 +76,7 @@ singlearity.APIs
 \item \emph{ @param } pitch.hand list( character )
 \item \emph{ @param } bat.side list( character )
 \item \emph{ @param } active character
+\item \emph{ @param } on.40 character
 \item \emph{ @returnType } list( \link{Player} ) \cr
 
 
@@ -228,6 +229,7 @@ var.age.max <- 56 # integer |
 var.pitch.hand <- ['pitch.hand_example'] # array[character] | 
 var.bat.side <- ['bat.side_example'] # array[character] | 
 var.active <- 'active_example' # character | 
+var.on.40 <- 'on.40_example' # character | 
 
 #Get Players
 api.instance <- APIsApi$new()
@@ -238,7 +240,7 @@ api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
 #Configure API key authorization: APIKeyQuery
 api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
 
-result <- api.instance$GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active)
+result <- api.instance$GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active, on.40=var.on.40)
 
 
 ####################  GetTeams  ####################
@@ -397,6 +399,7 @@ result <- api.instance$HelloWithKey()
   pitch.hand = NULL,
   bat.side = NULL,
   active = NULL,
+  on.40 = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -418,6 +421,7 @@ result <- api.instance$HelloWithKey()
   pitch.hand = NULL,
   bat.side = NULL,
   active = NULL,
+  on.40 = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }

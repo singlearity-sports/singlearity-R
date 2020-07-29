@@ -33,7 +33,7 @@ ValidationError <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object ValidationError:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object ValidationError:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!missing(`loc`)) {
         stopifnot(is.vector(`loc`), length(`loc`) != 0)

@@ -110,7 +110,7 @@ Name | Type | Description  | Notes
 | **422** | Validation Error |  -  |
 
 # **GetPlayers**
-> array[Player] GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active)
+> array[Player] GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active, on.40=var.on.40)
 
 Get Players
 
@@ -128,6 +128,7 @@ var.age.max <- 56 # integer |
 var.pitch.hand <- list("inner_example") # array[character] | 
 var.bat.side <- list("inner_example") # array[character] | 
 var.active <- 'active_example' # character | 
+var.on.40 <- 'on.40_example' # character | 
 
 #Get Players
 api.instance <- APIsApi$new()
@@ -135,7 +136,7 @@ api.instance <- APIsApi$new()
 api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
 # Configure API key authorization: APIKeyQuery
 api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-result <- api.instance$GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active)
+result <- api.instance$GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active, on.40=var.on.40)
 dput(result)
 ```
 
@@ -153,6 +154,7 @@ Name | Type | Description  | Notes
  **pitch.hand** | list( **character** )|  | [optional] 
  **bat.side** | list( **character** )|  | [optional] 
  **active** | **character**|  | [optional] 
+ **on.40** | **character**|  | [optional] 
 
 ### Return type
 

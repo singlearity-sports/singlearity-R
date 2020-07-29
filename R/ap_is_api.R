@@ -77,6 +77,7 @@
 #' \item \emph{ @param } pitch.hand list( character )
 #' \item \emph{ @param } bat.side list( character )
 #' \item \emph{ @param } active character
+#' \item \emph{ @param } on.40 character
 #' \item \emph{ @returnType } list( \link{Player} ) \cr
 #'
 #'
@@ -229,6 +230,7 @@
 #' var.pitch.hand <- ['pitch.hand_example'] # array[character] | 
 #' var.bat.side <- ['bat.side_example'] # array[character] | 
 #' var.active <- 'active_example' # character | 
+#' var.on.40 <- 'on.40_example' # character | 
 #'
 #' #Get Players
 #' api.instance <- APIsApi$new()
@@ -239,7 +241,7 @@
 #' #Configure API key authorization: APIKeyQuery
 #' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
 #'
-#' result <- api.instance$GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active)
+#' result <- api.instance$GetPlayers(name=var.name, id=var.id, team.name=var.team.name, team.id=var.team.id, position=var.position, age.min=var.age.min, age.max=var.age.max, pitch.hand=var.pitch.hand, bat.side=var.bat.side, active=var.active, on.40=var.on.40)
 #'
 #'
 #' ####################  GetTeams  ####################
@@ -322,7 +324,7 @@ APIsApi <- R6::R6Class(
     GetGameSim = function(body.get.game.sim.game.sim.post, num.sims=100, ...){
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in calling function GetGameSim:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in calling function GetGameSim: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       apiResponse <- self$GetGameSimWithHttpInfo(body.get.game.sim.game.sim.post, num.sims, ...)
       resp <- apiResponse$response
@@ -341,7 +343,7 @@ APIsApi <- R6::R6Class(
       args <- list(...)
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument in calling function GetGameSim which you attempted to set to a value of ", local.optional.var[[1]], sep=" "))
+        stop(paste("Unknown argument(s) in calling function GetGameSim: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       queryParams <- list()
       headerParams <- c()
@@ -394,7 +396,7 @@ APIsApi <- R6::R6Class(
     GetPaSim = function(matchup, return.features=FALSE, ...){
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in calling function GetPaSim:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in calling function GetPaSim: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       apiResponse <- self$GetPaSimWithHttpInfo(matchup, return.features, ...)
       resp <- apiResponse$response
@@ -413,7 +415,7 @@ APIsApi <- R6::R6Class(
       args <- list(...)
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument in calling function GetPaSim which you attempted to set to a value of ", local.optional.var[[1]], sep=" "))
+        stop(paste("Unknown argument(s) in calling function GetPaSim: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       queryParams <- list()
       headerParams <- c()
@@ -464,12 +466,12 @@ APIsApi <- R6::R6Class(
         ApiResponse$new("API server error", resp)
       }
     },
-    GetPlayers = function(name=NULL, id=NULL, team.name=NULL, team.id=NULL, position=NULL, age.min=NULL, age.max=NULL, pitch.hand=NULL, bat.side=NULL, active=NULL, ...){
+    GetPlayers = function(name=NULL, id=NULL, team.name=NULL, team.id=NULL, position=NULL, age.min=NULL, age.max=NULL, pitch.hand=NULL, bat.side=NULL, active=NULL, on.40=NULL, ...){
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in calling function GetPlayers:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in calling function GetPlayers: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
-      apiResponse <- self$GetPlayersWithHttpInfo(name, id, team.name, team.id, position, age.min, age.max, pitch.hand, bat.side, active, ...)
+      apiResponse <- self$GetPlayersWithHttpInfo(name, id, team.name, team.id, position, age.min, age.max, pitch.hand, bat.side, active, on.40, ...)
       resp <- apiResponse$response
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         apiResponse$content
@@ -482,11 +484,11 @@ APIsApi <- R6::R6Class(
       }
     },
 
-    GetPlayersWithHttpInfo = function(name=NULL, id=NULL, team.name=NULL, team.id=NULL, position=NULL, age.min=NULL, age.max=NULL, pitch.hand=NULL, bat.side=NULL, active=NULL, ...){
+    GetPlayersWithHttpInfo = function(name=NULL, id=NULL, team.name=NULL, team.id=NULL, position=NULL, age.min=NULL, age.max=NULL, pitch.hand=NULL, bat.side=NULL, active=NULL, on.40=NULL, ...){
       args <- list(...)
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument in calling function GetPlayers which you attempted to set to a value of ", local.optional.var[[1]], sep=" "))
+        stop(paste("Unknown argument(s) in calling function GetPlayers: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       queryParams <- list()
       headerParams <- c()
@@ -510,6 +512,8 @@ APIsApi <- R6::R6Class(
       queryParams['bat_side'] <- bat.side
 
       queryParams['active'] <- active
+
+      queryParams['on_40'] <- on.40
 
       urlPath <- "/players/"
       # API key authentication
@@ -547,7 +551,7 @@ APIsApi <- R6::R6Class(
     GetTeams = function(name=NULL, ...){
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in calling function GetTeams:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in calling function GetTeams: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       apiResponse <- self$GetTeamsWithHttpInfo(name, ...)
       resp <- apiResponse$response
@@ -566,7 +570,7 @@ APIsApi <- R6::R6Class(
       args <- list(...)
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument in calling function GetTeams which you attempted to set to a value of ", local.optional.var[[1]], sep=" "))
+        stop(paste("Unknown argument(s) in calling function GetTeams: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       queryParams <- list()
       headerParams <- c()
@@ -609,7 +613,7 @@ APIsApi <- R6::R6Class(
     GetVenues = function(stadium.name=NULL, team.name=NULL, ...){
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in calling function GetVenues:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in calling function GetVenues: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       apiResponse <- self$GetVenuesWithHttpInfo(stadium.name, team.name, ...)
       resp <- apiResponse$response
@@ -628,7 +632,7 @@ APIsApi <- R6::R6Class(
       args <- list(...)
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument in calling function GetVenues which you attempted to set to a value of ", local.optional.var[[1]], sep=" "))
+        stop(paste("Unknown argument(s) in calling function GetVenues: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       queryParams <- list()
       headerParams <- c()
@@ -673,7 +677,7 @@ APIsApi <- R6::R6Class(
     Hello = function(...){
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in calling function Hello:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in calling function Hello: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       apiResponse <- self$HelloWithHttpInfo(...)
       resp <- apiResponse$response
@@ -692,7 +696,7 @@ APIsApi <- R6::R6Class(
       args <- list(...)
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument in calling function Hello which you attempted to set to a value of ", local.optional.var[[1]], sep=" "))
+        stop(paste("Unknown argument(s) in calling function Hello: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       queryParams <- list()
       headerParams <- c()
@@ -725,7 +729,7 @@ APIsApi <- R6::R6Class(
     HelloWithKey = function(...){
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in calling function HelloWithKey:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in calling function HelloWithKey: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       apiResponse <- self$HelloWithKeyWithHttpInfo(...)
       resp <- apiResponse$response
@@ -744,7 +748,7 @@ APIsApi <- R6::R6Class(
       args <- list(...)
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument in calling function HelloWithKey which you attempted to set to a value of ", local.optional.var[[1]], sep=" "))
+        stop(paste("Unknown argument(s) in calling function HelloWithKey: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       queryParams <- list()
       headerParams <- c()

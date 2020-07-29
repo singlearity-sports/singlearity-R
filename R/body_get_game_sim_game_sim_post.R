@@ -30,7 +30,7 @@ BodyGetGameSimGameSimPost <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object BodyGetGameSimGameSimPost:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object BodyGetGameSimGameSimPost:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!missing(`game`)) {
         stopifnot(R6::is.R6(`game`))

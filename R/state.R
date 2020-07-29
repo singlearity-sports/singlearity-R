@@ -60,7 +60,7 @@ State <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object State:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object State:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!is.null(`on_1b`)) {
         self$`on_1b` <- `on_1b`

@@ -27,7 +27,7 @@ Lineup <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object Lineup:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object Lineup:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!missing(`lineup`)) {
         stopifnot(is.vector(`lineup`), length(`lineup`) != 0)

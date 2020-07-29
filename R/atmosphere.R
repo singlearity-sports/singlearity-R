@@ -33,7 +33,7 @@ Atmosphere <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object Atmosphere:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object Atmosphere:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!missing(`venue`)) {
         stopifnot(R6::is.R6(`venue`))

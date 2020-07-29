@@ -36,7 +36,7 @@ Venue <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object Venue:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object Venue:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!missing(`id`)) {
         stopifnot(is.numeric(`id`), length(`id`) == 1)

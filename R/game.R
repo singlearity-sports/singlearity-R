@@ -36,7 +36,7 @@ Game <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object Game:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object Game:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!missing(`home_lineup`)) {
         stopifnot(R6::is.R6(`home_lineup`))

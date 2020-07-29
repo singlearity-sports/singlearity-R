@@ -30,7 +30,7 @@ GameSimResults <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object GameSimResults:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object GameSimResults:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!missing(`home_score`)) {
         stopifnot(is.numeric(`home_score`), length(`home_score`) == 1)

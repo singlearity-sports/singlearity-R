@@ -27,7 +27,7 @@ HTTPValidationError <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object HTTPValidationError:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object HTTPValidationError:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!is.null(`detail`)) {
         stopifnot(is.vector(`detail`), length(`detail`) != 0)

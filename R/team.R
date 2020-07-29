@@ -45,7 +45,7 @@ Team <- R6::R6Class(
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
-        stop(paste("Unknown argument(s) in initialize of object Team:", paste(names(local.optional.var), collapse=" "), collapse=" "))
+        stop(paste("Unknown argument(s) in initialize of object Team:", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
       if (!missing(`abbreviation`)) {
         stopifnot(is.character(`abbreviation`), length(`abbreviation`) == 1)
