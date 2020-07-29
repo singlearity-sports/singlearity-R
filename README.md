@@ -4,7 +4,7 @@
 
 Singlearity is a web-based service for baseball analytics.  It uses machine learning to make predictions based on a wide range of player and historical data.    These predictions can be used to make more effective pre-game and in-game strategy decisions and to provide for more accurate game simulations.
 
-You can view the technical description of Singlearity at [Baseball Prospectus](https://www.baseballprospectus.com)
+You can view the technical description of Singlearity at [Baseball Prospectus](https://www.baseballprospectus.com/news/article/59993/singlearity-using-a-neural-network-to-predict-the-outcome-of-plate-appearances/)
 
 # Description
 
@@ -12,58 +12,46 @@ This repository contains sample R code for making programmatic calls to the Sing
 
 There are two closely related types of predictions that can be obtained:
 
-* **Batter vs. Pitcher predictions (Singlearity-PA)**.   To generate batter vs. pitcher predictions, you must programmatically generate a **Matchup**.  A Matchup consists of a **Batter**, a **Pitcher**, the **Atmosphere** (containing things such as game location and weather), and a **State** (containing things such as score, inning, and baserunners).  A list of matchups can be submitted to the Singlearity server and it will return predicted outcomes for each matchup.  Visit the [singlearity.com](www.singlearity.com) website to see a GUI version of Singlearity-PA.
+* **Batter vs. Pitcher predictions (Singlearity-PA)**.   To generate batter vs. pitcher predictions, you must programmatically generate a **Matchup**.  A Matchup consists of a **Batter**, a **Pitcher**, the **Atmosphere** (containing things such as game location and weather), and a **State** (containing things such as score, inning, and baserunners).  A list of matchups can be submitted to the Singlearity server and it will return predicted outcomes for each matchup.  Visit the [singlearity.com](https://www.singlearity.com) website to see a GUI version of Singlearity-PA.
 
 * **Game simulation predictions (Singlearity-Game)**.   Game simulations work by running hundreds or thousands of Monte Carlo simulations using the plate appearance outcomes provided by Singlearity-PA.   To generate game simulations, you must programmatically create home and away **Lineup**s.   The simulation may optionally include a starting **State** at some intermediate point in the game.  This would allow you to simulate, for instance, a tie game in the bottom of the 9th inning game with multiple runners on base, the #5 hitter coming to bat with a tired pitcher on the mound.   Currently, Singlearity-Game only supports simulating to the end of the half-inning.  With a very short piece of code, you could, for instance, simulate how successful each of ten different relievers would be in holding a lead in the bottom of the 10th inning when facing a given portion of the lineup.    It is possible to accurately simulate hundreds or thousands of games in just a few seconds. 
 
 # Requirements
 
-R 3.4.3+, R 4.0+
+R 3.3+
 
 ## Installation
+
+Obtain a Trial API key through the [Singlearity Contact Form](https://docs.google.com/forms/d/e/1FAIpQLSdO_K9_6cGBG_iStuSMKbqUBRX3Z8RAYzNVFRBVIXuumVSjAg/viewform?usp=sf_link)
+
+
 
 ### Prerequisites
 
 Install the dependencies
 
-```R
+```
+#R code
 install.packages("devtools")
-library(devtools)
+devtools::install_github("singlearity-sports/singlearity-R")
 ```
 
 
-To install directly from Github, use `devtools`:
-```R
+## Example Usage
 
-install_github("singlearity-sports/singlearity-R")
-```
+**Create it**
 
-## Setting API key
-Set a tr
+Copy ```examples/common.R``` to a local directory.
 
-## Usage
-
-```R
-library(singlearity)
-
-key = Sys.getenv('SINGLEARITY_API_KEY')
-if (nchar(key) == 0)
-{
-  stop("You need to set an API KEY in your environment.  Modify (or create) a .Renviron file with a line containing your API KEY, for instance:
-       SINGLEARITY_API_KEY=myveryspecialkey")
-}
-
-sing = APIsApi$new()
-sing$apiClient$apiKeys['SINGLEARITY_API_KEY'] = key
-sing$apiClient$basePath='https://api.singlearity.com'
-```
-
-Create a file ```pa_pred_very_simple.R``` with:
+Create a file ```pa_pred_very_simple.R``` in the same local directory with:
 
 ```
+#pa_pred_very_simple.R
+
 ##########################################
 # Make predictions for groups of batters vs groups of pitchers
 ##########################################
+source('common.R')
 
 #list of batters
 batter_list = c('Mookie Betts', 'Justin Turner', 'Max Muncy', 'Cody Bellinger')
@@ -89,7 +77,7 @@ venue <- sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]]
 atmosphere <- Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
 
 matchups <- list()
-for (b in candidate_batters) 
+for (b in candidate_batters)
 {
   for (p in candidate_pitchers)
   {
@@ -98,13 +86,14 @@ for (b in candidate_batters)
 }
 
 results <- sing$GetPaSim(matchup = matchups)
-results = results[order(results$woba_exp, decreasing = TRUE), ]
+results <- results[c('batter_name', 'pitcher_name', 'hr_exp', 'so_exp', 'ba_exp', 'ops_exp', 'woba_exp')]
+results <- results[order(results$woba_exp, decreasing = TRUE), ]
 print(results)
 ```
 
 **Run it**
 ```
-env SINGLEARITY_API_KEY=<API_KEY> r -f pa_pred_very_simple.R
+env SINGLEARITY_API_KEY=YOUR_API_KEY R -f pa_pred_very_simple.R
 ```
 **Results**
 ```
@@ -118,4 +107,7 @@ env SINGLEARITY_API_KEY=<API_KEY> r -f pa_pred_very_simple.R
 4  Justin Turner  Emilio Pagan 0.04254675 0.2940399 0.2347854 0.7125016 0.3079187
 8      Max Muncy Chris Paddack 0.04582457 0.3740999 0.2098127 0.7025451 0.3065602
 ```
+
+![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/dtucker-initial/Screen%20Shot%202020-07-29%20at%204.34.10%20PM.png)
+
 
