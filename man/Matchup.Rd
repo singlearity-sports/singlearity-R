@@ -41,7 +41,7 @@ Matchup Class
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Matchup$new(batter, pitcher, atmosphere, state, date = "2019-09-28", ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Matchup$new(batter, pitcher, atmosphere, state, date = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 }

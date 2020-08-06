@@ -35,7 +35,7 @@ Matchup <- R6::R6Class(
     `state` = NULL,
     `date` = NULL,
     initialize = function(
-        `batter`, `pitcher`, `atmosphere`, `state`, `date`='2019-09-28', ...
+        `batter`, `pitcher`, `atmosphere`, `state`, `date`=NULL, ...
     ) {
       local.optional.var <- list(...)
       if (length(local.optional.var) > 0) {
