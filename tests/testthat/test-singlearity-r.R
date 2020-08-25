@@ -10,6 +10,16 @@ test_that("hth_results", {
   
   source('../../examples/pa_pred_simple.R')
   
+  # Testing to make sure different events have zero probability:
+  
+  # double plays
+  
+  expect_equal(results$dp_exp, 0)
+  
+  # fielder's choice
+  
+  expect_equal(results$fc_exp, 0)
+  
 })
 
 # Game state tests
