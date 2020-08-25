@@ -1,3 +1,5 @@
+# hard-coded file path
+# source('~/Desktop/Everything/Singlearity/examples/common.R')
 source(file='common.R')
 
 #list of batters
