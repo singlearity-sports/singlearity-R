@@ -14,48 +14,48 @@ test_that("hth_results", {
   
   source('examples/pa_pred_simple.R')
   
-  # Testing to make sure different events have zero probability
-  # This function tests for near-equality, not absolute equality
+  # Testing to make sure different events have near-zero probability
+  # This function tests that a value is less than a given one
   
   # double plays, overall
   
-  expect_equal(results$dp_exp, 0)
+  expect_lt(results$dp_exp, 1e-05)
   
   # fielder's choice
   
-  expect_equal(results$fc_exp, 0)
+  expect_lt(results$fc_exp, 1e-05)
   
   # fielder's choice out
   
-  expect_equal(results$fc_o_exp, 0)
+  expect_lt(results$fc_o_exp, 1e-05)
   
   # force out
   
-  expect_equal(results$fo, 0)
+  expect_lt(results$fo, 1e-05)
   
   # double plays, ground balls
   
-  expect_equal(results$gdp_exp, 0)
+  expect_lt(results$gdp_exp, 1e-05)
   
   # sacrifice flies, overall
   
-  expect_equal(results$sf_exp, 0)
+  expect_lt(results$sf_exp, 1e-05)
   
   # sacrifice fly double plays
   
-  expect_equal(results$sf_dp_exp, 0)
+  expect_lt(results$sf_dp_exp, 1e-05)
   
   # sacrifice hits
   
-  expect_equal(results$sh_exp, 0)
+  expect_lt(results$sh_exp, 1e-05)
   
   # strikeout double plays
   
-  expect_equal(results$so_dp_exp, 0)
+  expect_lt(results$so_dp_exp, 1e-05)
   
   # triple plays
   
-  expect_equal(results$tp_exp, 0)
+  expect_lt(results$tp_exp, 1e-05)
   
 })
 
