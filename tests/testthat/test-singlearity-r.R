@@ -1,5 +1,9 @@
 context("Singlearity")
 
+# Moves back to main directory before running test
+
+setwd('../..')
+
 # Head-to-head tests
 # Ensuring that outcome likelihoods are feasible
 
@@ -8,9 +12,10 @@ test_that("hth_results", {
   # Using simple start-of-game matchup from pa_pred_simple.R
   # Mookie Betts vs. Chris Paddack, leading off the bottom of the 1st
   
-  source('../../examples/pa_pred_simple.R')
+  source('examples/pa_pred_simple.R')
   
-  # Testing to make sure different events have zero probability:
+  # Testing to make sure different events have zero probability
+  # This function tests for near-equality, not absolute equality
   
   # double plays, overall
   
@@ -20,11 +25,11 @@ test_that("hth_results", {
   
   expect_equal(results$fc_exp, 0)
   
-  # ** what is "fc_o_exp"? **
+  # fielder's choice out
   
   expect_equal(results$fc_o_exp, 0)
   
-  # ** what is "fo_exp"? **
+  # force out
   
   expect_equal(results$fo, 0)
   
