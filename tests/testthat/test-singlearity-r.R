@@ -7,9 +7,9 @@ setwd('../..')
 # Head-to-head tests
 # Ensuring that outcome likelihoods are feasible
 
-test_that("hth_results", {
+test_that("test-pa_pred_simple", {
   
-  # Using simple start-of-game matchup from pa_pred_simple.R
+  # Using simple start-of-game matchup
   # Mookie Betts vs. Chris Paddack, leading off the bottom of the 1st
   
   source('examples/pa_pred_simple.R')
@@ -59,5 +59,10 @@ test_that("hth_results", {
   
 })
 
-# Game state tests
-# Testing that impossible outcomes (DPs, SFs, etc.) are represented correctly
+# 
+
+test_that("test-pa_pred_bases_loaded", {
+  
+  
+  
+})
