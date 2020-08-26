@@ -13,7 +13,7 @@ test_that("test-pa_pred_bases_loaded", {
   source('examples/pa_pred_bases_loaded.R')
   
   # Doing some more common-sense tests
-  # Some are the same as above, adding in some ones like IBB
+  # Some are the same as before, adding in some ones like IBB
   
   # intentional walks
   

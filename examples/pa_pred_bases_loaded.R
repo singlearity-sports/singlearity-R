@@ -4,8 +4,8 @@
 ###############################################################
 
 # hard-coded file path
-source('~/Desktop/Everything/Singlearity/examples/common.R')
-# source(file = 'common.R')
+# source('~/Desktop/Everything/Singlearity/examples/common.R')
+source(file = 'common.R')
 
 batter = sing$GetPlayers(name = 'Aaron Judge')[[1]]
 pitching_team = "Rays"
