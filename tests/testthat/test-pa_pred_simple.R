@@ -58,11 +58,3 @@ test_that("test-pa_pred_simple", {
   expect_lt(results$tp_exp, 1e-05)
   
 })
-
-# 
-
-test_that("test-pa_pred_bases_loaded", {
-  
-  
-  
-})
