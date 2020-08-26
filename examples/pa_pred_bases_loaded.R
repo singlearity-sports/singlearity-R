@@ -3,14 +3,16 @@
 # against Aaron Judge in the 9th with two outs and the bases loaded
 ###############################################################
 
-source(file = 'common.R')
+# hard-coded file path
+source('~/Desktop/Everything/Singlearity/examples/common.R')
+# source(file = 'common.R')
 
 batter = sing$GetPlayers(name = 'Aaron Judge')[[1]]
 pitching_team = "Rays"
 candidate_pitchers = sing$GetPlayers(team.name=pitching_team, position = "P", active = TRUE)
 
 venue = sing$GetVenues(stadium.name = 'Yankee Stadium')[[1]]
-atmosphere = Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Yankees', on.40=TRUE)[[1]])
+atmosphere = Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Yankees')[[1]])
 state <- State$new(on_1b = TRUE, on_2b = TRUE, on_3b = TRUE, pitch_number = 0, inning = 9, outs = 2, top = FALSE, bat_score = 3, fld_score = 3)
 
 
