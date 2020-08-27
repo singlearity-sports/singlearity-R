@@ -2,6 +2,7 @@
 # Demonstrate making plate appearance predictions based on a game state
 ##########################################
 
+# source('~/Desktop/Everything/Singlearity/examples/common.R')
 source(file = 'common.R')
 
 #list of batters

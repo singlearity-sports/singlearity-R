@@ -1,18 +1,19 @@
 ###############################################################
-# Let's try to sign a veteran RH 1B or DH to platoon against the Yankees lefty pitchers 
+# Let's try to sign a veteran LHH 1B or DH to platoon against the Yankees righty pitchers 
 ###############################################################
 
+# source('~/Desktop/Everything/Singlearity/examples/common.R')
 source(file = 'common.R')
 
-pitcher_list = c('J.A. Happ', 'James Paxton', 'Jordan Montgomery')
+pitcher_list = c('Gerrit Cole', 'Luis Severino')
 
 candidate_batters <- list()
 candidate_pitchers <- list()
 
-candidate_batters <- sing$GetPlayers(position = "1B", bat.side = "R", 
+candidate_batters <- sing$GetPlayers(position = "1B", bat.side = "L", 
                                      age.min = 32, active = TRUE)
 
-candidate_batters <- append(candidate_batters, sing$GetPlayers(position = "DH", bat.side = "R", 
+candidate_batters <- append(candidate_batters, sing$GetPlayers(position = "DH", bat.side = "L", 
                                                                age.min = 32, active = TRUE))
 
 for (pitcher in pitcher_list)
