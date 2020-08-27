@@ -19,42 +19,42 @@ test_that("test-pa_pred_simple", {
   
   # double plays, overall
   
-  expect_lt(results$dp_exp, 1e-05)
+  expect_lt(results$dp_exp, 1e-04)
   
   # fielder's choice
   
-  expect_lt(results$fc_exp, 1e-05)
+  expect_lt(results$fc_exp, 1e-04)
   
   # fielder's choice out
   
-  expect_lt(results$fc_o_exp, 1e-05)
+  expect_lt(results$fc_o_exp, 1e-04)
   
   # force out
   
-  expect_lt(results$fo, 1e-05)
+  expect_lt(results$fo, 1e-04)
   
   # double plays, ground balls
   
-  expect_lt(results$gdp_exp, 1e-05)
+  expect_lt(results$gdp_exp, 1e-04)
   
   # sacrifice flies, overall
   
-  expect_lt(results$sf_exp, 1e-05)
+  expect_lt(results$sf_exp, 1e-04)
   
   # sacrifice fly double plays
   
-  expect_lt(results$sf_dp_exp, 1e-05)
+  expect_lt(results$sf_dp_exp, 1e-04)
   
   # sacrifice hits
   
-  expect_lt(results$sh_exp, 1e-05)
+  expect_lt(results$sh_exp, 1e-04)
   
   # strikeout double plays
   
-  expect_lt(results$so_dp_exp, 1e-05)
+  expect_lt(results$so_dp_exp, 1e-04)
   
   # triple plays
   
-  expect_lt(results$tp_exp, 1e-05)
+  expect_lt(results$tp_exp, 1e-04)
   
 })
