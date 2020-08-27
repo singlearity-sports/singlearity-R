@@ -20,6 +20,8 @@ test_that("test-pa_pred_get_best_veteran", {
   
   # Also double-checking that it did indeed return a proper wOBA ranking
   
-  expect_gt(results[1,]$woba_exp, results[2,]$woba_exp)
+  expect_equal(results[1,]$woba_exp, max(results$woba_exp))
+  
+  expect_equal(results[nrow(results),]$woba_exp, min(results$woba_exp))
   
 })
