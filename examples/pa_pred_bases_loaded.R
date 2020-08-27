@@ -4,8 +4,9 @@
 ###############################################################
 
 # hard-coded file path
+# commented out when running tests because API work contained within helper-common.R
 # source('~/Desktop/Everything/Singlearity/examples/common.R')
-source(file = 'common.R')
+# source(file = 'common.R')
 
 batter = sing$GetPlayers(name = 'Aaron Judge')[[1]]
 pitching_team = "Rays"

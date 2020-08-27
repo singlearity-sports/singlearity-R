@@ -1,6 +1,8 @@
 # hard-coded file path
+# commented out when running tests because API work contained within helper-common.R
+
 # source('~/Desktop/Everything/Singlearity/examples/common.R')
-source(file='common.R')
+# source(file='common.R')
 
 #list of batters
 batter_list = c('Mookie Betts')
