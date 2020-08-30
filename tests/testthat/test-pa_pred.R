@@ -77,12 +77,11 @@ test_that("test-pa_pred_bases_loaded", {
   pitchers <- c('Shane Bieber')
   stadium <- 'Progressive Field'
   home <- 'Indians'
-  temp <- 70
   state <- State$new(on_1b = TRUE, on_2b = TRUE, on_3b = TRUE, 
                      pitch_number = 20, inning = 1, outs = 0, 
                      top = TRUE, bat_score = 0, fld_score = 0)
   
-  results <- pa_pred_simple(batters, pitchers, stadium, home, temp, state)
+  results <- pa_pred_simple(batters, pitchers, stadium, home, state)
   
   # Now we test to look at the probabilities of some other notable events
   # These are meant to see whether common events have realistic probabilities
@@ -109,6 +108,38 @@ test_that("test-pa_pred_bases_loaded", {
   # A triple play is possible, so we test that probability is not equal to zero
   
   expect_false(isTRUE(all.equal(results$tp_exp, 0)))
+  
+})
+
+
+test_that("test-pa_pred_pitcher_comparison", {
+  
+  # Now ensuring that SP do better in similar situation w/ fewer pitches
+  # Bases empty, two out, Gerrit Cole vs. Xander Bogaerts
+  # Comparing start of game T1 vs. T7 (100 pitches)
+  
+  batters <- c('Xander Bogaerts')
+  pitchers <- c('Gerrit Cole')
+  stadium <- 'Yankee Stadium'
+  home <- 'Yankees'
+  state_t1 <- State$new(on_1b = F, on_2b = F, on_3b = F, 
+                     pitch_number = 0, inning = 1, outs = 0, 
+                     top = TRUE, bat_score = 0, fld_score = 0)
+  
+  results_t1 <- pa_pred_simple(batters, pitchers, stadium, home, state_t1)
+  
+  state_t7 <- State$new(on_1b = F, on_2b = F, on_3b = F, 
+                        pitch_number = 100, inning = 7, outs = 0, 
+                        top = TRUE, bat_score = 0, fld_score = 0)
+  
+  results_t7 <- pa_pred_simple(batters, pitchers, stadium, home, state_t7)
+  
+  # We want to make sure that there's higher offensive production after a long outing
+  
+  expect_gt(results_t7$ba_exp, results_t1$ba_exp)
+  expect_gt(results_t7$obp_exp, results_t1$obp_exp)
+  expect_gt(results_t7$slg_exp, results_t1$slg_exp)
+  expect_gt(results_t7$woba_exp, results_t1$woba_exp)
   
 })
 

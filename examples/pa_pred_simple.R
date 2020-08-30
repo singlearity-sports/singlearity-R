@@ -7,7 +7,7 @@
 # turning this into a function
 
 pa_pred_simple <- function(batters, pitchers, stadium, home, 
-                           temp = 70, state = State$new()) {
+                           state = State$new(), temp = 70) {
   
   #initialize empty lists
   candidate_batters <- list()
