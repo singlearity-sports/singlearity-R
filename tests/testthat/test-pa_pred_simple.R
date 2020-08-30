@@ -9,10 +9,19 @@ setwd('../..')
 
 test_that("test-pa_pred_simple", {
   
+  source('examples/pa_pred_simple.R')
+  
   # Using simple start-of-game matchup
   # Mookie Betts vs. Chris Paddack, leading off the bottom of the 1st
+  # At LAD, 70 degrees
   
-  source('examples/pa_pred_simple.R')
+  batters <- c("Mookie Betts")
+  pitchers <- c("Chris Paddack")
+  stadium <- "Dodger Stadium"
+  temp <- 70
+  home <- "Dodgers"
+  
+  results <- pa_pred_simple(batters, pitchers, stadium, temp, home)
   
   # Testing to make sure different events have near-zero probability
   # This function tests that a value is less than a given one
