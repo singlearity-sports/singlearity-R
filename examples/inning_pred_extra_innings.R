@@ -8,7 +8,13 @@
 
 library(glue)
 
-inning_pred_extra_innings <- function() {
+inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
+                                      home6, home7, home8, home9, home_sp,
+                                      away1, away2, away3, away4, away5,
+                                      away6, away7, away8, away9, away_sp,
+                                      stadium, team_home, bat_score_start, fld_score_start,
+                                      bat_start, pitch_start = 0,
+                                      temp = 70) {
     
     # Creates a function to create lineups
     # Position players passed in are in vector form
@@ -82,30 +88,13 @@ inning_pred_extra_innings <- function() {
     )
     
     
+    venue <- sing$GetVenues(stadium.name = stadium)[[1]]
+    atmosphere <- Atmosphere$new(venue = venue, temperature = temp, 
+                                 home_team = sing$GetTeams(name = team_home)[[1]])
     
-    
-    visit_lineup_pos=c(
-        LineupPos$new(player=sing$GetPlayers(name='Yastrzemski')[[1]], position='LF'),
-        LineupPos$new(player=sing$GetPlayers(name='Brandon Belt')[[1]], position='1B'),
-        LineupPos$new(player=sing$GetPlayers(name='Evan Longoria')[[1]], position='3B'),
-        LineupPos$new(player=sing$GetPlayers(name='Alex Dickerson')[[1]], position='RF'),
-        LineupPos$new(player=sing$GetPlayers(name='Brandon Crawford')[[1]], position='SS'),
-        LineupPos$new(player=sing$GetPlayers(name='Mauricio Dubon')[[1]], position='2B'),
-        LineupPos$new(player=sing$GetPlayers(name='Wilmer Flores')[[1]], position='DH'),
-        LineupPos$new(player=sing$GetPlayers(name='Billy Hamilton')[[1]], position='CF'),
-        LineupPos$new(player=sing$GetPlayers(name='Tyler Heineman')[[1]], position='C'),
-        LineupPos$new(player=sing$GetPlayers(name='Johnny Cueto')[[1]], position='P')
-    )
-    venue <- sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]]
-    atmosphere <- Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
-    
-    bat_score_start<-2
-    fld_score_start<-3
-    bat_lineup_start<-7
-    pitch_number_start <- 0 #assume a fresh pitcher
     state <- State$new(inning = 10, to = FALSE, on_1b = FALSE, on_2b = TRUE, on_3b = FALSE, 
                        outs = 0, bat_score = bat_score_start, fld_score = fld_score_start,
-                       bat_lineup_order = bat_lineup_start, pitch_number = pitch_number_start)
+                       bat_lineup_order = bat_start, pitch_number = pitch_start)
     
     
     find_best_reliever <- function(pitchers, sims) {
