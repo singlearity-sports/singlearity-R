@@ -123,8 +123,8 @@ test_that("test-pa_pred_pitcher_comparison", {
   stadium <- 'Yankee Stadium'
   home <- 'Yankees'
   state_t1 <- State$new(on_1b = F, on_2b = F, on_3b = F, 
-                     pitch_number = 0, inning = 1, outs = 0, 
-                     top = TRUE, bat_score = 0, fld_score = 0)
+                        pitch_number = 0, inning = 1, outs = 0, 
+                        top = TRUE, bat_score = 0, fld_score = 0)
   
   results_t1 <- pa_pred_simple(batters, pitchers, stadium, home, state_t1)
   
@@ -140,6 +140,11 @@ test_that("test-pa_pred_pitcher_comparison", {
   expect_gt(results_t7$obp_exp, results_t1$obp_exp)
   expect_gt(results_t7$slg_exp, results_t1$slg_exp)
   expect_gt(results_t7$woba_exp, results_t1$woba_exp)
+  
+  # And that this is supported by the peripherals
+  
+  expect_gt(results_t7$bb_exp, results_t1$bb_exp)
+  expect_lt(results_t7$so_exp, results_t1$so_exp)
   
 })
 
