@@ -1,7 +1,7 @@
 # hard-coded file path
 # commented out when running tests because API work contained within helper-common.R
 
-source('~/Desktop/Everything/Singlearity/examples/common.R')
+# source('~/Desktop/Everything/Singlearity/examples/common.R')
 # source(file='common.R')
 
 # Turning this into a function
@@ -192,6 +192,8 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
             select(player, hold_pct, trail_pct) %>% 
             arrange(desc(hold_pct))
     }
+    
+    print(pitcher_results)
     
     return(pitcher_results)
     

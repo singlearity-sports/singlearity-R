@@ -4,12 +4,12 @@ library(tidyverse)
 # Moves back to main directory before running test
 
 setwd('../..')
-source('examples/inning_pred_extra_innings')
+source('examples/inning_pred_extra_innings.R')
 
 test_that("test-pa_pred_extras", {
   
   # Attempting to determine the best NYY reliever to face the Rays in extras
-  # 3-2 Yankees, bottom 10, runner starting on second
+  # 4-3 Yankees, bottom 10, runner starting on second
   
   # Rays lineup
   
@@ -43,26 +43,27 @@ test_that("test-pa_pred_extras", {
                 'Luis Cessa', 'Brooks Kriske')
   
   # Running through the simulation and assigning to a variable
-  
-  sim_results <- inning_pred_extra_innings(away1, away2, away3, away4, away5, away6,
-                                           away7, away8, away9, away_starter,
-                                           home1, home2, home3, home4, home5, home6,
+
+  sim_results <- inning_pred_extra_innings(home1, home2, home3, home4, home5, home6,
                                            home7, home8, home9, home_starter,
+                                           away1, away2, away3, away4, away5, away6,
+                                           away7, away8, away9, away_starter,
                                            pitcher_list = pitchers,
-                                           stadium = 'Yankee Stadium',
-                                           team_home = 'Yankees',
+                                           stadium = 'Tropicana Field',
+                                           team_home = 'Rays',
                                            bat_score_start = 3, 
-                                           fld_score_start = 3, 
+                                           fld_score_start = 4, 
                                            bat_start = 2, 
-                                           num_sims = 2000,
+                                           num_sims = 1000,
                                            temp = 70,
                                            inning_start = 10,
-                                           top = TRUE)
+                                           top = FALSE)
   
   # Doing some quick sanity checks to make sure that our numbers make sense
   
   # That the data is sorted correctly
   
-  expect_gt(pull(slice(test, 1), win_pct), pull(slice(test, 2), win_pct))
+  expect_gt(pull(slice(sim_results, 1), save_pct), 
+            pull(slice(sim_results, 2), save_pct))
   
 })
