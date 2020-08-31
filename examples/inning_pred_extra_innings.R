@@ -1,12 +1,11 @@
 # hard-coded file path
 # commented out when running tests because API work contained within helper-common.R
 
-source('~/Desktop/Everything/Singlearity/examples/common.R')
+# source('~/Desktop/Everything/Singlearity/examples/common.R')
 # source(file='common.R')
 
 # Turning this into a function
 
-library(glue)
 library(tidyverse)
 
 # The default is bringing in a new reliever to start extra innings
@@ -185,23 +184,10 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
         mutate(win_pct = wins / num_sims,
                loss_pct = losses / num_sims,
                tie_pct = ties / num_sims) %>% 
-        select(win_pct, loss_pct, tie_pct) %>% 
+        select(player, win_pct, loss_pct, tie_pct) %>% 
         arrange(desc(win_pct))
     
     return(pitcher_results)
     
 }
 
-test <- inning_pred_extra_innings(c('Joey Wendle', '2B'), c('Ji-Man Choi', '1B'),
-                                  c('Yandy Diaz', '1B'), c('Yoshi Tsutsugo', 'DH'),
-                                  c('Willy Adames', 'SS'), c("Brian O'Grady", 'LF'),
-                                  c('Hunter Renfroe', 'RF'), c('Kevin Kiermaier', 'CF'),
-                                  c('Kevan Smith', 'C'), 'Tyler Glasnow',
-                                  c('LeMahieu', '2B'), c('Aaron Judge', 'RF'),
-                                  c('Gleyber Torres', 'SS'), c('Giancarlo Stanton', 'DH'),
-                                  c('Aaron Hicks', 'CF'), c('Luke Voit', '1B'),
-                                  c('Gary Sanchez', 'C'), c('Urshela', '3B'),
-                                  c('Miguel Andujar', 'LF'), 'Gerrit Cole',
-                                  c('Aroldis Chapman', 'Chad Green', 'Adam Ottavino',
-                                    'Luis Cessa', 'Brooks Kriske'),
-                                  'Tropicana Field', 'Rays', 3, 4, 2)
