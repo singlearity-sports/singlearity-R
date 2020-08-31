@@ -1,7 +1,7 @@
 # hard-coded file path
 # commented out when running tests because API work contained within helper-common.R
 
-# source('~/Desktop/Everything/Singlearity/examples/common.R')
+source('~/Desktop/Everything/Singlearity/examples/common.R')
 # source(file='common.R')
 
 # Turning this into a function
@@ -27,68 +27,48 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
     # Pitchers passed in are a single string with their names
     
     home_lineup_pos = c(
-        LineupPos$new(player = sing$GetPlayers(name = home1[2], 
-                                               position = home1[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home1[1])[[1]], 
                       position = home1[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home2[2], 
-                                               position = home2[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home2[1])[[1]], 
                       position = home2[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home3[2], 
-                                               position = home3[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home3[1])[[1]], 
                       position = home3[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home4[2], 
-                                               position = home4[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home4[1])[[1]], 
                       position = home4[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home5[2], 
-                                               position = home5[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home5[1])[[1]], 
                       position = home5[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home6[2], 
-                                               position = home6[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home6[1])[[1]], 
                       position = home6[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home7[2], 
-                                               position = home7[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home7[1])[[1]], 
                       position = home7[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home8[2], 
-                                               position = home8[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home8[1])[[1]], 
                       position = home8[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home9[2], 
-                                               position = home9[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = home9[1])[[1]], 
                       position = home9[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home_sp, 
-                                               position = 'P'), 
+        LineupPos$new(player = sing$GetPlayers(name = home_sp)[[1]], 
                       position = 'P')
     )
 
-    home_lineup_pos = c(
-        LineupPos$new(player = sing$GetPlayers(name = away1[2], 
-                                               position = away1[2])[[1]], 
+    visit_lineup_pos = c(
+        LineupPos$new(player = sing$GetPlayers(name = away1[1])[[1]], 
                       position = away1[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away2[2], 
-                                               position = away2[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = away2[1])[[1]], 
                       position = away2[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away3[2], 
-                                               position = away3[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = away3[1])[[1]], 
                       position = away3[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away4[2], 
-                                               position = away4[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = away4[1])[[1]], 
                       position = away4[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away5[2], 
-                                               position = away5[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = away5[1])[[1]], 
                       position = away5[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away6[2], 
-                                               position = away6[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = away6[1])[[1]], 
                       position = away6[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away7[2], 
-                                               position = away7[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = away7[1])[[1]], 
                       position = away7[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away8[2], 
-                                               position = away8[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = away8[1])[[1]], 
                       position = away8[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away9[2], 
-                                               position = away9[2])[[1]], 
+        LineupPos$new(player = sing$GetPlayers(name = away9[1])[[1]], 
                       position = away9[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away_sp, 
-                                               position = 'P'), 
+        LineupPos$new(player = sing$GetPlayers(name = away_sp)[[1]], 
                       position = 'P')
     )
     
@@ -120,7 +100,7 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
 
             # Splits it up by home and away
             
-            if (top = FALSE) {
+            if (top == FALSE) {
                 visit_lineup_pos[[10]] <- 
                     LineupPos$new(player = sing$GetPlayers(name = pitcher)[[1]], 
                                   position = 'P')
@@ -212,3 +192,16 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
     
 }
 
+test <- inning_pred_extra_innings(c('Joey Wendle', '2B'), c('Ji-Man Choi', '1B'),
+                                  c('Yandy Diaz', '1B'), c('Yoshi Tsutsugo', 'DH'),
+                                  c('Willy Adames', 'SS'), c("Brian O'Grady", 'LF'),
+                                  c('Hunter Renfroe', 'RF'), c('Kevin Kiermaier', 'CF'),
+                                  c('Kevan Smith', 'C'), 'Tyler Glasnow',
+                                  c('LeMahieu', '2B'), c('Aaron Judge', 'RF'),
+                                  c('Gleyber Torres', 'SS'), c('Giancarlo Stanton', 'DH'),
+                                  c('Aaron Hicks', 'CF'), c('Luke Voit', '1B'),
+                                  c('Gary Sanchez', 'C'), c('Urshela', '3B'),
+                                  c('Miguel Andujar', 'LF'), 'Gerrit Cole',
+                                  c('Aroldis Chapman', 'Chad Green', 'Adam Ottavino',
+                                    'Luis Cessa', 'Brooks Kriske'),
+                                  'Tropicana Field', 'Rays', 3, 4, 2)
