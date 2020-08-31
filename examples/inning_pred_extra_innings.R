@@ -7,16 +7,19 @@
 # Turning this into a function
 
 library(glue)
+library(tidyverse)
+
+# The default is bringing in a new reliever to start extra innings
 
 inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
                                       home6, home7, home8, home9, home_sp,
                                       away1, away2, away3, away4, away5,
                                       away6, away7, away8, away9, away_sp,
-                                      stadium, team_home, bat_score_start, 
-                                      fld_score_start, bat_start, sims = 1000,
-                                      temp = 70, inning_start = 10, top = FALSE, 
-                                      first = FALSE, second = TRUE, third = FALSE, 
-                                      outs_start = 0, pitch_start = 0) {
+                                      pitcher_list, stadium, team_home, 
+                                      bat_score_start, fld_score_start, bat_start, 
+                                      num_sims = 1000, temp = 70, inning_start = 10, 
+                                      top = FALSE, first = FALSE, second = TRUE, 
+                                      third = FALSE, outs_start = 0, pitch_start = 0) {
     
     # Creates a function to create lineups
     # Position players passed in are in vector form
@@ -89,6 +92,8 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
                       position = 'P')
     )
     
+    # Creates venue, atmosphere, and state from passed-in values as well
+    # A bit messy but nothing too complex
     
     venue <- sing$GetVenues(stadium.name = stadium)[[1]]
     atmosphere <- Atmosphere$new(venue = venue, temperature = temp, 
@@ -104,7 +109,42 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
     find_best_reliever <- function(pitchers, sims) {
         for (pitcher in pitchers) {
             print(glue("Testing pitcher : {pitcher}"))
-            visit_lineup_pos[[10]] <- LineupPos$new(player=sing$GetPlayers(name=pitcher)[[1]], position='P')
+            if (top = FALSE) {
+                visit_lineup_pos[[10]] <- 
+                    LineupPos$new(player = sing$GetPlayers(name = pitcher)[[1]], 
+                                  position = 'P')
+                visit_lineup <- Lineup$new(visit_lineup_pos)
+                home_lineup <- Lineup$new(home_lineup_pos)
+                game <- Game$new(visit_lineup = visit_lineup, 
+                                 home_lineup = home_lineup, 
+                                 atmosphere = atmosphere)
+                game_sim_results <- 
+                    sing$GetGameSim(BodyGetGameSimGameSimPost$new(game = game,
+                                                                  start_state = state), 
+                                    num.sims = sims)
+                
+                saves <- 0
+                losses <- 0
+                ties <- 0
+                
+                for (result in game_sim_results) {
+                    if (result$away_score > result$home_score) {
+                        saves <- (saves + 1)
+                    } else if (result$away_score < result$home_score) {
+                        losses <- (losses + 1)
+                    } else if (result$away_score == result$home_score){
+                        ties <- (ties + 1)
+                    }
+                }
+                
+                
+            }
+            else {
+                
+            }
+            visit_lineup_pos[[10]] <- LineupPos$new(player = 
+                                                        sing$GetPlayers(name = pitcher)[[1]], 
+                                                    position = 'P')
             visit_lineup <- Lineup$new(visit_lineup_pos)
             home_lineup <- Lineup$new(home_lineup_pos)
             game <- Game$new(visit_lineup = visit_lineup, home_lineup = home_lineup, atmosphere = atmosphere)
@@ -130,9 +170,7 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
         }
     }
     
-    test_pitcher_list <- c('Tony Watson', 'Shaun Anderson', 'Trevor Gott', 'Jarlin Garcia', 'Wandy Peralta')
-    find_best_reliever(test_pitcher_list, sims = sims)
-    
+    find_best_reliever(pitcher_list, sims = num_sims)
     
 }
 
