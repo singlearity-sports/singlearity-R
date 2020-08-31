@@ -8,21 +8,61 @@ source('examples/inning_pred_extra_innings')
 
 test_that("test-pa_pred_extras", {
   
-  # Attempting to determine the best NYY reliever to face Juan Soto in extras
-  # 1-0 Yankees, bottom 10, runner starting on second
+  # Attempting to determine the best NYY reliever to face the Rays in extras
+  # 3-2 Yankees, bottom 10, runner starting on second
   
-  batters <- c('Juan Soto')
-  pitchers <- c('Chad Green', 'Aroldis Chapman', 'Adam Ottavino', 'Luis Cessa',
-                'Jonathan Loaisiga', 'Jonathan Holder', 'Ben Heller')
-  stadium <- 'Nationals Park'
-  home <- 'Nationals'
-  state <- State$new(on_1b = F, on_2b = T, on_3b = F, 
-                     pitch_number = 0, inning = 10, outs = 0, 
-                     top = FALSE, bat_score = 0, fld_score = 1)
+  # Rays lineup
   
-  results <- pa_pred_simple(batters, pitchers, stadium, home, state) %>% 
-    arrange(woba_exp)
+  home1 <- c('Austin Meadows', 'DH')
+  home2 <- c('Brandon Lowe', 'LF')
+  home3 <- c('Yandy Diaz', '3B')
+  home4 <- c('Ji-Man Choi', '1B')
+  home5 <- c('Willy Adames', 'SS')
+  home6 <- c('Joey Wendle', '2B')
+  home7 <- c('Manuel Margot', 'RF')
+  home8 <- c('Kevin Kiermaier', 'CF')
+  home9 <- c('Michael Perez', 'C')
+  home_starter <- 'Tyler Glasnow'
+
+  # Yankees lineup
   
-  print(results)
+  away1 <- c('LeMahieu', '2B')
+  away2 <- c('Aaron Judge', 'RF')
+  away3 <- c('Gleyber Torres', 'SS')
+  away4 <- c('Giancarlo Stanton', 'DH')
+  away5 <- c('Aaron Hicks', 'CF')
+  away6 <- c('Luke Voit', '1B')
+  away7 <- c('Gary Sanchez', 'C')
+  away8 <- c('Urshela', '3B')
+  away9 <- c('Miguel Andujar', 'LF')
+  away_starter <- 'Gerrit Cole'
+  
+  # Pitchers to compare
+  
+  pitchers <- c('Aroldis Chapman', 'Chad Green', 'Adam Ottavino',
+                'Luis Cessa', 'Brooks Kriske')
+  
+  # Running through the simulation and assigning to a variable
+  
+  sim_results <- inning_pred_extra_innings(away1, away2, away3, away4, away5, away6,
+                                           away7, away8, away9, away_starter,
+                                           home1, home2, home3, home4, home5, home6,
+                                           home7, home8, home9, home_starter,
+                                           pitcher_list = pitchers,
+                                           stadium = 'Yankee Stadium',
+                                           team_home = 'Yankees',
+                                           bat_score_start = 3, 
+                                           fld_score_start = 3, 
+                                           bat_start = 2, 
+                                           num_sims = 2000,
+                                           temp = 70,
+                                           inning_start = 10,
+                                           top = TRUE)
+  
+  # Doing some quick sanity checks to make sure that our numbers make sense
+  
+  # That the data is sorted correctly
+  
+  expect_gt(pull(slice(test, 1), win_pct), pull(slice(test, 2), win_pct))
   
 })

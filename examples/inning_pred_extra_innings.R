@@ -1,7 +1,7 @@
 # hard-coded file path
 # commented out when running tests because API work contained within helper-common.R
 
-# source('~/Desktop/Everything/Singlearity/examples/common.R')
+source('~/Desktop/Everything/Singlearity/examples/common.R')
 # source(file='common.R')
 
 # Turning this into a function
@@ -88,13 +88,12 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
     
     find_best_reliever <- function(pitchers, sims) {
         
-        # Creates tibble of pitchers and the results of their outings
-        
-        pitcher_results <- tibble(player = pitchers,
-                                  wins = 0, losses = 0, ties = 0)
-        
         # Loops through each of the pitchers to assess performance
         
+        # Creates tibble of pitchers, with the results to be inputted later
+        
+        pitcher_results <- tibble()
+
         for (pitcher in pitchers) {
 
             # Splits it up by home and away
@@ -115,25 +114,25 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
                 
                 # Goes through each of the simulated results to examine performance
                 
+                pitcher_result <- tibble(player = pitcher,
+                                         saves = 0, losses = 0, ties = 0)
+            
                 for (result in game_sim_results) {
                     if (result$away_score > result$home_score) {
-                        pitcher_results <- pitcher_results %>% 
-                            mutate(wins = ifelse(player == pitcher,
-                                                 wins + 1,
-                                                 wins))
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(saves = saves + 1)
                     } else if (result$away_score < result$home_score) {
-                        pitcher_results <- pitcher_results %>% 
-                            mutate(losses = ifelse(player == pitcher,
-                                                   losses + 1,
-                                                   losses))
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(losses = losses + 1)
                     } else if (result$away_score == result$home_score){
-                        pitcher_results <- pitcher_results %>% 
-                            mutate(ties = ifelse(player == pitcher,
-                                                 ties + 1,
-                                                 ties))
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(ties = ties + 1)
                     }
+                    
                 }
                 
+                pitcher_results <- bind_rows(pitcher_results, pitcher_result)
+
             } else {
                 
                 home_lineup_pos[[10]] <- 
@@ -149,29 +148,26 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
                                                                   start_state = state), 
                                     num.sims = sims)
                 
-                # Similar loop as before, now just seeing if the home team wins
+                # Similar loop as before, now just for the home team
                 
+                pitcher_result <- tibble(player = pitcher,
+                                         trailing = 0, holds = 0)
+
                 for (result in game_sim_results) {
                     
-                    if (result$home_score > result$away_score) {
-                        pitcher_results <- pitcher_results %>% 
-                            mutate(wins = ifelse(player == pitcher,
-                                                 wins + 1,
-                                                 wins))
-                    } else if (result$home_score < result$away_score) {
-                        pitcher_results <- pitcher_results %>% 
-                            mutate(losses = ifelse(player == pitcher,
-                                                   losses + 1,
-                                                   losses))
+                    if (result$home_score < result$away_score) {
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(trailing = trailing + 1)
                     } else if (result$away_score == result$home_score){
-                        pitcher_results <- pitcher_results %>% 
-                            mutate(ties = ifelse(player == pitcher,
-                                                 ties + 1,
-                                                 ties))
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(holds = holds + 1)
                     }
                 }
                 
+                pitcher_results <- bind_rows(pitcher_results, pitcher_result)
+                
             }
+            
         }
         
         return(pitcher_results)
@@ -180,14 +176,23 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
     
     # Gets results of simulations, converts to percentages, and sorts
     
-    pitcher_results <- find_best_reliever(pitcher_list, num_sims) %>% 
-        mutate(win_pct = wins / num_sims,
-               loss_pct = losses / num_sims,
-               tie_pct = ties / num_sims) %>% 
-        select(player, win_pct, loss_pct, tie_pct) %>% 
-        arrange(desc(win_pct))
+    pitcher_results <- find_best_reliever(pitcher_list, num_sims)
+    
+    if (top == FALSE) {
+        pitcher_results <- pitcher_results %>% 
+            mutate(save_pct = saves / num_sims,
+                   loss_pct = losses / num_sims,
+                   tie_pct = ties / num_sims) %>% 
+            select(player, save_pct, loss_pct, tie_pct) %>% 
+            arrange(desc(save_pct))
+    } else {
+        pitcher_results <- pitcher_results %>% 
+            mutate(hold_pct = holds / num_sims,
+                   trail_pct = trailing / num_sims) %>% 
+            select(player, hold_pct, trail_pct) %>% 
+            arrange(desc(hold_pct))
+    }
     
     return(pitcher_results)
     
 }
-
