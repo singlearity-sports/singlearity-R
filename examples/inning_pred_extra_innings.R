@@ -105,10 +105,21 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
                        fld_score = fld_score_start, bat_lineup_order = bat_start, 
                        pitch_number = pitch_start)
     
+    # Inner function to simulate through inning with selected pitcher
     
     find_best_reliever <- function(pitchers, sims) {
+        
+        # Creates tibble of pitchers and the results of their outings
+        
+        pitcher_results <- tibble(player = pitchers,
+                                  wins = 0, losses = 0, ties = 0)
+        
+        # Loops through each of the pitchers to assess performance
+        
         for (pitcher in pitchers) {
-            print(glue("Testing pitcher : {pitcher}"))
+
+            # Splits it up by home and away
+            
             if (top = FALSE) {
                 visit_lineup_pos[[10]] <- 
                     LineupPos$new(player = sing$GetPlayers(name = pitcher)[[1]], 
@@ -123,123 +134,81 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
                                                                   start_state = state), 
                                     num.sims = sims)
                 
-                saves <- 0
-                losses <- 0
-                ties <- 0
+                # Goes through each of the simulated results to examine performance
                 
                 for (result in game_sim_results) {
                     if (result$away_score > result$home_score) {
-                        saves <- (saves + 1)
+                        pitcher_results <- pitcher_results %>% 
+                            mutate(wins = ifelse(player == pitcher,
+                                                 wins + 1,
+                                                 wins))
                     } else if (result$away_score < result$home_score) {
-                        losses <- (losses + 1)
+                        pitcher_results <- pitcher_results %>% 
+                            mutate(losses = ifelse(player == pitcher,
+                                                   losses + 1,
+                                                   losses))
                     } else if (result$away_score == result$home_score){
-                        ties <- (ties + 1)
+                        pitcher_results <- pitcher_results %>% 
+                            mutate(ties = ifelse(player == pitcher,
+                                                 ties + 1,
+                                                 ties))
                     }
                 }
                 
+            } else {
                 
-            }
-            else {
+                home_lineup_pos[[10]] <- 
+                    LineupPos$new(player = sing$GetPlayers(name = pitcher)[[1]], 
+                                  position = 'P')
+                visit_lineup <- Lineup$new(visit_lineup_pos)
+                home_lineup <- Lineup$new(home_lineup_pos)
+                game <- Game$new(visit_lineup = visit_lineup, 
+                                 home_lineup = home_lineup, 
+                                 atmosphere = atmosphere)
+                game_sim_results <- 
+                    sing$GetGameSim(BodyGetGameSimGameSimPost$new(game = game,
+                                                                  start_state = state), 
+                                    num.sims = sims)
                 
-            }
-            visit_lineup_pos[[10]] <- LineupPos$new(player = 
-                                                        sing$GetPlayers(name = pitcher)[[1]], 
-                                                    position = 'P')
-            visit_lineup <- Lineup$new(visit_lineup_pos)
-            home_lineup <- Lineup$new(home_lineup_pos)
-            game <- Game$new(visit_lineup = visit_lineup, home_lineup = home_lineup, atmosphere = atmosphere)
-            game_sim_results <- sing$GetGameSim(BodyGetGameSimGameSimPost$new(game = game, start_state = state), num.sims = sims)
-            #game_sim_results is an array of home_score and away_score.  Now calculate how many times each team won
-            saves<-0
-            losses<-0
-            ties<-0
-            for (result in game_sim_results) {
-                if (result$away_score > result$home_score) {
-                    saves <- (saves + 1)
-                } else if (result$away_score < result$home_score) {
-                    losses <- (losses + 1)
-                } else if (result$away_score == result$home_score){
-                    ties <- (ties + 1)
+                # Similar loop as before, now just seeing if the home team wins
+                
+                for (result in game_sim_results) {
+                    
+                    if (result$home_score > result$away_score) {
+                        pitcher_results <- pitcher_results %>% 
+                            mutate(wins = ifelse(player == pitcher,
+                                                 wins + 1,
+                                                 wins))
+                    } else if (result$home_score < result$away_score) {
+                        pitcher_results <- pitcher_results %>% 
+                            mutate(losses = ifelse(player == pitcher,
+                                                   losses + 1,
+                                                   losses))
+                    } else if (result$away_score == result$home_score){
+                        pitcher_results <- pitcher_results %>% 
+                            mutate(ties = ifelse(player == pitcher,
+                                                 ties + 1,
+                                                 ties))
+                    }
                 }
+                
             }
-            
-            print(glue('Pitcher:', sprintf("%-20s", pitcher)  ,
-                       'Save Percentage: {format(round(saves/sims*100, 1), nsmall = 1)}%  ', 
-                       'Loss Percentage: {format(round(losses/sims*100, 1), nsmall = 1)}%  ',
-                       'Tie Percentage: {format(round(ties/sims*100, 1), nsmall = 1)}%  '))
         }
+        
+        return(pitcher_results)
+        
     }
     
-    find_best_reliever(pitcher_list, sims = num_sims)
+    # Gets results of simulations, converts to percentages, and sorts
+    
+    pitcher_results <- find_best_reliever(pitcher_list, num_sims) %>% 
+        mutate(win_pct = wins / num_sims,
+               loss_pct = losses / num_sims,
+               tie_pct = ties / num_sims) %>% 
+        select(win_pct, loss_pct, tie_pct) %>% 
+        arrange(desc(win_pct))
+    
+    return(pitcher_results)
     
 }
-
-home_lineup_pos=c(
-    LineupPos$new(player=sing$GetPlayers(name='Mookie Betts')[[1]], position='CF'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Max Muncy')[[1]], position='1B'),
-    LineupPos$new(player=sing$GetPlayers(name='Justin Turner')[[1]], position='3B'),
-    LineupPos$new(player=sing$GetPlayers(name='Cody Bellinger')[[1]], position='RF'),
-    LineupPos$new(player=sing$GetPlayers(name='Corey Seager')[[1]], position='SS'),
-    LineupPos$new(player=sing$GetPlayers(name='Pollock')[[1]], position='DH'),
-    LineupPos$new(player=sing$GetPlayers(name='Joc Pederson')[[1]], position='LF'),
-    LineupPos$new(player=sing$GetPlayers(name='Will Smith', position='C')[[1]], position='C'),
-    LineupPos$new(player=sing$GetPlayers(name='Clayton Kershaw')[[1]], position='P')
-)
-
-visit_lineup_pos=c(
-    LineupPos$new(player=sing$GetPlayers(name='Yastrzemski')[[1]], position='LF'),
-    LineupPos$new(player=sing$GetPlayers(name='Brandon Belt')[[1]], position='1B'),
-    LineupPos$new(player=sing$GetPlayers(name='Evan Longoria')[[1]], position='3B'),
-    LineupPos$new(player=sing$GetPlayers(name='Alex Dickerson')[[1]], position='RF'),
-    LineupPos$new(player=sing$GetPlayers(name='Brandon Crawford')[[1]], position='SS'),
-    LineupPos$new(player=sing$GetPlayers(name='Mauricio Dubon')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Wilmer Flores')[[1]], position='DH'),
-    LineupPos$new(player=sing$GetPlayers(name='Billy Hamilton')[[1]], position='CF'),
-    LineupPos$new(player=sing$GetPlayers(name='Tyler Heineman')[[1]], position='C'),
-    LineupPos$new(player=sing$GetPlayers(name='Johnny Cueto')[[1]], position='P')
-)
-venue <- sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]]
-atmosphere <- Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
-    
-bat_score_start<-2
-fld_score_start<-3
-bat_lineup_start<-7
-pitch_number_start <- 0 #assume a fresh pitcher
-state <- State$new(inning = 10, to = FALSE, on_1b = FALSE, on_2b = TRUE, on_3b = FALSE, 
-                   outs = 0, bat_score = bat_score_start, fld_score = fld_score_start,
-                   bat_lineup_order = bat_lineup_start, pitch_number = pitch_number_start)
-
-
-find_best_reliever <- function(pitchers, sims) {
-    for (pitcher in pitchers) {
-        print(glue("Testing pitcher : {pitcher}"))
-        visit_lineup_pos[[10]] <- LineupPos$new(player=sing$GetPlayers(name=pitcher)[[1]], position='P')
-        visit_lineup <- Lineup$new(visit_lineup_pos)
-        home_lineup <- Lineup$new(home_lineup_pos)
-        game <- Game$new(visit_lineup = visit_lineup, home_lineup = home_lineup, atmosphere = atmosphere)
-        game_sim_results <- sing$GetGameSim(BodyGetGameSimGameSimPost$new(game = game, start_state = state), num.sims = sims)
-        #game_sim_results is an array of home_score and away_score.  Now calculate how many times each team won
-        saves<-0
-        losses<-0
-        ties<-0
-        for (result in game_sim_results) {
-          if (result$away_score > result$home_score) {
-            saves <- (saves + 1)
-          } else if (result$away_score < result$home_score) {
-            losses <- (losses + 1)
-          } else if (result$away_score == result$home_score){
-            ties <- (ties + 1)
-          }
-        }
-   
-        print(glue('Pitcher:', sprintf("%-20s", pitcher)  ,
-              'Save Percentage: {format(round(saves/sims*100, 1), nsmall = 1)}%  ', 
-              'Loss Percentage: {format(round(losses/sims*100, 1), nsmall = 1)}%  ',
-              'Tie Percentage: {format(round(ties/sims*100, 1), nsmall = 1)}%  '))
-    }
-}
-
-test_pitcher_list <- c('Tony Watson', 'Shaun Anderson', 'Trevor Gott', 'Jarlin Garcia', 'Wandy Peralta')
-find_best_reliever(test_pitcher_list, sims = 2000)
 
