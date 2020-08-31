@@ -12,9 +12,11 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
                                       home6, home7, home8, home9, home_sp,
                                       away1, away2, away3, away4, away5,
                                       away6, away7, away8, away9, away_sp,
-                                      stadium, team_home, bat_score_start, fld_score_start,
-                                      bat_start, pitch_start = 0,
-                                      temp = 70) {
+                                      stadium, team_home, bat_score_start, 
+                                      fld_score_start, bat_start, sims = 1000,
+                                      temp = 70, inning_start = 10, top = FALSE, 
+                                      first = FALSE, second = TRUE, third = FALSE, 
+                                      outs_start = 0, pitch_start = 0) {
     
     # Creates a function to create lineups
     # Position players passed in are in vector form
@@ -92,9 +94,11 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
     atmosphere <- Atmosphere$new(venue = venue, temperature = temp, 
                                  home_team = sing$GetTeams(name = team_home)[[1]])
     
-    state <- State$new(inning = 10, to = FALSE, on_1b = FALSE, on_2b = TRUE, on_3b = FALSE, 
-                       outs = 0, bat_score = bat_score_start, fld_score = fld_score_start,
-                       bat_lineup_order = bat_start, pitch_number = pitch_start)
+    state <- State$new(inning = inning_start, to = top, 
+                       on_1b = first, on_2b = second, on_3b = third, 
+                       outs = outs_start, bat_score = bat_score_start, 
+                       fld_score = fld_score_start, bat_lineup_order = bat_start, 
+                       pitch_number = pitch_start)
     
     
     find_best_reliever <- function(pitchers, sims) {
@@ -127,7 +131,7 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
     }
     
     test_pitcher_list <- c('Tony Watson', 'Shaun Anderson', 'Trevor Gott', 'Jarlin Garcia', 'Wandy Peralta')
-    find_best_reliever(test_pitcher_list, sims = 2000)
+    find_best_reliever(test_pitcher_list, sims = sims)
     
     
 }
