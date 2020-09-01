@@ -41,9 +41,9 @@ test_that("test-pa_pred_extras", {
   away7 <- c('Gary Sanchez', 'C')
   away8 <- c('Urshela', '3B')
   away9 <- c('Miguel Andujar', 'LF')
-  away_starter <- c('Gerrit Cole', 'P)'
+  away_starter <- c('Gerrit Cole', 'P')
   
-  away_lineup <- as_tibble(rbind(away1, away2, away3, away4, away5, awayhome6,
+  away_lineup <- as_tibble(rbind(away1, away2, away3, away4, away5, away6,
                                  away7, away8, away9, away_starter)) %>% 
     rename(name = V1, pos = V2) %>% 
     mutate(lineup = 1:10) %>% 
@@ -56,18 +56,7 @@ test_that("test-pa_pred_extras", {
   
   # Running through the simulation and assigning to a variable
 
-  sim_results <- inning_pred_extra_innings(home_lineup, 
-                                           away_lineup,
-                                           pitcher_list = pitchers,
-                                           stadium = 'Tropicana Field',
-                                           team_home = 'Rays',
-                                           bat_score_start = 3, 
-                                           fld_score_start = 4, 
-                                           bat_start = 2, 
-                                           num_sims = 1000,
-                                           temp = 70,
-                                           inning_start = 10,
-                                           top = FALSE)
+  sim_results <- inning_pred_extra_innings()
   
   # Doing some quick sanity checks to make sure that our numbers make sense
   

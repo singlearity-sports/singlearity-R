@@ -1,7 +1,7 @@
 # hard-coded file path
 # commented out when running tests because API work contained within helper-common.R
 
-# source('~/Desktop/Everything/Singlearity/examples/common.R')
+source('~/Desktop/Everything/Singlearity/examples/common.R')
 # source(file='common.R')
 
 # Turning this into a function
@@ -10,8 +10,41 @@ library(tidyverse)
 
 # The default is bringing in a new reliever to start extra innings
 
-inning_pred_extra_innings <- function(home_lineup, visit_lineup,
-                                      pitcher_list, stadium, team_home, 
+inning_pred_extra_innings <- function(home_lineup = as_tibble(rbind(
+                                          c('Austin Meadows', 'DH'),
+                                          c('Brandon Lowe', 'LF'),
+                                          c('Yandy Diaz', '3B'),
+                                          c('Ji-Man Choi', '1B'),
+                                          c('Willy Adames', 'SS'),
+                                          c('Joey Wendle', '2B'),
+                                          c('Manuel Margot', 'RF'),
+                                          c('Kevin Kiermaier', 'CF'),
+                                          c('Michael Perez', 'C'),
+                                          c('Tyler Glasnow', 'P'))) %>% 
+                                          rename(name = V1, pos = V2) %>% 
+                                          mutate(lineup = 1:10) %>% 
+                                          select(lineup, name, pos),
+                                      visit_lineup = as_tibble(rbind(
+                                          c('LeMahieu', '2B'),
+                                          c('Aaron Judge', 'RF'),
+                                          c('Gleyber Torres', 'SS'),
+                                          c('Giancarlo Stanton', 'DH'),
+                                          c('Aaron Hicks', 'CF'),
+                                          c('Luke Voit', '1B'),
+                                          c('Gary Sanchez', 'C'),
+                                          c('Urshela', '3B'),
+                                          c('Miguel Andujar', 'LF'),
+                                          c('Gerrit Cole', 'P'))) %>% 
+                                          rename(name = V1, pos = V2) %>% 
+                                          mutate(lineup = 1:10) %>% 
+                                          select(lineup, name, pos), 
+                                      pitcher_list = c('Aroldis Chapman',
+                                                       'Chad Green',
+                                                       'Adam Ottavino',
+                                                       'Luis Cessa',
+                                                       'Brooks Kriske'), 
+                                      stadium = 'Tropicana Field', 
+                                      team_home = 'Rays', 
                                       num_sims = 1000, temp = 70, 
                                       state = State$new(inning = 10, to = FALSE, 
                                                         on_1b = FALSE, on_2b = TRUE,
@@ -160,3 +193,5 @@ inning_pred_extra_innings <- function(home_lineup, visit_lineup,
     return(pitcher_results)
     
 }
+
+tester <- inning_pred_extra_innings()
