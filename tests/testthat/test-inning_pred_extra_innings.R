@@ -22,7 +22,13 @@ test_that("test-pa_pred_extras", {
   home7 <- c('Manuel Margot', 'RF')
   home8 <- c('Kevin Kiermaier', 'CF')
   home9 <- c('Michael Perez', 'C')
-  home_starter <- 'Tyler Glasnow'
+  home_starter <- c('Tyler Glasnow', 'P')
+  
+  home_lineup <- as_tibble(rbind(home1, home2, home3, home4, home5, home6,
+                                 home7, home8, home9, home_starter)) %>% 
+    rename(name = V1, pos = V2) %>% 
+    mutate(lineup = 1:10) %>% 
+    select(lineup, name, pos)
 
   # Yankees lineup
   
@@ -36,6 +42,12 @@ test_that("test-pa_pred_extras", {
   away8 <- c('Urshela', '3B')
   away9 <- c('Miguel Andujar', 'LF')
   away_starter <- 'Gerrit Cole'
+  
+  away_lineup <- as_tibble(rbind(away1, away2, away3, away4, away5, awayhome6,
+                                 away7, away8, away9, away_starter)) %>% 
+    rename(name = V1, pos = V2) %>% 
+    mutate(lineup = 1:10) %>% 
+    select(lineup, name, pos)
   
   # Pitchers to compare
   
