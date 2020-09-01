@@ -41,7 +41,7 @@ test_that("test-pa_pred_extras", {
   away7 <- c('Gary Sanchez', 'C')
   away8 <- c('Urshela', '3B')
   away9 <- c('Miguel Andujar', 'LF')
-  away_starter <- 'Gerrit Cole'
+  away_starter <- c('Gerrit Cole', 'P)'
   
   away_lineup <- as_tibble(rbind(away1, away2, away3, away4, away5, awayhome6,
                                  away7, away8, away9, away_starter)) %>% 

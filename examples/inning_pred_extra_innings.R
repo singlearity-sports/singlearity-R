@@ -12,15 +12,16 @@ library(tidyverse)
 
 inning_pred_extra_innings <- function(home_lineup, visit_lineup,
                                       pitcher_list, stadium, team_home, 
-                                      bat_score_start, fld_score_start, bat_start, 
-                                      num_sims = 1000, temp = 70, inning_start = 10, 
-                                      top = FALSE, first = FALSE, second = TRUE, 
-                                      third = FALSE, outs_start = 0, pitch_start = 0) {
+                                      num_sims = 1000, temp = 70, 
+                                      state = State$new(inning = 10, to = FALSE, 
+                                                        on_1b = FALSE, on_2b = TRUE,
+                                                        on_3b = FALSE, outs = 0, 
+                                                        bat_score = 3, fld_score = 4,
+                                                        bat_lineup_order = 1, 
+                                                        pitch_number = 0)) {
     
-    # Creates a function to create lineups
-    # Position players passed in are in vector form
-    # The first element is their name, the second element is their position
-    # Pitchers passed in are a single string with their names
+    # Loops through dataframes of players to create lineups
+    # Much more efficient than prior creation
     
     home_lineup_pos = c()
     visit_lineup_pos = c()
@@ -44,12 +45,6 @@ inning_pred_extra_innings <- function(home_lineup, visit_lineup,
     venue <- sing$GetVenues(stadium.name = stadium)[[1]]
     atmosphere <- Atmosphere$new(venue = venue, temperature = temp, 
                                  home_team = sing$GetTeams(name = team_home)[[1]])
-    
-    state <- State$new(inning = inning_start, to = top, 
-                       on_1b = first, on_2b = second, on_3b = third, 
-                       outs = outs_start, bat_score = bat_score_start, 
-                       fld_score = fld_score_start, bat_lineup_order = bat_start, 
-                       pitch_number = pitch_start)
     
     # Inner function to simulate through inning with selected pitcher
     
