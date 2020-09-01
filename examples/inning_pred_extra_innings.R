@@ -193,4 +193,85 @@ inning_pred_extra_innings <- function(num_sims,
     
 }
 
-tester <- inning_pred_extra_innings(1000)
+# Creates function to accept command-line arguments and run prediction function
+
+main <- function() {
+    args <- commandArgs(trailingOnly = TRUE)
+    nsims <- as.numeric(args[1])
+    
+    # Checks added to ensure valid input
+    
+    if (nsims < 1) {
+        print("Must simulate between 1 and 2000 times. Number of simulations has
+                  been changed to 1000.")
+        nsims <- 1000
+    }
+    else if (nsims > 2000) {
+        print("Must simulate between 1 and 2000 times. Number of simulations has
+                  been changed to 2000.")
+        nsims <- 2000
+    }
+    else if (!is.integer(nsims)) {
+        print("Number of simulations must be an integer and has been rounded down.")
+        nsims <- floor(nsims)
+    }
+    
+    # Runs the prediction function as-is if only the number of simulations is entered
+
+    if (length(args) == 1) {
+        return(inning_pred_extra_innings(nsims))
+    }
+    
+    # Creates home/away lineups, pitchers to look at, stadium, and home team
+    # 
+    
+    home_team <- as_tibble(rbind(c(args[2], args[3]),
+                                 c(args[4], args[5]),
+                                 c(args[6], args[7]),
+                                 c(args[8], args[9]),
+                                 c(args[10], args[11]),
+                                 c(args[12], args[13]),
+                                 c(args[14], args[15]),
+                                 c(args[16], args[17]),
+                                 c(args[18], args[19]),
+                                 c(args[20], args[21]))) %>% 
+        rename(name = V1, pos = V2) %>% 
+        mutate(lineup = 1:10) %>% 
+        select(lineup, name, pos)
+    
+    away_team <- as_tibble(rbind(c(args[22], args[23]),
+                                 c(args[24], args[25]),
+                                 c(args[26], args[27]),
+                                 c(args[28], args[29]),
+                                 c(args[30], args[31]),
+                                 c(args[32], args[33]),
+                                 c(args[34], args[35]),
+                                 c(args[36], args[37]),
+                                 c(args[38], args[39]),
+                                 c(args[40], args[41]))) %>% 
+        rename(name = V1, pos = V2) %>% 
+        mutate(lineup = 1:10) %>% 
+        select(lineup, name, pos)
+    
+    pitchers = c(args[42], args[43], args[44], args[45], args[46])
+    
+    stadium = args[47] 
+    team_home = args[48]
+    
+    # Runs function if teams/pitchers/stadium have changed
+    
+    if (length(args) > 1 & length(args) < 49) {
+        return(inning_pred_extra_innings(nsims, home_team, away_team, pitchers,
+                                         stadium, team_home))
+    }
+    
+    # Runs function if teams/pitchers/stadium/temperature have changed
+    
+    else if (length(args) == 49) {
+        return(inning_pred_extra_innings(nsims, home_team, away_team, pitchers,
+                                         stadium, team_home, as.numeric(args[49])))
+    }
+    
+}
+
+tester <- inning_pred_extra_innings(7.7)
