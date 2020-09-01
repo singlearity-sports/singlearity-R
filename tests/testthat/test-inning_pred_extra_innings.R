@@ -56,10 +56,8 @@ test_that("test-pa_pred_extras", {
   
   # Running through the simulation and assigning to a variable
 
-  sim_results <- inning_pred_extra_innings(home1, home2, home3, home4, home5, home6,
-                                           home7, home8, home9, home_starter,
-                                           away1, away2, away3, away4, away5, away6,
-                                           away7, away8, away9, away_starter,
+  sim_results <- inning_pred_extra_innings(home_lineup, 
+                                           away_lineup,
                                            pitcher_list = pitchers,
                                            stadium = 'Tropicana Field',
                                            team_home = 'Rays',

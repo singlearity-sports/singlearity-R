@@ -10,10 +10,7 @@ library(tidyverse)
 
 # The default is bringing in a new reliever to start extra innings
 
-inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
-                                      home6, home7, home8, home9, home_sp,
-                                      away1, away2, away3, away4, away5,
-                                      away6, away7, away8, away9, away_sp,
+inning_pred_extra_innings <- function(home_lineup, visit_lineup,
                                       pitcher_list, stadium, team_home, 
                                       bat_score_start, fld_score_start, bat_start, 
                                       num_sims = 1000, temp = 70, inning_start = 10, 
@@ -25,51 +22,21 @@ inning_pred_extra_innings <- function(home1, home2, home3, home4, home5,
     # The first element is their name, the second element is their position
     # Pitchers passed in are a single string with their names
     
-    home_lineup_pos = c(
-        LineupPos$new(player = sing$GetPlayers(name = home1[1])[[1]], 
-                      position = home1[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home2[1])[[1]], 
-                      position = home2[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home3[1])[[1]], 
-                      position = home3[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home4[1])[[1]], 
-                      position = home4[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home5[1])[[1]], 
-                      position = home5[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home6[1])[[1]], 
-                      position = home6[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home7[1])[[1]], 
-                      position = home7[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home8[1])[[1]], 
-                      position = home8[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home9[1])[[1]], 
-                      position = home9[2]),
-        LineupPos$new(player = sing$GetPlayers(name = home_sp)[[1]], 
-                      position = 'P')
-    )
-
-    visit_lineup_pos = c(
-        LineupPos$new(player = sing$GetPlayers(name = away1[1])[[1]], 
-                      position = away1[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away2[1])[[1]], 
-                      position = away2[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away3[1])[[1]], 
-                      position = away3[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away4[1])[[1]], 
-                      position = away4[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away5[1])[[1]], 
-                      position = away5[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away6[1])[[1]], 
-                      position = away6[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away7[1])[[1]], 
-                      position = away7[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away8[1])[[1]], 
-                      position = away8[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away9[1])[[1]], 
-                      position = away9[2]),
-        LineupPos$new(player = sing$GetPlayers(name = away_sp)[[1]], 
-                      position = 'P')
-    )
+    home_lineup_pos = c()
+    visit_lineup_pos = c()
+    
+    for (i in 1:10) {
+        home_lineup_pos = c(home_lineup_pos,
+                            LineupPos$new(player = 
+                                              sing$GetPlayers(name =
+                                                                  home_lineup[i, 2][[1]])[[1]],
+                                          position = home_lineup[i, 3][[1]]))
+        visit_lineup_pos = c(visit_lineup_pos,
+                             LineupPos$new(player = 
+                                               sing$GetPlayers(name =
+                                                                   visit_lineup[i, 2][[1]])[[1]],
+                                          position = visit_lineup[i, 3][[1]]))
+    }
     
     # Creates venue, atmosphere, and state from passed-in values as well
     # A bit messy but nothing too complex
