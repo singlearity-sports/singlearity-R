@@ -1,7 +1,7 @@
 # hard-coded file path
 # commented out when running tests because API work contained within helper-common.R
 
-source('~/Desktop/Everything/Singlearity/examples/common.R')
+source('examples/common.R')
 # source(file='common.R')
 
 # Turning this into a function
@@ -10,7 +10,8 @@ library(tidyverse)
 
 # The default is bringing in a new reliever to start extra innings
 
-inning_pred_extra_innings <- function(home_lineup = as_tibble(rbind(
+inning_pred_extra_innings <- function(num_sims, 
+                                      home_lineup = as_tibble(rbind(
                                           c('Austin Meadows', 'DH'),
                                           c('Brandon Lowe', 'LF'),
                                           c('Yandy Diaz', '3B'),
@@ -45,7 +46,7 @@ inning_pred_extra_innings <- function(home_lineup = as_tibble(rbind(
                                                        'Brooks Kriske'), 
                                       stadium = 'Tropicana Field', 
                                       team_home = 'Rays', 
-                                      num_sims = 1000, temp = 70, 
+                                      temp = 70, 
                                       state = State$new(inning = 10, to = FALSE, 
                                                         on_1b = FALSE, on_2b = TRUE,
                                                         on_3b = FALSE, outs = 0, 
@@ -93,7 +94,7 @@ inning_pred_extra_innings <- function(home_lineup = as_tibble(rbind(
 
             # Splits it up by home and away
             
-            if (top == FALSE) {
+            if (state$top == FALSE) {
                 visit_lineup_pos[[10]] <- 
                     LineupPos$new(player = sing$GetPlayers(name = pitcher)[[1]], 
                                   position = 'P')
@@ -173,7 +174,7 @@ inning_pred_extra_innings <- function(home_lineup = as_tibble(rbind(
     
     pitcher_results <- find_best_reliever(pitcher_list, num_sims)
     
-    if (top == FALSE) {
+    if (state$top == FALSE) {
         pitcher_results <- pitcher_results %>% 
             mutate(save_pct = saves / num_sims,
                    loss_pct = losses / num_sims,
@@ -194,4 +195,4 @@ inning_pred_extra_innings <- function(home_lineup = as_tibble(rbind(
     
 }
 
-tester <- inning_pred_extra_innings()
+tester <- inning_pred_extra_innings(1000)
