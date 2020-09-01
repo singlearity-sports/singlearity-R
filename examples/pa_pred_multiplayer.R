@@ -2,6 +2,7 @@
 # Make predictions for groups of batters vs groups of pitchers
 ##########################################
 
+# comment out file path when running test files
 source(file = 'common.R')
 
 #list of batters

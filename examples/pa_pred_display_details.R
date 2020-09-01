@@ -2,7 +2,7 @@
 # Show the input features used to form the prediction
 ##########################################
 
-# source('~/Desktop/Everything/Singlearity/examples/common.R')
+# comment out file path when running test files
 source(file = 'common.R')
 
 #list of batters

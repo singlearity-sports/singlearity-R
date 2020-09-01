@@ -3,7 +3,7 @@
 # could be used by the Padres to select a relief pitcher, or the Dodgers to select
 # a pinch hitter.
 
-# source('~/Desktop/Everything/Singlearity/examples/common.R')
+# comment out file path when running test files
 source(file='common.R')
 
 # load required packages

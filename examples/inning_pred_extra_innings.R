@@ -1,8 +1,6 @@
-# hard-coded file path
-# commented out when running tests because API work contained within helper-common.R
+# comment out file path when running test files
 
-source('examples/common.R')
-# source(file='common.R')
+source(file='common.R')
 
 # Turning this into a function
 

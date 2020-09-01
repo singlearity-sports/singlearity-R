@@ -2,11 +2,8 @@
 # Let's try to sign a veteran LHH 1B or DH to platoon against the Yankees righty pitchers 
 ###############################################################
 
-# hard-coded file path
-# commented out when running tests because API work contained within helper-common.R
-
-# source('~/Desktop/Everything/Singlearity/examples/common.R')
-# source(file = 'common.R')
+# comment out file path when running test files
+source(file = 'common.R')
 
 pitcher_list = c('Gerrit Cole', 'Luis Severino')
 
