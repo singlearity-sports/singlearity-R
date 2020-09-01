@@ -223,7 +223,7 @@ main <- function() {
     }
     
     # Creates home/away lineups, pitchers to look at, stadium, and home team
-    # 
+    # All from command-line inputs
     
     home_team <- as_tibble(rbind(c(args[2], args[3]),
                                  c(args[4], args[5]),
@@ -267,10 +267,29 @@ main <- function() {
     
     # Runs function if teams/pitchers/stadium/temperature have changed
     
-    else if (length(args) == 49) {
+    temperature <- as.numeric(args[49])
+    
+    if (length(args) == 49) {
         return(inning_pred_extra_innings(nsims, home_team, away_team, pitchers,
-                                         stadium, team_home, as.numeric(args[49])))
+                                         stadium, team_home, temperature))
     }
+    
+    # Creates new state if that's a command-line argument
+    # In order: inning, half, 1st/2nd/3rd, outs, bat score, field score, lineup start, pitch #
+    
+    state = State$new(inning = as.numeric(args[50]), 
+                      to = as.logical(args[51]), 
+                      on_1b = as.logical(args[52]), 
+                      on_2b = as.logical(args[53]),
+                      on_3b = as.logical(args[54]), 
+                      outs = as.numeric(args[55]), 
+                      bat_score = as.numeric(args[56]), 
+                      fld_score = as.numeric(args[57]),
+                      bat_lineup_order = as.numeric(args[58]), 
+                      pitch_number = as.numeric(args[59]))
+    
+    return(inning_pred_extra_innings(nsims, home_team, away_team, pitchers, stadium,
+                                     team_home, temperature, state))
     
 }
 
