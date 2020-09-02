@@ -198,11 +198,7 @@ main <- function() {
     args <- commandArgs(trailingOnly = TRUE)
     
     if (length(args) != 1 & length(args) != 48 & length(args) != 49 & length(args) != 59) {
-        return("Invalid number of arguments. Do one of the following:
-               - Change only number of simulations
-               - Also change the lineups of the two teams, pitchers, stadium, and home team
-               - Same as above, but also changing the game-time temperature
-               - Change everything, including the game state")
+        return("Invalid number of arguments.")
     }
     
     nsims <- as.numeric(args[1])
@@ -219,10 +215,8 @@ main <- function() {
                   been changed to 2000.")
         nsims <- 2000
     }
-    
-    if (!is.integer(nsims)) {
-        print("Number of simulations must be an integer and has been rounded down.")
-        nsims <- floor(nsims)
+    else {
+        nsims <- nsims
     }
     
     # Runs the prediction function as-is if only the number of simulations is entered
