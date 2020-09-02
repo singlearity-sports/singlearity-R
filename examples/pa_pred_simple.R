@@ -49,13 +49,19 @@ main <- function() {
   
   args <- commandArgs(trailingOnly = TRUE)
   
+  # Checks to make sure we're not passing in too many arguments
+  
   if (length(args) > 15) {
     return("Invalid number of arguments.")
   }
   
+  # Runs the function as default when there are no arguments
+  
   if (length(args) == 0) {
     return(pa_pred_simple())
   }
+  
+  # Changes the stadium
   
   stad <- args[1]
   
@@ -63,17 +69,23 @@ main <- function() {
     return(pa_pred_simple(stad))
   }
   
+  # Changes the stadium and home team
+  
   home <- args[2]
   
   if (length(args) == 2) {
     return(pa_pred_simple(stad, home))
   }
   
-  temperature <- args[3]
+  # Changes stadium, home team, and temperature
+  
+  temperature <- as.numeric(args[3])
   
   if (length(args) == 3) {
     return(pa_pred_simple(stad, home, temperature))
   }
+  
+  # CHanges stadium, home team, temperature, and batter
   
   batter <- args[4]
   
@@ -81,22 +93,27 @@ main <- function() {
     return(pa_pred_simple(stad, home, temperature, batter))
   }
   
+  # Changes stadium, home team, temperature, and batter/pitcher matchup
+  
   pitcher <- args[5]
   
   if (length(args) == 5) {
     return(pa_pred_simple(stad, home, temperature, batter, pitcher))
   }
   
-  state <- State$new(inning = args[6], 
-                     to = args[7], 
-                     on_1b = args[8], 
-                     on_2b = args[9],
-                     on_3b = args[10], 
-                     outs = args[11], 
-                     bat_score = args[12], 
-                     fld_score = args[13],
-                     bat_lineup_order = args[14], 
-                     pitch_number = args[15])
+  # Changes everything: stadium, home team, temp., matchup, and game state
+  
+  new_state <- State$new(inning = as.numeric(args[6]), 
+                         to = as.logical(args[7]), 
+                         on_1b = as.logical(args[8]), 
+                         on_2b = as.logical(args[9]),
+                         on_3b = as.logical(args[10]), 
+                         outs = as.numeric(args[11]), 
+                         bat_score = as.numeric(args[12]), 
+                         fld_score = as.numeric(args[13]), 
+                         pitch_number = as.numeric(args[14]))
+  
+  return(pa_pred_simple(stad, home, temperature, batter, pitcher, new_state))
   
 }
 
