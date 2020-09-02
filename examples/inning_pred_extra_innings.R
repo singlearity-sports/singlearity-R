@@ -187,8 +187,6 @@ inning_pred_extra_innings <- function(num_sims,
             arrange(desc(hold_pct))
     }
     
-    print(pitcher_results)
-    
     return(pitcher_results)
     
 }
@@ -211,7 +209,8 @@ main <- function() {
                   been changed to 2000.")
         nsims <- 2000
     }
-    else if (!is.integer(nsims)) {
+    
+    if (!is.integer(nsims)) {
         print("Number of simulations must be an integer and has been rounded down.")
         nsims <- floor(nsims)
     }
@@ -293,4 +292,4 @@ main <- function() {
     
 }
 
-tester <- inning_pred_extra_innings(7.7)
+main()
