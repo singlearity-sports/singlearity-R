@@ -1,10 +1,14 @@
 # comment out file path when running test files
 source(file='common.R')
 
-# turning this into a function
+# turning this into a function, with a default matchup
 
-pa_pred_simple <- function(batters, pitchers, stadium, home, 
-                           state = State$new(), temp = 70) {
+pa_pred_simple <- function(stadium = "Dodger Stadium", 
+                           home = "Dodgers",
+                           temp = 70,
+                           batters = "Mookie Betts", 
+                           pitchers = "Mike Clevinger", 
+                           state = State$new()) {
   
   #initialize empty lists
   candidate_batters <- list()
@@ -38,3 +42,62 @@ pa_pred_simple <- function(batters, pitchers, stadium, home,
   return(results)
   
 }
+
+# Creates function to accept command-line arguments and run prediction function
+
+main <- function() {
+  
+  args <- commandArgs(trailingOnly = TRUE)
+  
+  if (length(args) > 15) {
+    return("Invalid number of arguments.")
+  }
+  
+  if (length(args) == 0) {
+    return(pa_pred_simple())
+  }
+  
+  stad <- args[1]
+  
+  if (length(args) == 1) {
+    return(pa_pred_simple(stad))
+  }
+  
+  home <- args[2]
+  
+  if (length(args) == 2) {
+    return(pa_pred_simple(stad, home))
+  }
+  
+  temperature <- args[3]
+  
+  if (length(args) == 3) {
+    return(pa_pred_simple(stad, home, temperature))
+  }
+  
+  batter <- args[4]
+  
+  if (length(args) == 4) {
+    return(pa_pred_simple(stad, home, temperature, batter))
+  }
+  
+  pitcher <- args[5]
+  
+  if (length(args) == 5) {
+    return(pa_pred_simple(stad, home, temperature, batter, pitcher))
+  }
+  
+  state <- State$new(inning = args[6], 
+                     to = args[7], 
+                     on_1b = args[8], 
+                     on_2b = args[9],
+                     on_3b = args[10], 
+                     outs = args[11], 
+                     bat_score = args[12], 
+                     fld_score = args[13],
+                     bat_lineup_order = args[14], 
+                     pitch_number = args[15])
+  
+}
+
+main()
