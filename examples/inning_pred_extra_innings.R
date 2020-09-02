@@ -194,7 +194,17 @@ inning_pred_extra_innings <- function(num_sims,
 # Creates function to accept command-line arguments and run prediction function
 
 main <- function() {
+    
     args <- commandArgs(trailingOnly = TRUE)
+    
+    if (length(args) != 1 & length(args) != 48 & length(args) != 49 & length(args) != 59) {
+        return("Invalid number of arguments. Do one of the following:
+               - Change only number of simulations
+               - Also change the lineups of the two teams, pitchers, stadium, and home team
+               - Same as above, but also changing the game-time temperature
+               - Change everything, including the game state")
+    }
+    
     nsims <- as.numeric(args[1])
     
     # Checks added to ensure valid input
@@ -259,7 +269,7 @@ main <- function() {
     
     # Runs function if teams/pitchers/stadium have changed
     
-    if (length(args) > 1 & length(args) < 49) {
+    if (length(args) == 48) {
         return(inning_pred_extra_innings(nsims, home_team, away_team, pitchers,
                                          stadium, team_home))
     }
