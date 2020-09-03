@@ -45,6 +45,8 @@ pa_pred_simple <- function(stadium = "Dodger Stadium",
 }
 
 # Creates function to accept command-line arguments and run prediction function
+# To run in the command line: 
+# R -f pa_pred_simple.R --args [ARGUMENTS HERE]
 
 main <- function() {
   

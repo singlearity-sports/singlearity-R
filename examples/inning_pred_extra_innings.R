@@ -194,6 +194,9 @@ inning_pred_extra_innings <- function(num_sims,
 # Creates function to accept command-line arguments and run prediction function
 # To run in the command line: 
 # R -f inning_pred_extra_innings.R --args [ARGUMENTS HERE]
+# When entering lineup, each player must be entered as two separate arguments:
+# Player name, then position. ex. "Cody Bellinger" "RF"
+# For each team, the pitcher must also be the last of the ten players entered
 
 main <- function(sims = 1000) {
     

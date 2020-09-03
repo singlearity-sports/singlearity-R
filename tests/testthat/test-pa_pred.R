@@ -136,10 +136,5 @@ test_that("test-pa_pred_pitcher_comparison", {
   expect_gt(results_t7$slg_exp, results_t1$slg_exp)
   expect_gt(results_t7$woba_exp, results_t1$woba_exp)
   
-  # And that this is supported by the peripherals
-  
-  expect_gt(results_t7$bb_exp, results_t1$bb_exp)
-  expect_lt(results_t7$so_exp, results_t1$so_exp)
-  
 })
 
