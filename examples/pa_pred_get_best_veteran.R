@@ -72,8 +72,7 @@ pa_pred_get_best_veteran <- function(num_pitchers = 2,
 main <- function() {
   
   args <- commandArgs(trailingOnly = TRUE)
-  print(args)
-  
+
   if (length(args) == 0) {
     return(pa_pred_get_best_veteran())
   }
@@ -100,13 +99,13 @@ main <- function() {
   for (i in 1:num_pos) {
     batters_pos <- c(batters_pos, args[3 + i])
   }
-  
+
   batters_sides <- c()
   
   for (j in 1:num_sides) {
-    batters_sides <- c(batters_sides, args[3 + num_sides + j])
+    batters_sides <- c(batters_sides, args[3 + num_pos + j])
   }
-  
+
   # Runs function if just the player positions and batting sides have changed
   
   if (length(args) == 3 + num_pos + num_sides) {
@@ -131,8 +130,7 @@ main <- function() {
   for (i in 1:num_p) {
     pitcher_vector <- c(pitcher_vector, args[3 + num_pos + num_sides + 2 + i])
   }
-  print(pitcher_vector)
-  
+
   if (length(args) == 3 + num_pos + num_sides + 2 + num_p) {
     return(pa_pred_get_best_veteran(num_p, num_pos, num_sides,
                                     batters_pos, batters_sides, 
