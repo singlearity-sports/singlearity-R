@@ -11,15 +11,10 @@ source('examples/pa_pred_simple.R')
 test_that("test-pa_pred_simple", {
   
   # Using simple start-of-game matchup
-  # Mookie Betts vs. Chris Paddack, leading off the bottom of the 1st
+  # Mookie Betts vs. Mike Clevinger, leading off the bottom of the 1st
   # At LAD, 70 degrees
-  
-  batters <- c('Mookie Betts')
-  pitchers <- c('Chris Paddack')
-  stadium <- 'Dodger Stadium'
-  home <- 'Dodgers'
-  
-  results <- pa_pred_simple(batters, pitchers, stadium, home)
+
+  results <- pa_pred_simple()
   
   # Testing to make sure different events have near-zero probability
   # This function tests that a value is less than a given one
@@ -81,7 +76,7 @@ test_that("test-pa_pred_bases_loaded", {
                      pitch_number = 20, inning = 1, outs = 0, 
                      top = TRUE, bat_score = 0, fld_score = 0)
   
-  results <- pa_pred_simple(batters, pitchers, stadium, home, state)
+  results <- pa_pred_simple(stadium, home, 70, batters, pitchers, state)
   
   # Now we test to look at the probabilities of some other notable events
   # These are meant to see whether common events have realistic probabilities
@@ -126,13 +121,13 @@ test_that("test-pa_pred_pitcher_comparison", {
                         pitch_number = 0, inning = 1, outs = 0, 
                         top = TRUE, bat_score = 0, fld_score = 0)
   
-  results_t1 <- pa_pred_simple(batters, pitchers, stadium, home, state_t1)
+  results_t1 <- pa_pred_simple(stadium, home, 70, batters, pitchers, state_t1)
   
   state_t7 <- State$new(on_1b = F, on_2b = F, on_3b = F, 
                         pitch_number = 100, inning = 7, outs = 0, 
                         top = TRUE, bat_score = 0, fld_score = 0)
   
-  results_t7 <- pa_pred_simple(batters, pitchers, stadium, home, state_t7)
+  results_t7 <- pa_pred_simple(stadium, home, 70, batters, pitchers, state_t7)
   
   # We want to make sure that there's higher offensive production after a long outing
   
