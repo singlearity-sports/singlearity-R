@@ -192,10 +192,16 @@ inning_pred_extra_innings <- function(num_sims,
 }
 
 # Creates function to accept command-line arguments and run prediction function
+# To run in the command line: 
+# R -f inning_pred_extra_innings.R --args [ARGUMENTS HERE]
 
-main <- function() {
+main <- function(sims = 1000) {
     
     args <- commandArgs(trailingOnly = TRUE)
+    
+    if (length(args) == 0) {
+        return(inning_pred_extra_innings(sims))
+    }
     
     if (length(args) != 1 & length(args) != 48 & length(args) != 49 & length(args) != 59) {
         return("Invalid number of arguments.")
