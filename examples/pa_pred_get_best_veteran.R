@@ -168,4 +168,7 @@ main <- function() {
   
 }
 
+# Uncomment when running tests
+# results <- main()
+
 main()
