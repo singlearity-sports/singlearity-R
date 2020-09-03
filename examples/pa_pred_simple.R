@@ -54,7 +54,7 @@ main <- function() {
   
   # Checks to make sure we're not passing in too many arguments
   
-  if (length(args) > 15) {
+  if (length(args) > 14) {
     return("Invalid number of arguments.")
   }
   
