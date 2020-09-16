@@ -92,7 +92,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
                         home, temp, away, idx) {
   
   # Uses info to get results of plate appearance
-  # "Away" argument is T/F on wheher team is on road
+  # "Away" argument is T/F on whether team is on road
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
                          State$new(top = away), idx)
@@ -1193,11 +1193,13 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
   
   # This corresponds to the starting state
   # 1 -> 8 correspond to no outs, 9 -> 16 are one out, 17 -> 24 two outs
-  #########
-  # EDIT DESCRIPTION HERE
-  #########
+  # In order within each: ---, 1--, -2-, --3, 12-, 1-3, -23, 123
+  # ex. 2 corresponds to no outs, runner on first
+  # ex. 13 corresponds to one out, runners on first and second
+  # ex. 24 corresponds to two outs, bases loaded
+  # The math to utilize this for the starting state is below
   
-  state_input <- 8*state$outs + state$on_1b + 2*state$on_2b + 3*state$on_3b +
+  state_input <- 1 + 8*state$outs + state$on_1b + 2*state$on_2b + 3*state$on_3b +
     ((state$on_1b & state$on_2b) | (state$on_1b & state$on_3b) | (state$on_2b & state$on_3b))
   
   scores[1, state_input] <- 1
@@ -1751,7 +1753,7 @@ main <- function() {
     
   }
   
-  
+  # When not run in the R console
   
   else {
     
@@ -1775,7 +1777,7 @@ main <- function() {
     
     if (default) {
       
-      markov_half_inning(1, info, state)
+      markov_half_inning(1, info)
       
     }
     
@@ -2062,7 +2064,7 @@ main <- function() {
           
           while (is.na(state$outs) | (state$outs < 0 | state$outs > 2)) {
             
-            cat("Inning: ")
+            cat("Outs: ")
             state$outs <- as.integer(readLines(file("stdin"), 1))
             
           }
