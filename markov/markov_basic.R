@@ -1197,6 +1197,9 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
   # EDIT DESCRIPTION HERE
   #########
   
+  state_input <- 8*state$outs + state$on_1b + 2*state$on_2b + 3*state$on_3b +
+    ((state$on_1b & state$on_2b) | (state$on_1b & state$on_3b) | (state$on_2b & state$on_3b))
+  
   scores[1, state_input] <- 1
   
   # Algorithm from:
