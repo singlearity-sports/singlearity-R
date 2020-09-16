@@ -1160,7 +1160,7 @@ EPSILON <- 1 / 100000
 
 # Uses Markov chains to get run-scoring probability distributions for a half-inning
 
-markov_half_inning <- function(idx, info, state_input = 1) {
+markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
   
   # Assigns values from function
   # Also creates a list of the 24 possible batting states
@@ -1170,7 +1170,7 @@ markov_half_inning <- function(idx, info, state_input = 1) {
   stadium <- info[[3]]
   home <- info[[4]]
   temp <- info[[5]]
-  away <- info[[6]]
+  away <- state$top
 
   # Uses this info to create the transition matrix for each batter
   
@@ -1197,7 +1197,7 @@ markov_half_inning <- function(idx, info, state_input = 1) {
   # EDIT DESCRIPTION HERE
   #########
   
-  scores[1, 1] <- state_input
+  scores[1, state_input] <- 1
   
   # Algorithm from:
   # https://pdfs.semanticscholar.org/563d/11f4baec14278357149a9726677453ba79a2.pdf
@@ -1354,9 +1354,7 @@ main <- function() {
   
   state <- State$new(top = FALSE)
   
-  away <- state$top
-
-  info <- list(batters, pitcher, stadium, home, temp, away)
+  info <- list(batters, pitcher, stadium, home, temp)
   
   # Has two different options: default matchup or custom matchup
   
@@ -1382,7 +1380,7 @@ main <- function() {
     
     if (default) {
 
-      markov_half_inning(1, info, state)
+      markov_half_inning(1, info)
       
     }
     
