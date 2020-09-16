@@ -89,11 +89,13 @@ get_results <- function(bat, pitch, stad, home, temp, state, idx) {
 # Function to create individual transition matrices
 
 get_tmatrix <- function(batter, pitcher, stadium,
-                        home, temp, state, idx) {
+                        home, temp, away, idx) {
   
   # Uses info to get results of plate appearance
+  # "Away" argument is T/F on wheher team is on road
   
-  results <- get_results(batter, pitcher, stadium, home, temp, state, idx)
+  results <- get_results(batter, pitcher, stadium, home, temp, 
+                         State$new(top = away), idx)
 
   # Uses predicted results to get the transition matrix
   # A0: 8x8 transition matrix where there are no outs and outs don't increase
@@ -144,7 +146,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 1--, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(on_1b = TRUE), idx)
+                         State$new(top = away, on_1b = TRUE), idx)
   
   # Probability of 1-- to ---, starting with no outs and no increase
   
@@ -190,7 +192,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at -2-, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(on_2b = TRUE), idx)
+                         State$new(top = away, on_2b = TRUE), idx)
   
   # Probability of -2- to ---, starting with no outs and no increase
   
@@ -233,7 +235,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at --3, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(on_3b = TRUE), idx)
+                         State$new(top = away, on_3b = TRUE), idx)
   
   # Probability of --3 to ---, starting with no outs and no increase
   
@@ -273,7 +275,8 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 12-, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(on_1b = TRUE, on_2b = TRUE), idx)
+                         State$new(top = away, on_1b = TRUE, on_2b = TRUE), 
+                         idx)
   
   # Probability of 12- to ---, starting with no outs and no increase
   
@@ -329,7 +332,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 1-3, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(on_1b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, on_1b = TRUE, on_3b = TRUE), idx)
   
   # Probability of 1-3 to ---, starting with no outs and no increase
   
@@ -385,7 +388,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at -23, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(on_2b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, on_2b = TRUE, on_3b = TRUE), idx)
   
   # Probability of -23 to ---, starting with no outs and no increase
   
@@ -435,7 +438,8 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 123, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(on_1b = TRUE, on_2b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, on_1b = TRUE, on_2b = TRUE, on_3b = TRUE), 
+                         idx)
   
   # Probability of 123 to ---, starting with no outs and no increase
   
@@ -486,7 +490,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at ---, one out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 1), idx)
+                         State$new(top = away, outs = 1), idx)
   
   # Probability of --- to ---, starting with one out and no increase
   
@@ -514,7 +518,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 1--, one out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 1, on_1b = TRUE), idx)
+                         State$new(top = away, outs = 1, on_1b = TRUE), idx)
   
   # Probability of 1-- to ---, starting with one out and no increase
   
@@ -560,7 +564,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at -2-, one out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 1, on_2b = TRUE), idx)
+                         State$new(top = away, outs = 1, on_2b = TRUE), idx)
   
   # Probability of -2- to ---, starting with one out and no increase
   
@@ -603,7 +607,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at --3, one out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 1, on_3b = TRUE), idx)
+                         State$new(top = away, outs = 1, on_3b = TRUE), idx)
   
   # Probability of --3 to ---, starting with one out and no increase
   
@@ -643,7 +647,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 12-, one out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 1, on_1b = TRUE, on_2b = TRUE), idx)
+                         State$new(top = away, outs = 1, on_1b = TRUE, on_2b = TRUE), idx)
   
   # Probability of 12- to ---, starting with one out and no increase
   
@@ -696,7 +700,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 1-3, one out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 1, on_1b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, outs = 1, on_1b = TRUE, on_3b = TRUE), idx)
   
   # Probability of 1-3 to ---, starting with one out and no increase
   
@@ -749,7 +753,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at -23, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 1, on_2b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, outs = 1, on_2b = TRUE, on_3b = TRUE), idx)
   
   # Probability of -23 to ---, starting with one out and no increase
   
@@ -796,7 +800,8 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 123, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 1, on_1b = TRUE, on_2b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, outs = 1, on_1b = TRUE, on_2b = TRUE, 
+                                   on_3b = TRUE), idx)
   
   # Probability of 123 to ---, starting with one out and no increase
   
@@ -844,7 +849,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at ---, two out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 2), idx)
+                         State$new(top = away, outs = 2), idx)
   
   # Probability of --- to ---, starting with two outs and no increase
   
@@ -872,7 +877,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 1--, two out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 2, on_1b = TRUE), idx)
+                         State$new(top = away, outs = 2, on_1b = TRUE), idx)
   
   # Probability of 1-- to ---, starting with two out and no increase
   
@@ -909,7 +914,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at -2-, two out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 2, on_2b = TRUE), idx)
+                         State$new(top = away, outs = 2, on_2b = TRUE), idx)
   
   # Probability of -2- to ---, starting with two out and no increase
   
@@ -943,7 +948,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at --3, two out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 2, on_3b = TRUE), idx)
+                         State$new(top = away, outs = 2, on_3b = TRUE), idx)
   
   # Probability of --3 to ---, starting with two out and no increase
   
@@ -974,7 +979,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 12-, two out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 2, on_1b = TRUE, on_2b = TRUE), idx)
+                         State$new(top = away, outs = 2, on_1b = TRUE, on_2b = TRUE), idx)
   
   # Probability of 12- to ---, starting with two out and no increase
   
@@ -1014,7 +1019,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 1-3, two out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 2, on_1b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, outs = 2, on_1b = TRUE, on_3b = TRUE), idx)
   
   # Probability of 1-3 to ---, starting with two out and no increase
   
@@ -1054,7 +1059,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at -23, no out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 2, on_2b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, outs = 2, on_2b = TRUE, on_3b = TRUE), idx)
   
   # Probability of -23 to ---, starting with two out and no increase
   
@@ -1088,7 +1093,8 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Changing results to start at 123, two out state
   
   results <- get_results(batter, pitcher, stadium, home, temp, 
-                         State$new(outs = 2, on_1b = TRUE, on_2b = TRUE, on_3b = TRUE), idx)
+                         State$new(top = away, outs = 2, on_1b = TRUE, on_2b = TRUE, 
+                                   on_3b = TRUE), idx)
   
   # Probability of 123 to ---, starting with two out and no increase
   
@@ -1154,7 +1160,7 @@ EPSILON <- 1 / 100000
 
 # Uses Markov chains to get run-scoring probability distributions for a half-inning
 
-markov_half_inning <- function(idx, info, state_input = State$new()) {
+markov_half_inning <- function(idx, info, state_input = 1) {
   
   # Assigns values from function
   # Also creates a list of the 24 possible batting states
@@ -1164,12 +1170,12 @@ markov_half_inning <- function(idx, info, state_input = State$new()) {
   stadium <- info[[3]]
   home <- info[[4]]
   temp <- info[[5]]
-  state <- state_input
+  away <- info[[6]]
 
   # Uses this info to create the transition matrix for each batter
   
   for (batter in 1:9) {
-    matrix <- get_tmatrix(batters[batter], pitcher, stadium, home, temp, state, batter)
+    matrix <- get_tmatrix(batters[batter], pitcher, stadium, home, temp, away, batter)
     assign(paste0("tmatrix_", batter), matrix)
   }
   
@@ -1184,7 +1190,14 @@ markov_half_inning <- function(idx, info, state_input = State$new()) {
   # 25 columns because there are 25 unique states (including end of inning)
   
   scores <- matrix(0, 21, 25)
-  scores[1, 1] <- 1
+  
+  # This corresponds to the starting state
+  # 1 -> 8 correspond to no outs, 9 -> 16 are one out, 17 -> 24 two outs
+  #########
+  # EDIT DESCRIPTION HERE
+  #########
+  
+  scores[1, 1] <- state_input
   
   # Algorithm from:
   # https://pdfs.semanticscholar.org/563d/11f4baec14278357149a9726677453ba79a2.pdf
@@ -1340,8 +1353,10 @@ main <- function() {
   temp <- 75
   
   state <- State$new(top = FALSE)
+  
+  away <- state$top
 
-  info <- list(batters, pitcher, stadium, home, temp)
+  info <- list(batters, pitcher, stadium, home, temp, away)
   
   # Has two different options: default matchup or custom matchup
   
