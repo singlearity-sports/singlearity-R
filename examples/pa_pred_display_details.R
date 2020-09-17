@@ -2,6 +2,7 @@
 # Show the input features used to form the prediction
 ##########################################
 
+# comment out file path when running test files
 source(file = 'common.R')
 
 #list of batters
@@ -27,7 +28,7 @@ for (pitcher in pitcher_list)
 
 
 venue <- sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]]
-state <- State$new(on_1b = FALSE, on_2b = TRUE, on_3b = FALSE, pitch_number = 19, inning = 4, bat_score = 3, fld_score = 5, top = FALSE)
+state <- State$new(on_1b = FALSE, on_2b = TRUE, on_3b = FALSE, pitch_number = 49, inning = 4, bat_score = 3, fld_score = 5, top = FALSE)
 atmosphere <- Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
 
 

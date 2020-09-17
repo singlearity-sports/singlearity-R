@@ -2,6 +2,7 @@
 # Demonstrate making plate appearance predictions based on a game state
 ##########################################
 
+# comment out file path when running test files
 source(file = 'common.R')
 
 #list of batters

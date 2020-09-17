@@ -1,72 +1,308 @@
+# comment out file path when running test files
+
 source(file='common.R')
-library(glue)
 
-home_lineup_pos=c(
-    LineupPos$new(player=sing$GetPlayers(name='Mookie Betts')[[1]], position='CF'),
-    LineupPos$new(player=sing$GetPlayers(name='Gavin Lux')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Max Muncy')[[1]], position='1B'),
-    LineupPos$new(player=sing$GetPlayers(name='Justin Turner')[[1]], position='3B'),
-    LineupPos$new(player=sing$GetPlayers(name='Cody Bellinger')[[1]], position='RF'),
-    LineupPos$new(player=sing$GetPlayers(name='Corey Seager')[[1]], position='SS'),
-    LineupPos$new(player=sing$GetPlayers(name='Pollock')[[1]], position='DH'),
-    LineupPos$new(player=sing$GetPlayers(name='Joc Pederson')[[1]], position='LF'),
-    LineupPos$new(player=sing$GetPlayers(name='Will Smith', position='C')[[1]], position='C'),
-    LineupPos$new(player=sing$GetPlayers(name='Clayton Kershaw')[[1]], position='P')
-)
+# Turning this into a function
 
-visit_lineup_pos=c(
-    LineupPos$new(player=sing$GetPlayers(name='Yastrzemski')[[1]], position='LF'),
-    LineupPos$new(player=sing$GetPlayers(name='Brandon Belt')[[1]], position='1B'),
-    LineupPos$new(player=sing$GetPlayers(name='Evan Longoria')[[1]], position='3B'),
-    LineupPos$new(player=sing$GetPlayers(name='Alex Dickerson')[[1]], position='RF'),
-    LineupPos$new(player=sing$GetPlayers(name='Brandon Crawford')[[1]], position='SS'),
-    LineupPos$new(player=sing$GetPlayers(name='Mauricio Dubon')[[1]], position='2B'),
-    LineupPos$new(player=sing$GetPlayers(name='Wilmer Flores')[[1]], position='DH'),
-    LineupPos$new(player=sing$GetPlayers(name='Billy Hamilton')[[1]], position='CF'),
-    LineupPos$new(player=sing$GetPlayers(name='Tyler Heineman')[[1]], position='C'),
-    LineupPos$new(player=sing$GetPlayers(name='Johnny Cueto')[[1]], position='P')
-)
-venue <- sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]]
-atmosphere <- Atmosphere$new(venue = venue, temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
+library(tidyverse)
+
+# The default is bringing in a new reliever to start extra innings
+
+inning_pred_extra_innings <- function(num_sims, 
+                                      home_lineup = as_tibble(rbind(
+                                          c('Austin Meadows', 'DH'),
+                                          c('Brandon Lowe', 'LF'),
+                                          c('Yandy Diaz', '3B'),
+                                          c('Ji-Man Choi', '1B'),
+                                          c('Willy Adames', 'SS'),
+                                          c('Joey Wendle', '2B'),
+                                          c('Manuel Margot', 'RF'),
+                                          c('Kevin Kiermaier', 'CF'),
+                                          c('Michael Perez', 'C'),
+                                          c('Tyler Glasnow', 'P'))) %>% 
+                                          rename(name = V1, pos = V2) %>% 
+                                          mutate(lineup = 1:10) %>% 
+                                          select(lineup, name, pos),
+                                      visit_lineup = as_tibble(rbind(
+                                          c('LeMahieu', '2B'),
+                                          c('Aaron Judge', 'RF'),
+                                          c('Gleyber Torres', 'SS'),
+                                          c('Giancarlo Stanton', 'DH'),
+                                          c('Aaron Hicks', 'CF'),
+                                          c('Luke Voit', '1B'),
+                                          c('Gary Sanchez', 'C'),
+                                          c('Urshela', '3B'),
+                                          c('Miguel Andujar', 'LF'),
+                                          c('Gerrit Cole', 'P'))) %>% 
+                                          rename(name = V1, pos = V2) %>% 
+                                          mutate(lineup = 1:10) %>% 
+                                          select(lineup, name, pos), 
+                                      pitcher_list = c('Aroldis Chapman',
+                                                       'Chad Green',
+                                                       'Adam Ottavino',
+                                                       'Luis Cessa',
+                                                       'Brooks Kriske'), 
+                                      stadium = 'Tropicana Field', 
+                                      team_home = 'Rays', 
+                                      temp = 70, 
+                                      state = State$new(inning = 10, to = FALSE, 
+                                                        on_1b = FALSE, on_2b = TRUE,
+                                                        on_3b = FALSE, outs = 0, 
+                                                        bat_score = 3, fld_score = 4,
+                                                        bat_lineup_order = 1, 
+                                                        pitch_number = 0)) {
     
-bat_score_start<-2
-fld_score_start<-3
-bat_lineup_start<-7
-pitch_number_start <- 0 #assume a fresh pitcher
-state <- State$new(inning = 10, to = FALSE, on_1b = FALSE, on_2b = TRUE, on_3b = FALSE, 
-                   outs = 0, bat_score = bat_score_start, fld_score = fld_score_start,
-                   bat_lineup_order = bat_lineup_start, pitch_number = pitch_number_start)
-
-
-find_best_reliever <- function(pitchers, sims) {
-    for (pitcher in pitchers) {
-        print(glue("Testing pitcher : {pitcher}"))
-        visit_lineup_pos[[10]] <- LineupPos$new(player=sing$GetPlayers(name=pitcher)[[1]], position='P')
-        visit_lineup <- Lineup$new(visit_lineup_pos)
-        home_lineup <- Lineup$new(home_lineup_pos)
-        game <- Game$new(visit_lineup = visit_lineup, home_lineup = home_lineup, atmosphere = atmosphere)
-        game_sim_results <- sing$GetGameSim(BodyGetGameSimGameSimPost$new(game = game, start_state = state), num.sims = sims)
-        #game_sim_results is an array of home_score and away_score.  Now calculate how many times each team won
-        saves<-0
-        losses<-0
-        ties<-0
-        for (result in game_sim_results) {
-          if (result$away_score > result$home_score) {
-            saves <- (saves + 1)
-          } else if (result$away_score < result$home_score) {
-            losses <- (losses + 1)
-          } else if (result$away_score == result$home_score){
-            ties <- (ties + 1)
-          }
-        }
-   
-        print(glue('Pitcher:', sprintf("%-20s", pitcher)  ,
-              'Save Percentage: {format(round(saves/sims*100, 1), nsmall = 1)}%  ', 
-              'Loss Percentage: {format(round(losses/sims*100, 1), nsmall = 1)}%  ',
-              'Tie Percentage: {format(round(ties/sims*100, 1), nsmall = 1)}%  '))
+    # Loops through dataframes of players to create lineups
+    # Much more efficient than prior creation
+    
+    home_lineup_pos = c()
+    visit_lineup_pos = c()
+    
+    for (i in 1:10) {
+        home_lineup_pos = c(home_lineup_pos,
+                            LineupPos$new(player = 
+                                              sing$GetPlayers(name =
+                                                                  home_lineup[i, 2][[1]])[[1]],
+                                          position = home_lineup[i, 3][[1]]))
+        visit_lineup_pos = c(visit_lineup_pos,
+                             LineupPos$new(player = 
+                                               sing$GetPlayers(name =
+                                                                   visit_lineup[i, 2][[1]])[[1]],
+                                          position = visit_lineup[i, 3][[1]]))
     }
+    
+    # Creates venue, atmosphere, and state from passed-in values as well
+    # A bit messy but nothing too complex
+    
+    venue <- sing$GetVenues(stadium.name = stadium)[[1]]
+    atmosphere <- Atmosphere$new(venue = venue, temperature = temp, 
+                                 home_team = sing$GetTeams(name = team_home)[[1]])
+    
+    # Inner function to simulate through inning with selected pitcher
+    
+    find_best_reliever <- function(pitchers, sims) {
+        
+        # Loops through each of the pitchers to assess performance
+        
+        # Creates tibble of pitchers, with the results to be inputted later
+        
+        pitcher_results <- tibble()
+
+        for (pitcher in pitchers) {
+
+            # Splits it up by home and away
+            
+            if (state$top == FALSE) {
+                visit_lineup_pos[[10]] <- 
+                    LineupPos$new(player = sing$GetPlayers(name = pitcher)[[1]], 
+                                  position = 'P')
+                visit_lineup <- Lineup$new(visit_lineup_pos)
+                home_lineup <- Lineup$new(home_lineup_pos)
+                game <- Game$new(visit_lineup = visit_lineup, 
+                                 home_lineup = home_lineup, 
+                                 atmosphere = atmosphere)
+                game_sim_results <- 
+                    sing$GetGameSim(BodyGetGameSimGameSimPost$new(game = game,
+                                                                  start_state = state), 
+                                    num.sims = sims)
+                
+                # Goes through each of the simulated results to examine performance
+                
+                pitcher_result <- tibble(player = pitcher,
+                                         saves = 0, losses = 0, ties = 0)
+            
+                for (result in game_sim_results) {
+                    if (result$away_score > result$home_score) {
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(saves = saves + 1)
+                    } else if (result$away_score < result$home_score) {
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(losses = losses + 1)
+                    } else if (result$away_score == result$home_score){
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(ties = ties + 1)
+                    }
+                    
+                }
+                
+                pitcher_results <- bind_rows(pitcher_results, pitcher_result)
+
+            } else {
+                
+                home_lineup_pos[[10]] <- 
+                    LineupPos$new(player = sing$GetPlayers(name = pitcher)[[1]], 
+                                  position = 'P')
+                visit_lineup <- Lineup$new(visit_lineup_pos)
+                home_lineup <- Lineup$new(home_lineup_pos)
+                game <- Game$new(visit_lineup = visit_lineup, 
+                                 home_lineup = home_lineup, 
+                                 atmosphere = atmosphere)
+                game_sim_results <- 
+                    sing$GetGameSim(BodyGetGameSimGameSimPost$new(game = game,
+                                                                  start_state = state), 
+                                    num.sims = sims)
+                
+                # Similar loop as before, now just for the home team
+                
+                pitcher_result <- tibble(player = pitcher,
+                                         trailing = 0, holds = 0)
+
+                for (result in game_sim_results) {
+                    
+                    if (result$home_score < result$away_score) {
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(trailing = trailing + 1)
+                    } else if (result$away_score == result$home_score){
+                        pitcher_result <- pitcher_result %>% 
+                            mutate(holds = holds + 1)
+                    }
+                }
+                
+                pitcher_results <- bind_rows(pitcher_results, pitcher_result)
+                
+            }
+            
+        }
+        
+        return(pitcher_results)
+        
+    }
+    
+    # Gets results of simulations, converts to percentages, and sorts
+    
+    pitcher_results <- find_best_reliever(pitcher_list, num_sims)
+    
+    if (state$top == FALSE) {
+        pitcher_results <- pitcher_results %>% 
+            mutate(save_pct = saves / num_sims,
+                   loss_pct = losses / num_sims,
+                   tie_pct = ties / num_sims) %>% 
+            select(player, save_pct, loss_pct, tie_pct) %>% 
+            arrange(desc(save_pct))
+    } else {
+        pitcher_results <- pitcher_results %>% 
+            mutate(hold_pct = holds / num_sims,
+                   trail_pct = trailing / num_sims) %>% 
+            select(player, hold_pct, trail_pct) %>% 
+            arrange(desc(hold_pct))
+    }
+    
+    return(pitcher_results)
+    
 }
 
-test_pitcher_list <- c('Tony Watson', 'Shaun Anderson', 'Trevor Gott', 'Jarlin Garcia', 'Wandy Peralta')
-find_best_reliever(test_pitcher_list, sims = 2000)
+# Creates function to accept command-line arguments and run prediction function
+# To run in the command line: 
+# R -f inning_pred_extra_innings.R --args [ARGUMENTS HERE]
+# When entering lineup, each player must be entered as two separate arguments:
+# Player name, then position. ex. "Cody Bellinger" "RF"
+# For each team, the pitcher must also be the last of the ten players entered
 
+main <- function(sims = 1000) {
+    
+    args <- commandArgs(trailingOnly = TRUE)
+    
+    if (length(args) == 0) {
+        return(inning_pred_extra_innings(sims))
+    }
+    
+    if (length(args) != 1 & length(args) != 48 & length(args) != 49 & length(args) != 59) {
+        return("Invalid number of arguments.")
+    }
+    
+    nsims <- as.numeric(args[1])
+    
+    # Checks added to ensure valid input
+    
+    if (nsims < 1) {
+        print("Must simulate between 1 and 2000 times. Number of simulations has
+                  been changed to 1000.")
+        nsims <- 1000
+    }
+    else if (nsims > 2000) {
+        print("Must simulate between 1 and 2000 times. Number of simulations has
+                  been changed to 2000.")
+        nsims <- 2000
+    }
+    else {
+        nsims <- nsims
+    }
+    
+    # Runs the prediction function as-is if only the number of simulations is entered
+
+    if (length(args) == 1) {
+        return(inning_pred_extra_innings(nsims))
+    }
+    
+    # Creates home/away lineups, pitchers to look at, stadium, and home team
+    # All from command-line inputs
+    
+    home_team <- as_tibble(rbind(c(args[2], args[3]),
+                                 c(args[4], args[5]),
+                                 c(args[6], args[7]),
+                                 c(args[8], args[9]),
+                                 c(args[10], args[11]),
+                                 c(args[12], args[13]),
+                                 c(args[14], args[15]),
+                                 c(args[16], args[17]),
+                                 c(args[18], args[19]),
+                                 c(args[20], args[21]))) %>% 
+        rename(name = V1, pos = V2) %>% 
+        mutate(lineup = 1:10) %>% 
+        select(lineup, name, pos)
+    
+    away_team <- as_tibble(rbind(c(args[22], args[23]),
+                                 c(args[24], args[25]),
+                                 c(args[26], args[27]),
+                                 c(args[28], args[29]),
+                                 c(args[30], args[31]),
+                                 c(args[32], args[33]),
+                                 c(args[34], args[35]),
+                                 c(args[36], args[37]),
+                                 c(args[38], args[39]),
+                                 c(args[40], args[41]))) %>% 
+        rename(name = V1, pos = V2) %>% 
+        mutate(lineup = 1:10) %>% 
+        select(lineup, name, pos)
+    
+    pitchers = c(args[42], args[43], args[44], args[45], args[46])
+    
+    stadium = args[47] 
+    team_home = args[48]
+    
+    # Runs function if teams/pitchers/stadium have changed
+    
+    if (length(args) == 48) {
+        return(inning_pred_extra_innings(nsims, home_team, away_team, pitchers,
+                                         stadium, team_home))
+    }
+    
+    # Runs function if teams/pitchers/stadium/temperature have changed
+    
+    temperature <- as.numeric(args[49])
+    
+    if (length(args) == 49) {
+        return(inning_pred_extra_innings(nsims, home_team, away_team, pitchers,
+                                         stadium, team_home, temperature))
+    }
+    
+    # Creates new state if that's a command-line argument
+    # In order: inning, half, 1st/2nd/3rd, outs, bat score, field score, lineup start, pitch #
+    
+    state = State$new(inning = as.numeric(args[50]), 
+                      to = as.logical(args[51]), 
+                      on_1b = as.logical(args[52]), 
+                      on_2b = as.logical(args[53]),
+                      on_3b = as.logical(args[54]), 
+                      outs = as.numeric(args[55]), 
+                      bat_score = as.numeric(args[56]), 
+                      fld_score = as.numeric(args[57]),
+                      bat_lineup_order = as.numeric(args[58]), 
+                      pitch_number = as.numeric(args[59]))
+    
+    return(inning_pred_extra_innings(nsims, home_team, away_team, pitchers, stadium,
+                                     team_home, temperature, state))
+    
+}
+
+main()
