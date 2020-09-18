@@ -34,7 +34,7 @@ devtools::install_github("singlearity-sports/singlearity-R")
 Copy the file to your local directory, and run it:
 
 ```
-env SINGLEARITY_API_KEY=YOUR_API_KEY R -f markov_basic.R
+env SINGLEARITY_API_KEY=YOUR_API_KEY R -f markov.R
 ```
 
 Current functionality means that running the file is interactive: when run, you will be asked if you want to proceed with running the default matchup of the Dodgers batting vs. Chris Paddack in the bottom of the first inning. If not, you will be asked if you want to change the lineup, opposing pitcher, environment (team/stadium/etc.), state (i.e., outs, baserunners, top of inning), or starting position in the batting order. The result will be the expected runs scored in the inning and the corresponding probability:
@@ -58,4 +58,4 @@ Current functionality means that running the file is interactive: when run, you 
 
 ## Acknowledgments
 
-Singlearity is by no means the first to explore the applicability of Markov chains in baseball. For their prior work on the subject, we'd like to thank [Mark Pankin](http://www.pankin.com/markov/theory.htm) for his efforts in developing the theory of Markov and baseball, [statshacker](http://statshacker.com/blog/2018/05/07/the-markov-chain-model-of-baseball/#applications-example) for the linear algebra refresher, and [Daniel Ursin](https://dc.uwm.edu/cgi/viewcontent.cgi?article=1969&context=etd) for the foundation of the algorithm used in this file.
+Singlearity is by no means the first to explore the applicability of Markov chains in baseball. For their prior work on the subject, we'd like to thank [Mark Pankin](http://www.pankin.com/markov/theory.htm) for his efforts in developing the theory of Markov and baseball, [statshacker](http://statshacker.com/blog/2018/05/07/the-markov-chain-model-of-baseball) for the linear algebra refresher, and [Daniel Ursin](https://dc.uwm.edu/cgi/viewcontent.cgi?article=1969&context=etd) for the foundation of the algorithm used in this file.
