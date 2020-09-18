@@ -170,7 +170,7 @@ get_tmatrix <- function(batter, pitcher, stadium,
   # Probability of 1-- to 1-3, starting with no outs and no increase
   
   tmatrix[2, 6] <- p_1b_first_to_third * (results$ba_exp - results$double_exp - 
-                                      results$triple_exp - results$hr_exp)
+                                            results$triple_exp - results$hr_exp)
   
   # Probability of 1-- to -23, starting with no outs and no increase
   
@@ -1126,7 +1126,8 @@ get_tmatrix <- function(batter, pitcher, stadium,
   tmatrix[25, 25] <- 1
   
   ########################
-  # TO DO: add in double-play probabilities for no outs and following states:
+  # TO DO: Add field out probabilities for states with weird sums
+  # Add in double-play probabilities for no outs and following states:
   # 12-, 1-3, -23, 123
   # Complete full transition matrix
   #######################
