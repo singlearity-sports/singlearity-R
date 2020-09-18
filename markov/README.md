@@ -8,6 +8,6 @@ While different plate appearances are distinct and exhibit a strong degree of in
 
 ## Markov Chains
 
-A Markov chain is a random probability model that exhibits one-step dependence. Put another way, the probability of transitioning from state $i$ to state $j$ is always the same, no matter what happened before, and only depends on state $i$. This is called the Markov property, and it simplifies probability calculations: we don't have to account for the entire past, only the most recent state. 
+A Markov chain is a random probability model that exhibits one-step dependence. Put another way, the probability of transitioning from state *i* to state *j* is always the same, no matter what happened before, and only depends on state *i*. This is called the Markov property, and it simplifies probability calculations: we don't have to account for the entire past, only the most recent state. 
 
-In a baseball sense, this means that the probability of an event happening is just dependent on the starting state, or baserunner/out combination. If we say $p_{i,j}$ is the probability of going from state $i$ to state $j$, we can construct a 25 by 25 matrix containing all these probabilities, which is called the transition matrix (25, not 24, because we also need to be able to transition to an inning-ending three-out state). 
+In a baseball sense, this means that the probability of an event happening is just dependent on the starting state, or baserunner/out combination. If we say *p<sub>i,j</sub>* is the probability of going from state *i* to state *j*, we can construct a 25 by 25 matrix containing all these probabilities, which is called the transition matrix (25, not 24, because we also need to be able to transition to an inning-ending three-out state). 
