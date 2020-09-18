@@ -1,0 +1,3 @@
+# Baseball and Markov Chains
+
+Baseball has a relatively clean, distinct structure. Each plate appearance can be viewed as a separate matchup or event, and there are a fixed number of possible baserunner/out combinations, or states, for each plate appearance. Specifically, each of the three bases can be either occupied or unoccupied, and there can be zero, one, or two outs, leaving 2<sup>3</sup> * 3 = 24 possible states. 
