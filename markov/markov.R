@@ -10,13 +10,7 @@
 # T_(i,j) gives the probability of going from state i to state j
 # The sum of all transition probabilities in a given row must equal 1
 
-# https://tinyurl.com/y3t4om6o
-# This is the most simple form of a Markov chain: 
-# - every batter has the same transition matrix
-# - can't score on an out (very naive assumption)
-# - doesn't differentiate between inning-ending base-out states
-# - assumes only six offensive outcomes possible:
-# -- out (no advancing), BB, 1B, 2B, 3B, HR
+# With help from https://tinyurl.com/y3t4om6o
 
 library(wordspace)
 library(tidyverse)
