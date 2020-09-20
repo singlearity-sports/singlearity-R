@@ -1704,23 +1704,6 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
   
 }
 
-# Function for full game Markov chain run distribution
-
-markov_full_game <- function() {
-  
-  info_list <- get_info()
-  run_distr <- list()
-  idx <- 1
-  
-  for (inning in 1:9) {
-    distr <- markov_half_inning(idx, info_list)
-    run_distr[[inning]] <- distr
-  }
-  
-  return(run_distr)
-  
-}
-
 # Creating function for dynamic user input
 # Can be called from within RStudio or from the command line
 
