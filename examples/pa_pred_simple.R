@@ -32,8 +32,7 @@ pa_pred_simple <- function(batters = sing$GetPlayers(name="Mookie Betts"),
 # To run in the command line: 
 # R -f pa_pred_simple.R --args [ARGUMENTS HERE]
 
-if (sys.nframe() == 0)
-{ #main function if run as stand-alone
+if (sys.nframe() == 0) { #main function if run as stand-alone
   batters_list = c('Mookie Betts', 'Cody Bellinger')
   pitchers_list = c('Mike Clevinger', 'Chris Paddack')
   candidate_batters <- list()
