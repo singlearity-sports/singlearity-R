@@ -135,7 +135,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of --- to ---, starting with no outs and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][1,9] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][1,9] <- results[i,]$f_out_exp + results[i,]$so_exp
   }
   
   # Changing results to start at 1--, no out state
@@ -187,7 +187,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][2,10] <- results[i,]$fc_o_exp + results[i,]$fo_exp + 
-      results[i,]$so_exp
+      results[i,]$so_exp + results[i,]$f_out_exp
   }
   
   # Probability of 1-- to -2-, starting with no outs and one-out increase
@@ -242,19 +242,26 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of -2- to 1-3, starting with no outs and no increase
   
   for (i in 1:9) {
-    tmatrices[[i]][3,6] <- p_error_1b * results[i,]$e_exp
+    tmatrices[[i]][3,6] <- p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
+  }
+  
+  # Probability of -2- to 1--, starting with no outs and one-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][3,10] <- results[i,]$fc_o_exp
   }
   
   # Probability of -2- to -2-, starting with no outs and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][3,11] <- results[i,]$so_exp + p_fo_second_stay * results[i,]$fo_exp
+    tmatrices[[i]][3,11] <- results[i,]$so_exp + p_fo_second_stay * results[i,]$f_out_exp
   }
   
   # Probability of -2- to --3, starting with no outs and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][3,12] <- p_fo_second_to_third * results[i,]$fo_exp + results[i,]$sh_exp
+    tmatrices[[i]][3,12] <- p_fo_second_to_third * results[i,]$f_out_exp + 
+      results[i,]$sh_exp
   }
   
   # Probability of -2- to ---, starting with no outs and two-out increase
@@ -303,7 +310,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of --3 to ---, starting with no outs and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][4,9] <- results[i,]$sf_exp
+    tmatrices[[i]][4,9] <- results[i,]$sf_exp + results[i,]$f_out_exp +
+      results[i,]$fc_o_exp
   }
   
   # Probability of --3 to --3, starting with no outs and one-out increase
@@ -386,9 +394,17 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
     tmatrices[[i]][5,15] <- results[i,]$sh_exp
   }
 
-  #############
-  # DP PROBABILITY FOR 12- HERE
-  #############
+  # Probability of 12- to -2-, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][5,19] <- results[i,]$so_dp_exp + results[i,]$dp_exp
+  }
+  
+  # Probability of 12- to --3, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][5,20] <- results[i,]$gdp_exp
+  }
   
   # Probability of 12- to end of inning, starting with no outs
   
@@ -423,7 +439,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][6,5] <- p_1b_first_to_second * results[i,]$single_exp +
-      p_error_1b * results[i,]$e_exp
+      p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
   }
   
   # Probability of 1-3 to 1-3, starting with no outs and no increase
@@ -449,7 +465,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability to 1-3 to 1--, starting with no outs and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][6,10] <- results[i,]$sf_exp
+    tmatrices[[i]][6,10] <- results[i,]$sf_exp + results[i,]$fc_o_exp +
+      results[i,]$fo_exp
   }
   
   # Probability of 1-3 to -2-, starting with no outs and one-out increase
@@ -461,12 +478,26 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of 1-3 to 1-3, starting with no outs and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][6,14] <- results[i,]$so_exp
+    tmatrices[[i]][6,14] <- results[i,]$so_exp + results[i,]$f_out_exp
   }
   
-  #############
-  # DP PROBABILITY FOR 1-3 HERE
-  #############
+  # Probability of 1-3 to ---, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][6,17] <- results[i,]$dp_exp + results[i,]$gdp_exp
+  }
+  
+  # Probability of 1-3 to -2-, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][6,19] <- results[i,]$sf_dp_exp
+  }
+  
+  # Probability of 1-3 to --3, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][6,20] <- results[i,]$so_dp_exp
+  }
   
   # Probability of 1-3 to end of inning, starting with no outs
   
@@ -506,7 +537,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of -23 to 1-3, starting with no outs and no increase
   
   for (i in 1:9) {
-    tmatrices[[i]][7,6] <- p_error_1b * results[i,]$e_exp
+    tmatrices[[i]][7,6] <- p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
   }
   
   # Probability of -23 to 123, starting with no outs and no increase
@@ -530,15 +561,24 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
       p_fo_second_to_third * results[i,]$f_out_exp
   }
   
+  # Probability of -23 to 1-3, starting with no outs and one-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][7,14] <- results[i,]$fc_o_exp
+  }
+  
   # Probability of -23 to -23, starting with no outs and one-out increase
   
   for (i in 1:9) {
     tmatrices[[i]][7,15] <- results[i,]$so_exp
   }
 
-  #############
-  # DP PROBABILITY FOR -23 HERE
-  #############
+  # Probability of -23 to --3, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][7,20] <- results[i,]$sf_dp_exp + results[i,]$so_dp_exp +
+      results[i,]$dp_exp + results[i,]$gdp_exp
+  }
   
   # Probability of -23 to end of inning, starting with no outs
   
@@ -569,6 +609,18 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
     tmatrices[[i]][8,4] <- results[i,]$triple_exp
   }
   
+  # Probability of 123 to 12-, starting with no outs and no increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][8,5] <- p_1b_first_to_second * results[i,]$single_exp
+  }
+  
+  # Probability of 123 to 1-3, starting with no outs and no increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][8,6] <- p_1b_first_to_third * results[i,]$single_exp
+  }
+  
   # Probability of 123 to -23, starting with no outs and no increase
   
   for (i in 1:9) {
@@ -594,7 +646,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][8,14] <- p_fo_second_to_third * results[i,]$f_out_exp +
-      results[i,]$fo_exp + results[i,]$fc_o_exp
+      results[i,]$fc_o_exp
   }
   
   # Probability of 123 to -23, starting with no outs and one-out increase
@@ -607,12 +659,26 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][8,16] <- 0.5 * p_fo_second_stay * results[i,]$f_out_exp +
-      results[i,]$so_exp
+      results[i,]$so_exp + results[i,]$fo_exp
   }
   
-  #############
-  # DP PROBABILITY FOR 123 HERE
-  #############
+  # Probability of 123 to --3, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][8,20] <- results[i,]$gdp_exp
+  }
+  
+  # Probability of 123 to 12-, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][8,21] <- results[i,]$so_dp_exp + results[i,]$dp_exp
+  }
+  
+  # Probability of 123 to 1-3, starting with no outs and two-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][8,22] <- results[i,]$sf_dp_exp
+  }
   
   # Probability of 123 to end of inning, starting with no outs
   
@@ -654,7 +720,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of --- to ---, starting with one out and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][9,17] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][9,17] <- results[i,]$f_out_exp + results[i,]$so_exp
   }
   
   # Changing results to start at 1--, one out state
@@ -705,7 +771,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][10,18] <- results[i,]$fc_o_exp + results[i,]$fo_exp +
-      results[i,]$so_exp
+      results[i,]$so_exp + results[i,]$f_out_exp
   }
 
   # Probability of 1-- to -2-, starting with one out and one-out increase
@@ -760,19 +826,19 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of -2- to 1-3, starting with one out and no increase
   
   for (i in 1:9) {
-    tmatrices[[i]][11,14] <- p_error_1b * results[i,]$e_exp
+    tmatrices[[i]][11,14] <- p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
   }
   
   # Probability of -2- to -2-, starting with one out and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][11,19] <- results[i,]$so_exp + p_fo_second_stay * results[i,]$fo_exp
+    tmatrices[[i]][11,19] <- results[i,]$so_exp + p_fo_second_stay * results[i,]$f_out_exp
   }
   
   # Probability of -2- to --3, starting with one out and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][11,20] <- p_fo_second_to_third * results[i,]$fo_exp +
+    tmatrices[[i]][11,20] <- p_fo_second_to_third * results[i,]$f_out_exp +
       results[i,]$sh_exp
   }
   
@@ -822,7 +888,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of --3 to ---, starting with one out and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][12,17] <- results[i,]$sf_exp
+    tmatrices[[i]][12,17] <- results[i,]$sf_exp + results[i,]$f_out_exp +
+      results[i,]$fc_o_exp
   }
   
   # Probability of --3 to --3, starting with one out and one-out increase
@@ -939,7 +1006,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][14,13] <- p_1b_first_to_second * results[i,]$single_exp +
-      p_error_1b * results[i,]$e_exp
+      p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
   }
 
   # Probability of 1-3 to 1-3, starting with one out and no increase
@@ -965,7 +1032,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability to 1-3 to 1--, starting with one out and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][14,18] <- results[i,]$sf_exp
+    tmatrices[[i]][14,18] <- results[i,]$sf_exp + results[i,]$fc_o_exp +
+      results[i,]$fo_exp
   }
   
   # Probability of 1-3 to -2-, starting with one out and one-out increase
@@ -977,7 +1045,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of 1-3 to 1-3, starting with one out and one-out increase
   
   for (i in 1:9) {
-    tmatrices[[i]][14,22] <- results[i,]$so_exp
+    tmatrices[[i]][14,22] <- results[i,]$so_exp + results[i,]$f_out_exp
   }
   
   # Probability of 1-3 to end of inning, starting with one out
@@ -987,7 +1055,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
       results[i,]$sf_dp_exp + results[i,]$so_dp_exp
   }
   
-  # Changing results to start at -23, no out state
+  # Changing results to start at -23, one out state
   
   results <- get_results(batters, pitcher, stadium, home, temp, 
                          State$new(top = away, outs = 1, on_2b = TRUE, on_3b = TRUE))
@@ -1019,7 +1087,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of -23 to 1-3, starting with one out and no increase
   
   for (i in 1:9) {
-    tmatrices[[i]][15,14] <- p_error_1b * results[i,]$e_exp
+    tmatrices[[i]][15,14] <- p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
   }
   
   # Probability of -23 to 123, starting with one out and no increase
@@ -1043,6 +1111,12 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
       p_fo_second_to_third * results[i,]$f_out_exp
   }
   
+  # Probability of -23 to 1-3, starting with one out and one-out increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][15,22] <- results[i,]$fc_o_exp
+  }
+  
   # Probability of -23 to -23, starting with one out and one-out increase
   
   for (i in 1:9) {
@@ -1056,7 +1130,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
       results[i,]$sf_dp_exp + results[i,]$so_dp_exp
   }
 
-  # Changing results to start at 123, no out state
+  # Changing results to start at 123, one out state
   
   results <- get_results(batters, pitcher, stadium, home, temp, 
                          State$new(top = away, outs = 1, on_1b = TRUE, on_2b = TRUE, 
@@ -1079,6 +1153,19 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   for (i in 1:9) {
     tmatrices[[i]][16,12] <- results[i,]$triple_exp
   }
+  
+  # Probability of 123 to 12-, starting with one out and no increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][16,13] <- p_1b_first_to_second * results[i,]$single_exp
+  }
+  
+  # Probability of 123 to 1-3, starting with one out and no increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][16,14] <- p_1b_first_to_third * results[i,]$single_exp
+  }
+  
   
   # Probability of 123 to -23, starting with one out and no increase
   
@@ -1105,7 +1192,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][16,22] <- p_fo_second_to_third * results[i,]$f_out_exp +
-      results[i,]$fo_exp + results[i,]$fc_o_exp
+      results[i,]$fc_o_exp
   }
 
   # Probability of 123 to -23, starting with one out and one-out increase
@@ -1118,7 +1205,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][16,24] <- 0.5 * p_fo_second_stay * results[i,]$f_out_exp +
-      results[i,]$so_exp
+      results[i,]$so_exp + results[i,]$fo_exp
   }
   
   # Probability of 123 to end of inning, starting with one out
@@ -1162,7 +1249,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of --- to end of inning, starting with two out
   
   for (i in 1:9) {
-    tmatrices[[i]][17,25] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][17,25] <- results[i,]$f_out_exp + results[i,]$so_exp
   }
   
   # Changing results to start at 1--, two out state
@@ -1212,7 +1299,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of 1-- to end of inning, starting with two out
   
   for (i in 1:9) {
-    tmatrices[[i]][18,25] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][18,25] <- results[i,]$f_out_exp + results[i,]$fc_o_exp +
+      results[i,]$fo_exp + results[i,]$so_exp
   }
   
   # Changing results to start at -2-, two out state
@@ -1254,13 +1342,14 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of -2- to 1-3, starting with two out and no increase
   
   for (i in 1:9) {
-    tmatrices[[i]][19,22] <- p_error_1b * results[i,]$e_exp
+    tmatrices[[i]][19,22] <- p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
   }
   
   # Probability of -2- to end of inning, starting with two out
   
   for (i in 1:9) {
-    tmatrices[[i]][19,25] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][19,25] <- results[i,]$fc_o_exp + results[i,]$f_out_exp +
+      results[i,]$so_exp
   }
   
   # Changing results to start at --3, two out state
@@ -1302,7 +1391,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of --3 to end of inning, starting with two out
   
   for (i in 1:9) {
-    tmatrices[[i]][20,25] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][20,25] <- results[i,]$f_out_exp + results[i,]$fc_o_exp +
+      results[i,]$so_exp
   }
   
   # Changing results to start at 12-, two out state
@@ -1357,7 +1447,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of 12- to end of inning, starting with two out
   
   for (i in 1:9) {
-    tmatrices[[i]][21,25] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][21,25] <- results[i,]$f_out_exp + results[i,]$fc_o_exp +
+      results[i,]$fo_exp + results[i,]$so_exp
   }
   
   # Changing results to start at 1-3, two out state
@@ -1387,13 +1478,13 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   
   for (i in 1:9) {
     tmatrices[[i]][22,21] <- p_1b_first_to_second * results[i,]$single_exp +
-      p_error_1b * results[i,]$e_exp
+      p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
   }
   
   # Probability of 1-3 to 1-3, starting with two out and no increase
   
   for (i in 1:9) {
-    tmatrices[[i]][10,9] <- p_1b_first_to_third * results[i,]$single_exp
+    tmatrices[[i]][22,22] <- p_1b_first_to_third * results[i,]$single_exp
   }
   
   # Probability of 1-3 to -23, starting with two out and no increase
@@ -1413,7 +1504,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of 1-3 to end of inning, starting with two out
   
   for (i in 1:9) {
-    tmatrices[[i]][22,25] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][22,25] <- results[i,]$f_out_exp + results[i,]$fc_o_exp +
+      results[i,]$fo_exp + results[i,]$so_exp
   }
   
   # Changing results to start at -23, no out state
@@ -1448,7 +1540,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of -23 to 1-3, starting with two out and no increase
   
   for (i in 1:9) {
-    tmatrices[[i]][23,22] <- p_error_1b * results[i,]$e_exp
+    tmatrices[[i]][23,22] <- p_error_1b * results[i,]$e_exp + results[i,]$fc_exp
   }
   
   # Probability of -23 to 123, starting with two out and no increase
@@ -1458,10 +1550,11 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
       results[i,]$hbp_exp + results[i,]$ci_exp
   }
   
-  # Probability of --- to end of inning, starting with two out
+  # Probability of -23 to end of inning, starting with two out
   
   for (i in 1:9) {
-    tmatrices[[i]][23,25] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][23,25] <- results[i,]$f_out_exp + results[i,]$fc_o_exp +
+      results[i,]$so_exp
   }
   
   # Changing results to start at 123, two out state
@@ -1488,6 +1581,18 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
     tmatrices[[i]][24,20] <- results[i,]$triple_exp
   }
   
+  # Probability of 123 to 12-, starting with two out and no increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][24,21] <- p_1b_first_to_second * results[i,]$single_exp
+  }
+  
+  # Probability of 123 to 1-3, starting with two out and no increase
+  
+  for (i in 1:9) {
+    tmatrices[[i]][24,22] <- p_1b_first_to_third * results[i,]$single_exp
+  }
+  
   # Probability of 123 to -23, starting with two out and no increase
   
   for (i in 1:9) {
@@ -1505,7 +1610,8 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   # Probability of 123 to end of inning, starting with two out
   
   for (i in 1:9) {
-    tmatrices[[i]][24,25] <- 1 - results[i,]$obp_exp
+    tmatrices[[i]][24,25] <- results[i,]$f_out_exp + results[i,]$fc_o_exp +
+      results[i,]$fo_exp + results[i,]$so_exp
   }
   
   # Filling in the last element of the matrix
@@ -1514,19 +1620,12 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
     tmatrices[[i]][25,25] <- 1
   }
   
-  ########################
-  # TO DO: Add field out probabilities for states with weird sums
-  # Add in double-play probabilities for no outs and following states:
-  # 12-, 1-3, -23, 123
-  # Complete full transition matrix
-  #######################
-  
   # Normalizing the matrix for proper calculation
   
   for (i in 1:9) {
     for (j in 1:25) {
       rowsum <- sum(tmatrices[[i]][j,])
-      print(rowsum)
+      print(c(i, j, rowsum))
       tmatrices[[i]][j,] <- tmatrices[[i]][j,] / rowsum
     }
   }
