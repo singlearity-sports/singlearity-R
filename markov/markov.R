@@ -1526,6 +1526,7 @@ get_tmatrix <- function(batters, pitcher, stadium, home, temp, away) {
   for (i in 1:9) {
     for (j in 1:25) {
       rowsum <- sum(tmatrices[[i]][j,])
+      print(rowsum)
       tmatrices[[i]][j,] <- tmatrices[[i]][j,] / rowsum
     }
   }
