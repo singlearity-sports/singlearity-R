@@ -11,8 +11,6 @@ pa_pred_simple <- function(batters = sing$GetPlayers(name="Mookie Betts"),
                           ) {
   
   #initialize empty lists
-  candidate_batters <- list()
-  candidate_pitchers <- list()
   matchups <- list()
   
   for (b in batters) 
