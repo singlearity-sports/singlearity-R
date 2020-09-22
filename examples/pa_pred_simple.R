@@ -5,7 +5,7 @@ source(file='common.R')
 # turning this into a function, with a default matchup
 
 pa_pred_simple <- function(batters = sing$GetPlayers(name="Mookie Betts"),
-                           pitchers = sing$GetPlayers(name="Mike Cleveringer"),
+                           pitchers = sing$GetPlayers(name="Mike Clevinger"),
                            state =  State$new(), 
                            atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
                           ) {
