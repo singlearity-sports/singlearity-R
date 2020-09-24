@@ -2,6 +2,37 @@
 
 source("examples/common.R")
 
+# Default probabilities for certain events
+# Probability of a one-base error
+
+p_error_1b <- 0.85
+p_error_2b <- 1 - p_error_1b
+
+# Probability of scoring from first on a double
+
+p_2b_score_from_1b <- 0.38
+p_2b_go_to_3b <- 1 - p_2b_score_from_1b
+
+# Probability of going first to third on a single
+
+p_1b_first_to_third <- 0.3
+p_1b_first_to_second <- 1 - p_1b_first_to_third
+
+# Probability of going second to third on a field out
+
+p_fo_second_to_third <- 0.15
+p_fo_second_stay <- 1 - p_fo_second_to_third
+
+# Function to fill in specific element of the transition matrix
+# The ellipses are whatever values are entered after the matrix/row/col info
+
+elmt_fill <- function(matrix, row, col, ...) {
+  
+  matrix[row, col] <- sum(...)
+  return(matrix)
+  
+}
+
 # Standard function (passing in values explicitly)
 # Inputs:
 # 21 different event probabilities
@@ -32,5 +63,11 @@ tmatrix_std <- function(bb_exp = 5697 / 62087,
                         so_dp_exp = 42 / 27215,
                         tp_exp = 1 / 9155,
                         triple_exp = 225 / 62087) {
+  
+  # Creating transition matrix (25x25, all zeroes as default)
+  
+  tmatrix <- matrix(0, 25, 25)
+  
+  
   
 }
