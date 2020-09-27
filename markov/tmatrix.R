@@ -23,6 +23,30 @@ p_1b_first_to_second <- 1 - p_1b_first_to_third
 p_fo_second_to_third <- 0.15
 p_fo_second_stay <- 1 - p_fo_second_to_third
 
+# League-wide default event probabilities, as of 9/24/20
+
+bb_exp_lg <- 5697 / 62087
+ci_exp_lg <- 33 / 62087
+double_exp_lg <- 2635 / 62087
+dp_exp_lg <- 137 / 62087
+e_exp_lg <- 955 / 62087
+f_out_exp_lg <- 23875 / 62087
+fc_exp_lg <- 135 / 62087
+fc_o_exp_lg <- 110 / 62087
+fo_exp_lg <- 1195 / 62087
+gdp_exp_lg <- 1146 / 62087
+hbp_exp_lg <- 772 / 62087
+hr_exp_lg <- 2156 / 62087
+ibb_exp_lg <- 187 / 62087
+sf_exp_lg <- 370 / 62087
+sf_dp_exp_lg <- 2 / 62087
+sh_exp_lg <- 112 / 62087
+single_exp_lg <- 8439 / 62087
+so_exp_lg <- 14540 / 62087
+so_dp_exp_lg <- 42 / 62087
+tp_exp_lg <- 1 / 62087
+triple_exp_lg <- 225 / 62087
+
 # Function to fill in specific element of the transition matrix
 # The ellipses are whatever values are entered after the matrix/row/col info
 
@@ -36,33 +60,28 @@ elmt_fill <- function(matrix, row, col, ...) {
 # Standard function (passing in values explicitly)
 # Inputs:
 # 21 different event probabilities
-# Defaults are overall league averages for the 2020 season, as of 9/24/20
-# Probs. are generally just # occurrences / # situations
-# Situation-dependent ones are restricted to states where it's actually possible
-# i.e., the PA denominator is not the same for TP as for SO
-# For errors, the denominator is number of chances
 
-tmatrix_std <- function(bb_exp = 5697 / 62087,
-                        ci_exp = 33 / 62087,
-                        double_exp = 2635 / 62087,
-                        dp_exp = 137 / 62087,
-                        e_exp = 955 / 62087,
-                        f_out_exp = 23875 / 62087,
-                        fc_exp = 135 / 62087,
-                        fc_o_exp = 110 / 62087,
-                        fo_exp = 1195 / 62087,
-                        gdp_exp = 1146 / 62087,
-                        hbp_exp = 772 / 62087,
-                        hr_exp = 2156 / 62087,
-                        ibb_exp = 187 / 62087,
-                        sf_exp = 370 / 62087,
-                        sf_dp_exp = 2 / 62087,
-                        sh_exp = 112 / 62087,
-                        single_exp = 8439 / 62087,
-                        so_exp = 14540 / 62087,
-                        so_dp_exp = 42 / 62087,
-                        tp_exp = 1 / 62087,
-                        triple_exp = 225 / 62087) {
+tmatrix_std <- function(bb_exp = bb_exp_lg,
+                        ci_exp = ci_exp_lg,
+                        double_exp = double_exp_lg,
+                        dp_exp = dp_exp_lg,
+                        e_exp = e_exp_lg,
+                        f_out_exp = f_out_exp_lg,
+                        fc_exp = fc_exp_lg,
+                        fc_o_exp = fc_o_exp_lg,
+                        fo_exp = fo_exp_lg,
+                        gdp_exp = gdp_exp_lg,
+                        hbp_exp = hbp_exp_lg,
+                        hr_exp = hr_exp_lg,
+                        ibb_exp = ibb_exp_lg,
+                        sf_exp = sf_exp_lg,
+                        sf_dp_exp = sf_dp_exp_lg,
+                        sh_exp = sh_exp_lg,
+                        single_exp = single_exp_lg,
+                        so_exp = so_exp_lg,
+                        so_dp_exp = so_dp_exp_lg,
+                        tp_exp = tp_exp_lg,
+                        triple_exp = triple_exp_lg) {
   
   # Creating transition matrix (25x25, all zeroes as default)
   
