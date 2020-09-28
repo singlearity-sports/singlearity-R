@@ -17,10 +17,6 @@ library(tidyverse)
 source("examples/common.R")
 source("markov/tmatrix.R")
 
-# Function to create individual transition matrices
-
-
-
 # The error in the probability
 # Exits when difference between the sum of all run-scoring probabilities and 1 is < EPSILON
 
@@ -178,9 +174,11 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
                                       "8", "9", "10", "11", "12", "13", "14", 
                                       "15", "16", "17", "18", "19", "20"),
            "Probability" = run_prob) %>% 
-    select("Expected Runs Scored", "Probability") %>% 
+    select("Expected Runs Scored", "Probability")
+  
+  runs <- runs %>% 
     add_row("Expected Runs Scored" = "7+",
-            "Probability" = sum(select(slice(testing, 8:21), "Probability"))) %>% 
+            "Probability" = sum(select(slice(runs, 8:21), "Probability"))) %>% 
     slice(c(1:7, 22))
 
   return(runs)
@@ -997,28 +995,3 @@ main <- function() {
 }
 
 main()
-
-
-
-
-
-
-
-st <- list(State$new(), State$new(on_1b = T), State$new(on_2b = T), State$new(on_3b = T),
-           State$new(on_1b = T, on_2b = T), State$new(on_1b = T, on_3b = T),
-           State$new(on_2b = T, on_3b = T), State$new(on_1b = T, on_2b = T, on_3b = T),
-           State$new(outs = 1), State$new(on_1b = T, outs = 1), 
-           State$new(on_2b = T, outs = 1), State$new(on_3b = T, outs = 1),
-           State$new(on_1b = T, on_2b = T, outs = 1), 
-           State$new(on_1b = T, on_3b = T, outs = 1),
-           State$new(on_2b = T, on_3b = T, outs = 1), 
-           State$new(on_1b = T, on_2b = T, on_3b = T, outs = 1),
-           State$new(outs = 2), State$new(on_1b = T, outs = 2), 
-           State$new(on_2b = T, outs = 2), State$new(on_3b = T, outs = 2),
-           State$new(on_1b = T, on_2b = T, outs = 2), 
-           State$new(on_1b = T, on_3b = T, outs = 2),
-           State$new(on_2b = T, on_3b = T, outs = 2), 
-           State$new(on_1b = T, on_2b = T, on_3b = T, outs = 2))
-
-
-get_results("Betts", "Clevinger", "Dodger Stadium", "Dodgers", 70, st)
