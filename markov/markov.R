@@ -34,14 +34,15 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
   stadium <- info[[3]]
   home <- info[[4]]
   temp <- info[[5]]
+  date <- info[[6]]
   away <- state$top
   inning <- state$inning
   pitch_ct <- state$pitch_number
   
   # List of the transition matrices for the nine batters
   
-  tmatrix_list <- tmatrix_sing(batters, pitcher, stadium, home, temp, away,
-                               inning, pitch_ct)
+  tmatrix_list <- tmatrix_sing(batters, pitcher, stadium, home, temp, date,
+                               away, inning, pitch_ct)
 
   # Initializing 21x25 scorekeeping matrix
   # 21 rows because we assume teams can score from 0 to 20 runs in a game
@@ -170,15 +171,15 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
   
   run_prob <- scores[,25]
   runs <- tibble(run_prob) %>% 
-    mutate("Expected Runs Scored" = c("0", "1", "2", "3", "4", "5", "6", "7", 
-                                      "8", "9", "10", "11", "12", "13", "14", 
-                                      "15", "16", "17", "18", "19", "20"),
-           "Probability" = run_prob) %>% 
-    select("Expected Runs Scored", "Probability")
+    dplyr::mutate("Expected Runs Scored" = c("0", "1", "2", "3", "4", "5", "6", "7", 
+                                                 "8", "9", "10", "11", "12", "13", "14", 
+                                                 "15", "16", "17", "18", "19", "20"),
+                      "Probability" = run_prob) %>% 
+    dplyr::select("Expected Runs Scored", "Probability")
   
   runs <- runs %>% 
     add_row("Expected Runs Scored" = "7+",
-            "Probability" = sum(select(slice(runs, 8:21), "Probability"))) %>% 
+            "Probability" = sum(dplyr::select(slice(runs, 8:21), "Probability"))) %>% 
     slice(c(1:7, 22))
 
   return(runs)

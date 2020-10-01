@@ -1018,8 +1018,8 @@ tmatrix_std <- function(bb_exp = bb_exp_lg,
 # Function to get results of a plate appearance
 # This is essentially copied/pasted from pa_pred_simple.R
 
-get_results <- function(bat, pitch, stad, home, temp, away, 
-                        inning = 1, pitch_ct = 0) {
+get_results <- function(bat, pitch, stad, home, temp, date,
+                        away, inning = 1, pitch_ct = 0) {
   
   # Create list of states to iterate over
   states <- list(State$new(top = away, inning = inning, pitch_number = pitch_ct), 
@@ -1090,6 +1090,7 @@ get_results <- function(bat, pitch, stad, home, temp, away,
   atmosphere <- Atmosphere$new(venue = venue, 
                                temperature = temp, 
                                home_team = sing$GetTeams(name = home)[[1]])
+  d <- date
   
   matchups <- list()
   
@@ -1101,17 +1102,17 @@ get_results <- function(bat, pitch, stad, home, temp, away,
       {
         matchups <- append(matchups, Matchup$new(batter = b, pitcher = p,
                                                  atmosphere = atmosphere,
-                                                 state = s))
+                                                 state = s, date = d))
       }
     }
   }
   
   results <- sing$GetPaSim(matchup = matchups) %>% 
-    mutate(num_on = reduce(select(., starts_with("on_")), `+`),
-           lineup_spot = match(batter_name, unique(batter_name))) %>% 
-    arrange(match(word(batter_name, -1), last_names), outs, num_on,
-            desc(on_1b), desc(on_2b)) %>% 
-    select(-c(num_on))
+    dplyr::mutate(num_on = reduce(dplyr::select(., starts_with("on_")), `+`),
+                      lineup_spot = match(batter_name, unique(batter_name))) %>% 
+    dplyr::arrange(match(word(batter_name, -1), last_names), outs, num_on,
+                       desc(on_1b), desc(on_2b)) %>% 
+    dplyr::select(-c(num_on))
   
   return(results)
   
@@ -1119,8 +1120,8 @@ get_results <- function(bat, pitch, stad, home, temp, away,
 
 # Singlearity-based function
 
-tmatrix_sing <- function(batters, pitcher, stadium, home, temp, away,
-                         inning = 1, pitch_ct = 0) {
+tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
+                         away, inning = 1, pitch_ct = 0) {
   
   # Uses predicted results to get the transition matrix
   # Initializes nine matrices
@@ -1142,8 +1143,8 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, away,
 
   # Gets results of plate appearance simulations
   
-  results <- get_results(batters, pitcher, stadium, home, temp, away, 
-                         inning, pitch_ct)
+  results <- get_results(batters, pitcher, stadium, home, temp, date,
+                         away, inning, pitch_ct)
   
   for (i in 1:9) {
     
