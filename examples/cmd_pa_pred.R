@@ -1,43 +1,43 @@
 #!/usr/local/bin/Rscript
 
-source(file='common.R')
-source(file='pa_pred_simple.R')
-source(file='utils.R')
+source(file='examples/common.R')
+source(file='examples/pa_pred_simple.R')
+source(file='examples/utils.R')
 
-  library("optparse")
+  library(optparse)
   option_list = list(
-  make_option(c("--batters"), type="character", default="Mookie Betts, Cody Bellinger",
+    make_option(c("--batters"), type="character", default="Mookie Betts, Cody Bellinger",
                 help="comma separated list of batter names.   Default '%default'"),
-  make_option(c("--pitchers"), type="character", default="Mike Clevinger, Chris Paddack",
+    make_option(c("--pitchers"), type="character", default="Mike Clevinger, Chris Paddack",
                 help="comma separated list of pitcher names.  Default '%default'"),
-  make_option(c("--venue"), type="character", default="Dodger Stadium",
+    make_option(c("--venue"), type="character", default="Dodger Stadium",
               help="venue name.  Default '%default' "),
-  make_option(c("--hometeam"), type="character", default="Dodgers",
+    make_option(c("--hometeam"), type="character", default="Dodgers",
               help="name of home team.  Default %default"),
-  make_option(c("--inning"), type="integer", default=1,
+    make_option(c("--inning"), type="integer", default=1,
                help="inning. Default %default"),
-  make_option(c("--outs"), type="integer", default=0,
+    make_option(c("--outs"), type="integer", default=0,
                help="outs. Default %default"),
-  make_option(c("--on1b"), action="store_true", default=FALSE,
+    make_option(c("--on1b"), action="store_true", default=FALSE,
               help="true if runner on first. Default %default"),
-  make_option(c("--on2b"), action="store_true", default=FALSE,
+    make_option(c("--on2b"), action="store_true", default=FALSE,
               help="true if runner on second. Default %default"),
-  make_option(c("--on3b"), action="store_true", default=FALSE,
+    make_option(c("--on3b"), action="store_true", default=FALSE,
               help="true if runner on third. Default %default"),
-  make_option(c("--temperature"), type="integer", default=70,
+    make_option(c("--temperature"), type="integer", default=70,
               help="temperature at start time.  Default %default"),
-  make_option(c("--batscore"), type="integer", default=0,
+    make_option(c("--batscore"), type="integer", default=0,
               help="batting team's score. Default %default"),
-  make_option(c("--fieldscore"), type="integer", default=0,
+    make_option(c("--fieldscore"), type="integer", default=0,
               help="fielding team's score. Default %default"),
-  make_option(c("--pitchnumber"), type="integer", default=0,
+    make_option(c("--pitchnumber"), type="integer", default=0,
               help="pitcher's pitch count at start of the at bat"),
-  make_option(c("--plot"), type="character", default='',
+    make_option(c("--plot"), type="character", default='',
               help="comma separated list of values to plot e.g. 'woba, hr, so'")
-  )
+    )
   
   opt_parser = OptionParser(option_list=option_list)
-  opt = parse_args(opt_parser);
+  opt = parse_args(opt_parser)
   batters_list = as.list(strsplit(opt$batters, ",")[[1]])
   print(batters_list)
   pitchers_list = as.list(strsplit(opt$pitchers, ",")[[1]])

@@ -1,6 +1,6 @@
 # comment out file path when running test files
 
-source(file='common.R')
+source(file='examples/common.R')
 
 # turning this into a function, with a default matchup
 
