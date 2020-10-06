@@ -116,3 +116,6 @@ It is easy to combine the Singlearity prediction outputs with libraries such as 
 It is also easy to create visualizations which efficiently represent the data needed to make player substitutions.   [Here is an example in R](https://github.com/singlearity-sports/singlearity-R/blob/master/examples/batters_vs_pitchers.R "Here is an example in R") showing the predicted wOBA for each Dodgers batter vs. each Padres pitcher.  These predictions and their visualizations take only a few seconds to produce. 
 
 ![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/master/resources/woba_batter_vs_pitcher.png)
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMTE3NjkyOTE1Ml19
+-->
