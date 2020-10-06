@@ -38,6 +38,8 @@ option_list = list(
               help = "True if runner on third. Default %default"),
   make_option(c("--temperature", "-t"), type = "integer", default = 70,
               help = "Temperature at start time. Default %default"),
+  make_option(c("--date", "-d"), type = "character", default = "2020-10-01",
+              help = "Date of matchup. Default %default"),
   make_option(c("--pitchnumber", "-c"), type = "integer", default = 0,
               help = "Pitcher's pitch count at start of the at-bat. Default %default"),
   make_option(c("--plot"), type = "character", default = '',
@@ -78,9 +80,13 @@ home = opt$hometeam
 
 temp = opt$temperature
 
+# Date
+
+date = opt$date
+
 # Creating list of above inputs
 
-info <- list(lineup, pitcher, stad, home, temp)
+info <- list(lineup, pitcher, stad, home, temp, date)
 
 # Creates new state
 

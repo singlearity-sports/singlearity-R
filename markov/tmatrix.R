@@ -1018,7 +1018,7 @@ tmatrix_std <- function(bb_exp = bb_exp_lg,
 # Function to get results of a plate appearance
 # This is essentially copied/pasted from pa_pred_simple.R
 
-get_results <- function(bat, pitch, stad, home, temp,
+get_results <- function(bat, pitch, stad, home, temp, date,
                         away, inning = 1, pitch_ct = 0) {
   
   # Create list of states to iterate over
@@ -1090,6 +1090,7 @@ get_results <- function(bat, pitch, stad, home, temp,
   atmosphere <- Atmosphere$new(venue = venue, 
                                temperature = temp, 
                                home_team = sing$GetTeams(name = home)[[1]])
+  
   d <- date
   
   matchups <- list()
@@ -1102,7 +1103,7 @@ get_results <- function(bat, pitch, stad, home, temp,
       {
         matchups <- append(matchups, Matchup$new(batter = b, pitcher = p,
                                                  atmosphere = atmosphere,
-                                                 state = s))
+                                                 state = s, date = d))
       }
     }
   }
@@ -1120,7 +1121,7 @@ get_results <- function(bat, pitch, stad, home, temp,
 
 # Singlearity-based function
 
-tmatrix_sing <- function(batters, pitcher, stadium, home, temp,
+tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
                          away, inning = 1, pitch_ct = 0) {
   
   # Uses predicted results to get the transition matrix
@@ -1143,7 +1144,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp,
 
   # Gets results of plate appearance simulations
   
-  results <- get_results(batters, pitcher, stadium, home, temp,
+  results <- get_results(batters, pitcher, stadium, home, temp, date,
                          away, inning, pitch_ct)
   
   for (i in 1:9) {
