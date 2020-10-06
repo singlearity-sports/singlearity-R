@@ -108,14 +108,75 @@ env SINGLEARITY_API_KEY=YOUR_API_KEY R -f pa_pred_very_simple.R
 8      Max Muncy Chris Paddack 0.04582457 0.3740999 0.2098127 0.7025451 0.3065602
 ```
 
-## Example Command Line Usage
+## Command Line Usage
 ```examples/cmd_pa_pred.R``` is a command line utility for quickly generating batter vs. pitcher predictions.   It is a "swiss-army knife" for creating matchups with various different options.  The source code can also be examined to view the R code necessary to generate different options.   To run this command line, type:
 
 ```cmd_pa_pred.R```      - you will likely need to make this file executable 
 or 
 ```R -f cmd_pa_pred.R```
 
-To see a list of options, type ```cmd_pa_pred.R --help```
+To see a list of options, type:
+ ```cmd_pa_pred.R --help```
+
+This results in:
+```Usage: ./cmd_pa_pred.R [options]
+
+
+Options:
+	--batters=BATTERS
+		comma separated list of batter names.   Default 'Mookie Betts, Cody Bellinger'
+
+	--pitchers=PITCHERS
+		comma separated list of pitcher names.  Default 'Mike Clevinger, Chris Paddack'
+
+	--venue=VENUE
+		venue name.  Default 'Dodger Stadium' 
+
+	--hometeam=HOMETEAM
+		name of home team.  Default Dodgers
+
+	--date=DATE
+		date of the game (use format like 2018-08-25).  Defaults to today's date
+
+	--inning=INNING
+		inning. Default 1
+
+	--outs=OUTS
+		outs. Default 0
+
+	--on1b
+		true if runner on first. Default FALSE
+
+	--on2b
+		true if runner on second. Default FALSE
+
+	--on3b
+		true if runner on third. Default FALSE
+
+	--temperature=TEMPERATURE
+		temperature at start time.  Default 70
+
+	--batscore=BATSCORE
+		batting team's score. Default 0
+
+	--fieldscore=FIELDSCORE
+		fielding team's score. Default 0
+
+	--pitchnumber=PITCHNUMBER
+		pitcher's pitch count at start of the at bat
+
+	--predictiontype=PREDICTIONTYPE
+		Type of prediction.  Choose either 'ab_outcome', 'ab_woba', 'ab_woba_no_state'.  Default 'ab_outcome'
+
+	--plot=PLOT
+		comma separated list of values to plot e.g. 'woba, hr, so'
+
+	-h, --help
+		Show this help message and exit
+
+```
+**Sample Command Line**
+Here is an 
 
 
 ## Example Visualizations
@@ -127,5 +188,5 @@ It is also easy to create visualizations which efficiently represent the data ne
 
 ![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/master/resources/woba_batter_vs_pitcher.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTczOTk0NzUzN119
+eyJoaXN0b3J5IjpbMTY3NjU0MjE2N119
 -->
