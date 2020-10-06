@@ -44,6 +44,7 @@ singlearity.APIs
 \itemize{
 \item \emph{ @param } matchup list( \link{Matchup} )
 \item \emph{ @param } return.features character
+\item \emph{ @param } model.name character
 
 
 \item status code : 200 | Successful Response
@@ -203,6 +204,7 @@ result <- api.instance$GetGameSim(var.body.get.game.sim.game.sim.post, num.sims=
 library(singlearity)
 var.matchup <- [Matchup$new()] # array[Matchup] | 
 var.return.features <- FALSE # character | 
+var.model.name <- 'model.name_example' # character | 
 
 #Get Pa Sim
 api.instance <- APIsApi$new()
@@ -213,7 +215,7 @@ api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
 #Configure API key authorization: APIKeyQuery
 api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
 
-result <- api.instance$GetPaSim(var.matchup, return.features=var.return.features)
+result <- api.instance$GetPaSim(var.matchup, return.features=var.return.features, model.name=var.model.name)
 
 
 ####################  GetPlayers  ####################
@@ -370,7 +372,7 @@ result <- api.instance$HelloWithKey()
 \if{latex}{\out{\hypertarget{method-GetPaSim}{}}}
 \subsection{Method \code{GetPaSim()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{APIsApi$GetPaSim(matchup, return.features = FALSE, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{APIsApi$GetPaSim(matchup, return.features = FALSE, model.name = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 }
@@ -379,7 +381,12 @@ result <- api.instance$HelloWithKey()
 \if{latex}{\out{\hypertarget{method-GetPaSimWithHttpInfo}{}}}
 \subsection{Method \code{GetPaSimWithHttpInfo()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{APIsApi$GetPaSimWithHttpInfo(matchup, return.features = FALSE, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{APIsApi$GetPaSimWithHttpInfo(
+  matchup,
+  return.features = FALSE,
+  model.name = NULL,
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 }

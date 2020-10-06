@@ -7,7 +7,9 @@ source(file='common.R')
 pa_pred_simple <- function(batters = sing$GetPlayers(name="Mookie Betts"),
                            pitchers = sing$GetPlayers(name="Mike Clevinger"),
                            state =  State$new(), 
-                           atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]])
+                           atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Dodger Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Dodgers')[[1]]),
+                           date = format(Sys.Date(), "%Y-%m-%d"),
+                           predictiontype = 'ab_outcome'
                           ) {
   
   #initialize empty lists
@@ -17,18 +19,14 @@ pa_pred_simple <- function(batters = sing$GetPlayers(name="Mookie Betts"),
   {
     for (p in pitchers)
     {
-      matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, atmosphere = atmosphere, state = state))
+      matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, atmosphere = atmosphere, state = state, date = date))
     }
   }
   
-  results <- sing$GetPaSim(matchup = matchups)
+  results <- sing$GetPaSim(matchup = matchups, model.name = predictiontype )
   results = results[order(results$woba_exp, decreasing = TRUE), ]
   return(results)
 }
-
-# Creates function to accept command-line arguments and run prediction function
-# To run in the command line: 
-# R -f pa_pred_simple.R --args [ARGUMENTS HERE]
 
 if (sys.nframe() == 0)
 { #main function if run as stand-alone

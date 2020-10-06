@@ -62,7 +62,7 @@ Name | Type | Description  | Notes
 | **422** | Validation Error |  -  |
 
 # **GetPaSim**
-> object GetPaSim(matchup, return.features=FALSE)
+> object GetPaSim(matchup, return.features=FALSE, model.name=var.model.name)
 
 Get Pa Sim
 
@@ -72,6 +72,7 @@ library(singlearity)
 
 var.matchup <- list(Matchup$new(Player$new("full_name_example", "position_example", 123, "debut_date_example", 123, "team_abbrev_example", "active_example", "bat_side_example", "pitch_hand_example", "birth_country_example", "birth_date_example", 123, "photo_url_example"), Player$new("full_name_example", "position_example", 123, "debut_date_example", 123, "team_abbrev_example", "active_example", "bat_side_example", "pitch_hand_example", "birth_country_example", "birth_date_example", 123, "photo_url_example"), Atmosphere$new(Venue$new(123, "name_example", "home_team_abbrev_example", 123), Team$new("abbreviation_example", "division_example", "league_example", 123, "name_example", "team_name_example", Venue$new(123, "name_example", "home_team_abbrev_example", 123)), 123), State$new("on_1b_example", "on_2b_example", "on_3b_example", 123, 123, "top_example", 123, 123, 123, 123, 123, 123), "date_example")) # array[Matchup] | 
 var.return.features <- FALSE # character | 
+var.model.name <- 'model.name_example' # character | 
 
 #Get Pa Sim
 api.instance <- APIsApi$new()
@@ -79,7 +80,7 @@ api.instance <- APIsApi$new()
 api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
 # Configure API key authorization: APIKeyQuery
 api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
-result <- api.instance$GetPaSim(var.matchup, return.features=var.return.features)
+result <- api.instance$GetPaSim(var.matchup, return.features=var.return.features, model.name=var.model.name)
 dput(result)
 ```
 
@@ -89,6 +90,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **matchup** | list( [**Matchup**](Matchup.md) )|  | 
  **return.features** | **character**|  | [optional] [default to FALSE]
+ **model.name** | **character**|  | [optional] 
 
 ### Return type
 

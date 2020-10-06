@@ -1,5 +1,6 @@
 #!/usr/local/bin/Rscript
 
+
 source(file='common.R')
 source(file='pa_pred_simple.R')
 source(file='utils.R')
@@ -14,6 +15,8 @@ source(file='utils.R')
               help="venue name.  Default '%default' "),
   make_option(c("--hometeam"), type="character", default="Dodgers",
               help="name of home team.  Default %default"),
+  make_option(c("--date"), type="character", default=format(Sys.Date(), "%Y-%m-%d"),
+              help="date of the game (use format like 2018-08-25).  Defaults to today's date"),
   make_option(c("--inning"), type="integer", default=1,
                help="inning. Default %default"),
   make_option(c("--outs"), type="integer", default=0,
@@ -32,6 +35,8 @@ source(file='utils.R')
               help="fielding team's score. Default %default"),
   make_option(c("--pitchnumber"), type="integer", default=0,
               help="pitcher's pitch count at start of the at bat"),
+  make_option(c("--predictiontype"), type="character", default="ab_outcome",
+              help="Type of prediction.  Choose either 'ab_outcome', 'ab_woba', 'ab_woba_no_state'.  Default '%default'"),
   make_option(c("--plot"), type="character", default='',
               help="comma separated list of values to plot e.g. 'woba, hr, so'")
   )
@@ -66,13 +71,16 @@ source(file='utils.R')
                          fld_score = opt$fld_score,
                          pitch_number = opt$pitchnumber)
   venue <- sing$GetVenues(stadium.name = opt$venue)[[1]]
-  atmosphere <- Atmosphere$new(venue = venue, temperature = opt$temerature, home_team = sing$GetTeams(name = opt$hometeam)[[1]])
+  atmosphere <- Atmosphere$new(venue = venue, temperature = opt$temperature, home_team = sing$GetTeams(name = opt$hometeam)[[1]])
    
  
   results = pa_pred_simple(batters = candidate_batters,
                               pitchers = candidate_pitchers,
                               state = state,
-                              atmosphere = atmosphere)
+                              atmosphere = atmosphere, 
+                              date = opt$date,
+                              predictiontype = opt$predictiontype
+                          )
   print(results)
   
   if (length(plot_list) > 0) {
