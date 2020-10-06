@@ -177,7 +177,7 @@ Options:
 ```
 **Sample Command Line**
 Here is an example of using the command line to generate matchups.
-
+``` ./cmd_pa_pred.R --batters='Joc Pederson, Giancarlo Stanton' --pitchers='Blake Snell, Zack Greinke' --venue='Yankee Stadium' --hometeam='Yankees' --inning=6 --pitchnumber=80 --outs=1 --on2b --temperature=90 --plot=woba```
 
 
 ## Example Visualizations
@@ -189,5 +189,6 @@ It is also easy to create visualizations which efficiently represent the data ne
 
 ![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/master/resources/woba_batter_vs_pitcher.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3OTg3ODIwODldfQ==
+eyJoaXN0b3J5IjpbLTExOTExOTE3MDEsLTE3OTg3ODIwODldfQ
+==
 -->
