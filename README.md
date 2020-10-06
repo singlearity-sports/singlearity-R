@@ -109,7 +109,7 @@ env SINGLEARITY_API_KEY=YOUR_API_KEY R -f pa_pred_very_simple.R
 ```
 
 ## Example Command Line Usage
-```examples/
+```examples/cmd_pa_pred.R``` is a command line utility for quickly generating batter vs. pitcher predictions.   It is a "swiss-army knife" for generating multiple different options
 
 ## Example Visualizations
 It is easy to combine the Singlearity prediction outputs with libraries such as ggplot to create visualizations which communicate the important information efficiently.  [Here is an example in R](https://github.com/singlearity-sports/singlearity-R/blob/master/examples/wOBA_by_pitch_count.R "Here is an example") showing each batter's expected wOBA as Max Scherzer's pitch count increases.
@@ -120,5 +120,5 @@ It is also easy to create visualizations which efficiently represent the data ne
 
 ![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/master/resources/woba_batter_vs_pitcher.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTMxMzk4MjUwOF19
+eyJoaXN0b3J5IjpbLTIwNTc5MjE4MV19
 -->
