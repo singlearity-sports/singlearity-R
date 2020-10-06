@@ -176,7 +176,8 @@ Options:
 
 ```
 **Sample Command Line**
-Here is an 
+Here is an example of using the command line to generate matchups.
+
 
 
 ## Example Visualizations
@@ -188,5 +189,5 @@ It is also easy to create visualizations which efficiently represent the data ne
 
 ![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/master/resources/woba_batter_vs_pitcher.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY3NjU0MjE2N119
+eyJoaXN0b3J5IjpbLTE3OTg3ODIwODldfQ==
 -->
