@@ -170,13 +170,25 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
   
   run_prob <- scores[,25]
   runs <- tibble(run_prob) %>% 
-    mutate("Expected Runs Scored" = c("0", "1", "2", "3", "4", "5", "6", "7", 
-                                      "8", "9", "10", "11", "12", "13", "14", 
-                                      "15", "16", "17", "18", "19", "20"),
+    mutate("Expected Runs Scored" = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
+                                      13, 14, 15, 16, 17, 18, 19, 20),
            "Probability" = run_prob) %>% 
     select("Expected Runs Scored", "Probability")
   
+  # Gets expected runs
+  
+  exp_runs <- runs %>% 
+    mutate(prod = `Expected Runs Scored` * Probability) %>% 
+    select(prod) %>% 
+    sum() %>%
+    round(digits = 5)
+  
+  print(paste("Expected Runs:", exp_runs))
+  
   runs <- runs %>% 
+    mutate("Expected Runs Scored" = c("0", "1", "2", "3", "4", "5", "6", "7", "8", 
+                                      "9", "10", "11", "12", "13", "14", "15", 
+                                      "16", "17", "18", "19", "20")) %>% 
     add_row("Expected Runs Scored" = "7+",
             "Probability" = sum(select(slice(runs, 8:21), "Probability"))) %>% 
     slice(c(1:7, 22))

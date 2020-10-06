@@ -2206,14 +2206,14 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp,
   }
 
   # Normalizing the matrix for proper calculation
-  
-  for (i in 1:9) {
-    for (j in 1:25) {
-      rowsum <- sum(tmatrices[[i]][j,])
-      print(c(i, j, rowsum))
-      tmatrices[[i]][j,] <- tmatrices[[i]][j,] / rowsum
-    }
-  }
+  # 
+  # for (i in 1:9) {
+  #   for (j in 1:25) {
+  #     rowsum <- sum(tmatrices[[i]][j,])
+  #     print(c(i, j, rowsum))
+  #     tmatrices[[i]][j,] <- tmatrices[[i]][j,] / rowsum
+  #   }
+  # }
   
   return(tmatrices)
   
