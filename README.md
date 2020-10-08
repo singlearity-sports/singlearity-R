@@ -108,6 +108,78 @@ env SINGLEARITY_API_KEY=YOUR_API_KEY R -f pa_pred_very_simple.R
 8      Max Muncy Chris Paddack 0.04582457 0.3740999 0.2098127 0.7025451 0.3065602
 ```
 
+## Command Line Usage
+```examples/cmd_pa_pred.R``` is a command line utility for quickly generating batter vs. pitcher predictions.   It is a "swiss-army knife" for creating matchups with various different options.  The source code can also be examined to view the R code necessary to generate different options.   To run this command line, type:
+
+```cmd_pa_pred.R```      - you will likely need to make this file executable 
+or 
+```R -f cmd_pa_pred.R```
+
+To see a list of options, type:
+ ```cmd_pa_pred.R --help```
+
+This results in:
+```Usage: ./cmd_pa_pred.R [options]
+
+
+Options:
+	--batters=BATTERS
+		comma separated list of batter names.   Default 'Mookie Betts, Cody Bellinger'
+
+	--pitchers=PITCHERS
+		comma separated list of pitcher names.  Default 'Mike Clevinger, Chris Paddack'
+
+	--venue=VENUE
+		venue name.  Default 'Dodger Stadium' 
+
+	--hometeam=HOMETEAM
+		name of home team.  Default Dodgers
+
+	--date=DATE
+		date of the game (use format like 2018-08-25).  Defaults to today's date
+
+	--inning=INNING
+		inning. Default 1
+
+	--outs=OUTS
+		outs. Default 0
+
+	--on1b
+		true if runner on first. Default FALSE
+
+	--on2b
+		true if runner on second. Default FALSE
+
+	--on3b
+		true if runner on third. Default FALSE
+
+	--temperature=TEMPERATURE
+		temperature at start time.  Default 70
+
+	--batscore=BATSCORE
+		batting team's score. Default 0
+
+	--fieldscore=FIELDSCORE
+		fielding team's score. Default 0
+
+	--pitchnumber=PITCHNUMBER
+		pitcher's pitch count at start of the at bat
+
+	--predictiontype=PREDICTIONTYPE
+		Type of prediction.  Choose either 'ab_outcome', 'ab_woba', 'ab_woba_no_state'.  Default 'ab_outcome'
+
+	--plot=PLOT
+		comma separated list of values to plot e.g. 'woba, hr, so'
+
+	-h, --help
+		Show this help message and exit
+
+```
+**Sample Command Line**
+Here is an example of using the command line to generate matchups.
+``` ./cmd_pa_pred.R --batters='Joc Pederson, Giancarlo Stanton' --pitchers='Blake Snell, Zack Greinke' --venue='Yankee Stadium' --hometeam='Yankees' --inning=6 --pitchnumber=80 --outs=1 --on2b --temperature=90 --plot=woba```
+
+
 ## Example Visualizations
 It is easy to combine the Singlearity prediction outputs with libraries such as ggplot to create visualizations which communicate the important information efficiently.  [Here is an example in R](https://github.com/singlearity-sports/singlearity-R/blob/master/examples/wOBA_by_pitch_count.R "Here is an example") showing each batter's expected wOBA as Max Scherzer's pitch count increases.
 
@@ -116,3 +188,6 @@ It is easy to combine the Singlearity prediction outputs with libraries such as 
 It is also easy to create visualizations which efficiently represent the data needed to make player substitutions.   [Here is an example in R](https://github.com/singlearity-sports/singlearity-R/blob/master/examples/batters_vs_pitchers.R "Here is an example in R") showing the predicted wOBA for each Dodgers batter vs. each Padres pitcher.  These predictions and their visualizations take only a few seconds to produce. 
 
 ![enter image description here](https://github.com/singlearity-sports/singlearity-R/blob/master/resources/woba_batter_vs_pitcher.png)
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTExOTExOTE3MDFdfQ==
+-->
