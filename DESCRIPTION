@@ -1,6 +1,6 @@
 Package: singlearity
 Title: R Package Client for Singlearity Baseball API
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: person("Joshua Silver", email = "joshua.silver@singlearity.com", role = c("aut", "cre"))
 Description: Baseball optimization API using machine learning
 URL: https://www.singlearity.com

@@ -45,6 +45,7 @@
 #' \itemize{
 #' \item \emph{ @param } matchup list( \link{Matchup} )
 #' \item \emph{ @param } return.features character
+#' \item \emph{ @param } model.name character
 #'
 #'
 #' \item status code : 200 | Successful Response
@@ -204,6 +205,7 @@
 #' library(singlearity)
 #' var.matchup <- [Matchup$new()] # array[Matchup] | 
 #' var.return.features <- FALSE # character | 
+#' var.model.name <- 'model.name_example' # character | 
 #'
 #' #Get Pa Sim
 #' api.instance <- APIsApi$new()
@@ -214,7 +216,7 @@
 #' #Configure API key authorization: APIKeyQuery
 #' api.instance$apiClient$apiKeys['SINGLEARITY_API_KEY'] <- 'TODO_YOUR_API_KEY';
 #'
-#' result <- api.instance$GetPaSim(var.matchup, return.features=var.return.features)
+#' result <- api.instance$GetPaSim(var.matchup, return.features=var.return.features, model.name=var.model.name)
 #'
 #'
 #' ####################  GetPlayers  ####################
@@ -393,12 +395,12 @@ APIsApi <- R6::R6Class(
         ApiResponse$new("API server error", resp)
       }
     },
-    GetPaSim = function(matchup, return.features=FALSE, ...){
+    GetPaSim = function(matchup, return.features=FALSE, model.name=NULL, ...){
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
         stop(paste("Unknown argument(s) in calling function GetPaSim: ", paste(names(local.optional.var), collapse=", "), collapse=" "))
       }
-      apiResponse <- self$GetPaSimWithHttpInfo(matchup, return.features, ...)
+      apiResponse <- self$GetPaSimWithHttpInfo(matchup, return.features, model.name, ...)
       resp <- apiResponse$response
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         apiResponse$content
@@ -411,7 +413,7 @@ APIsApi <- R6::R6Class(
       }
     },
 
-    GetPaSimWithHttpInfo = function(matchup, return.features=FALSE, ...){
+    GetPaSimWithHttpInfo = function(matchup, return.features=FALSE, model.name=NULL, ...){
       args <- list(...)
       local.optional.var = list(...)
       if (length(local.optional.var) > 0) {
@@ -425,6 +427,8 @@ APIsApi <- R6::R6Class(
       }
 
       queryParams['return_features'] <- return.features
+
+      queryParams['model_name'] <- model.name
 
       if (!missing(`matchup`)) {
         body.items = paste(unlist(lapply(matchup, function(param){param$toJSONString()})), collapse = ",")
