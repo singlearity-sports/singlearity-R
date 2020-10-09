@@ -184,8 +184,6 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
     sum() %>%
     round(digits = 5)
   
-  print(paste("Expected Runs:", exp_runs))
-  
   runs <- runs %>% 
     mutate("Expected Runs Scored" = c("0", "1", "2", "3", "4", "5", "6", "7", "8", 
                                       "9", "10", "11", "12", "13", "14", "15", 
@@ -194,12 +192,11 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
             "Probability" = sum(select(slice(runs, 8:21), "Probability"))) %>% 
     slice(c(1:7, 22))
 
-  return(runs)
+  return(list(paste("Expected Runs:", exp_runs), runs))
   
 }
 
 # Creating function for dynamic user input
-# Can be called from within RStudio or from the command line
 
 main <- function() {
 
@@ -217,13 +214,16 @@ main <- function() {
 
   home <- "Dodgers"
 
-  temp <- 75
+  temp <- 70
 
   date <- as.character(Sys.Date())
   
   info <- list(batters, pitcher, stadium, home, temp, date)
   
-  markov_half_inning(idx, info)
+  results <- markov_half_inning(idx, info)
+  
+  print(results[[1]])
+  print(results[[2]])
 
 }
 

@@ -6,8 +6,8 @@ suppressPackageStartupMessages(library(optparse))
 
 # Assumes user is in the overarching "Singlearity" directory 
 
-source("markov/markov.R")
-source("examples/common.R")
+invisible(capture.output(source(file = "markov/markov.R")))
+source(file = "examples/common.R")
 
 # Creates list of command-line argument options
 
@@ -15,8 +15,7 @@ option_list = list(
   make_option(c("--start", "-s"), type = "integer", default = 1,
               help = "Starting position in the batting order. Default %default"),
   make_option(c("--batters", "-b"), type = "character", 
-              default = "Mookie Betts, Max Muncy, Justin Turner, Cody Bellinger,
-              Corey Seager, AJ Pollock, Joc Pederson, Austin Barnes, Gavin Lux",
+              default = "Mookie Betts, Max Muncy, Justin Turner, Cody Bellinger, Corey Seager, AJ Pollock, Joc Pederson, Austin Barnes, Gavin Lux",
               help = "Comma-separated list of batter names. Default '%default'"),
   make_option(c("--pitcher", "-p"), type = "character", default = "Chris Paddack",
               help = "Comma-separated list of pitcher names. Default '%default'"),
@@ -48,41 +47,41 @@ option_list = list(
 
 # Creates capabilities to parse arguments
 
-opt_parser = OptionParser(option_list = option_list)
-opt = parse_args(opt_parser)
+opt_parser <- OptionParser(option_list = option_list)
+opt <- parse_args(opt_parser)
 
 # Creates list of arguments
 
 # Lineup start
 
-start = opt$start
+start <- opt$start
 
 # Lineup
 
-lineup = as.list(strsplit(opt$batters, ",")[[1]])
+lineup <- as.list(strsplit(opt$batters, ",")[[1]])
 for (i in 1:length(lineup)) {
   lineup[[i]] = trimws(lineup[[i]])
 }
 
 # Pitcher
 
-pitcher = opt$pitcher
+pitcher <- opt$pitcher
 
 # Stadium
 
-stad = opt$venue
+stad <- opt$venue
 
 # Home team
 
-home = opt$hometeam
+home <- opt$hometeam
 
 # Temperature
 
-temp = opt$temperature
+temp <- opt$temperature
 
 # Date
 
-date = opt$date
+date <- opt$date
 
 # Creating list of above inputs
 
@@ -90,11 +89,13 @@ info <- list(lineup, pitcher, stad, home, temp, date)
 
 # Creates new state
 
-state = State$new(inning = opt$inning, outs = opt$outs, top = opt$away,
-                  on_1b = opt$on1b, on_2b = opt$on2b, on_3b = opt$on3b,
-                  pitch_number = opt$pitchnumber)
+state <- State$new(inning = opt$inning, outs = opt$outs, top = opt$away,
+                   on_1b = opt$on1b, on_2b = opt$on2b, on_3b = opt$on3b,
+                   pitch_number = opt$pitchnumber)
 
 # Calling Markov function
 
-markov_half_inning(start, info, state)
+results <- markov_half_inning(start, info, state)
+results[[1]]
+results[[2]]
 

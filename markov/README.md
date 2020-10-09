@@ -37,24 +37,46 @@ Copy the file to your local directory, and run it:
 env SINGLEARITY_API_KEY=YOUR_API_KEY R -f markov.R
 ```
 
-Current functionality means that running the file is interactive: when run, you will be asked if you want to proceed with running the default matchup of the Dodgers batting vs. Chris Paddack in the bottom of the first inning. If not, you will be asked if you want to change the lineup, opposing pitcher, environment (team/stadium/etc.), state (i.e., outs, baserunners, top of inning), or starting position in the batting order. The result will be the expected runs scored in the inning and the corresponding probability:
+The current default matchup is the Dodgers batting in the bottom of the first against Chris Paddack. The result will be the expected runs scored in the inning and the corresponding probability:
 
 ```
-# A tibble: 21 x 2
-   `Expected Runs Scored` Probability
-                    <dbl>       <dbl>
- 1                      0    0.677   
- 2                      1    0.152   
- 3                      2    0.0818  
- 4                      3    0.0470  
- 5                      4    0.0244  
- 6                      5    0.0102  
- 7                      6    0.00430 
- 8                      7    0.00173 
- 9                      8    0.000829
-10                      9    0.000355
-# … with 11 more rows
+# A tibble: 8 x 2
+  `Expected Runs Scored` Probability
+  <chr>                        <dbl>
+1 0                          0.712  
+2 1                          0.143  
+3 2                          0.0795 
+4 3                          0.0373 
+5 4                          0.0171 
+6 5                          0.00694
+7 6                          0.00248
+8 7+                         0.00173
 ```
+
+## Command Line Usage
+
+`markov/cmd_markov.R` enables dynamic user input via the command line. To see a list of possible inputs, type `cmd_markov.R --help`. 
+
+### Sample
+
+Below is an example command line input:
+
+`./cmd_markov.R --start=2 --batters="DJ LeMahieu, Aaron Judge, Aaron Hicks, Giancarlo Stanton, Luke Voit, Brett Gardner, Gleyber Torres, Gio Urshela, Kyle Higashioka" --pitcher="Tyler Glasnow" --venue="Yankee Stadium" --hometeam="Yankees" --inning=3 --outs=1 --on2b --temperature=65 --pitchnumber=40`
+
+And the resulting output:
+
+`[1] "Expected Runs: 0.51728"
+# A tibble: 8 x 2
+  `Expected Runs Scored` Probability
+  <chr>                        <dbl>
+1 0                         0.703   
+2 1                         0.167   
+3 2                         0.0746  
+4 3                         0.0324  
+5 4                         0.0153  
+6 5                         0.00507 
+7 6                         0.00167 
+8 7+                        0.000966`
 
 ## Acknowledgments
 
