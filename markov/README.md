@@ -65,18 +65,18 @@ Below is an example command line input:
 
 And the resulting output:
 
-`[1] "Expected Runs: 0.51728"
-# A tibble: 8 x 2
-  `Expected Runs Scored` Probability
-  <chr>                        <dbl>
-1 0                         0.703   
-2 1                         0.167   
-3 2                         0.0746  
-4 3                         0.0324  
-5 4                         0.0153  
-6 5                         0.00507 
-7 6                         0.00167 
-8 7+                        0.000966`
+`[1] "Expected Runs: 0.51728"`
+`# A tibble: 8 x 2`
+  `Expected Runs Scored` `Probability`
+  `<chr>                        <dbl>`
+`1 0                         0.703`   
+`2 1                         0.167`   
+`3 2                         0.0746` 
+`4 3                         0.0324`  
+`5 4                         0.0153`  
+`6 5                         0.00507`
+`7 6                         0.00167` 
+`8 7+                        0.000966`
 
 ## Acknowledgments
 
