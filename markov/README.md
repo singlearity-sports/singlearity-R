@@ -40,17 +40,16 @@ env SINGLEARITY_API_KEY=YOUR_API_KEY R -f markov.R
 The current default matchup is the Dodgers batting in the bottom of the first against Chris Paddack. The result will be the expected runs scored in the inning and the corresponding probability:
 
 ```
-# A tibble: 8 x 2
-  `Expected Runs Scored` Probability
+[1] "Expected Runs: 0.54077"# A tibble: 8 x 2  `Expected Runs Scored` Probability
   <chr>                        <dbl>
-1 0                          0.712  
-2 1                          0.143  
-3 2                          0.0795 
-4 3                          0.0373 
-5 4                          0.0171 
-6 5                          0.00694
-7 6                          0.00248
-8 7+                         0.00173
+1 0                          0.714  
+2 1                          0.142  
+3 2                          0.0790 
+4 3                          0.0370 
+5 4                          0.0169 
+6 5                          0.00685
+7 6                          0.00246
+8 7+                         0.00171
 ```
 
 ## Command Line Usage
