@@ -2,6 +2,12 @@
 
 source("examples/common.R")
 
+library(assertthat)
+
+# Overall allowed error
+
+EPSILON <- 1 / 100000
+
 # Default probabilities for certain events
 # Probability of a one-base error
 
@@ -1108,11 +1114,11 @@ get_results <- function(bat, pitch, stad, home, temp, date,
     }
   }
   
-  results <- sing$GetPaSim(matchup = matchups) %>% 
-    dplyr::mutate(num_on = reduce(dplyr::select(., starts_with("on_")), `+`),
-                      lineup_spot = match(batter_name, unique(batter_name))) %>% 
+  results <- sing$GetPaSim(matchup = matchups) %>%
+    dplyr::mutate(num_on = reduce(dplyr::select(., starts_with("on_")), `+`)) %>%
     dplyr::arrange(match(word(batter_name, -1), last_names), outs, num_on,
-                       desc(on_1b), desc(on_2b)) %>% 
+                   desc(on_1b), desc(on_2b)) %>%
+    dplyr::mutate(lineup_spot = match(batter_name, unique(batter_name))) %>% 
     dplyr::select(-c(num_on))
   
   return(results)
@@ -1217,7 +1223,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][2,17] <- results[2 + 24 * (i - 1),]$dp_exp + 
       results[2 + 24 * (i - 1),]$gdp_exp + results[2 + 24 * (i - 1),]$sf_dp_exp + 
-      results[2 + 24 * (i - 1),]$so_dp_exp
+      results[2 + 24 * (i - 1),]$so_dp_exp + results[2 + 24 * (i - 1),]$tp_exp
 
     # Probability of -2- to ---, starting with no outs and no increase
 
@@ -1816,7 +1822,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][14,25] <- results[14 + 24 * (i - 1),]$dp_exp + 
       results[14 + 24 * (i - 1),]$gdp_exp + results[14 + 24 * (i - 1),]$sf_dp_exp + 
-      results[14 + 24 * (i - 1),]$so_dp_exp
+      results[14 + 24 * (i - 1),]$so_dp_exp + results[14 + 24 * (i-1),]$tp_exp
 
     # Probability of -23 to ---, starting with one out and no increase
     
@@ -1926,7 +1932,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     
     tmatrices[[i]][16,25] <- results[16 + 24 * (i - 1),]$dp_exp + 
       results[16 + 24 * (i - 1),]$gdp_exp + results[16 + 24 * (i - 1),]$sf_dp_exp + 
-      results[16 + 24 * (i - 1),]$so_dp_exp
+      results[16 + 24 * (i - 1),]$so_dp_exp + results[16 + 24 * (i - 1),]$tp_exp
     
     # Probability of --- to ---, starting with two outs and no increase
     
@@ -2126,7 +2132,10 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][22,25] <- results[22 + 24 * (i - 1),]$f_out_exp + 
       results[22 + 24 * (i - 1),]$fc_o_exp + results[22 + 24 * (i - 1),]$fo_exp + 
-      results[22 + 24 * (i - 1),]$so_exp
+      results[22 + 24 * (i - 1),]$so_exp + results[22 + 24 * (i - 1),]$sf_exp +
+      results[22 + 24 * (i - 1),]$dp_exp + results[22 + 24 * (i - 1),]$gdp_exp +
+      results[22 + 24 * (i - 1),]$sf_dp_exp + results[22 + 24 * (i - 1),]$sh_exp +
+      results[22 + 24 * (i - 1),]$so_dp_exp + results[22 + 24 * (i - 1),]$tp_exp
 
     # Probability of -23 to ---, starting with two out and no increase
     
@@ -2198,11 +2207,23 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     
     tmatrices[[i]][24,25] <- results[24 + 24 * (i - 1),]$f_out_exp + 
       results[24 + 24 * (i - 1),]$fc_o_exp + results[24 + 24 * (i - 1),]$fo_exp + 
-      results[24 + 24 * (i - 1),]$so_exp
+      results[24 + 24 * (i - 1),]$so_exp + results[24 + 24 * (i - 1),]$dp_exp +
+      results[24 + 24 * (i - 1),]$gdp_exp + results[24 + 24 * (i - 1),]$sf_exp +
+      results[24 + 24 * (i - 1),]$sf_dp_exp + results[24 + 24 * (i - 1),]$sh_exp +
+      results[24 + 24 * (i - 1),]$so_dp_exp + results[24 + 24 * (i - 1),]$tp_exp
 
     # Filling in the last element of the matrix
     
     tmatrices[[i]][25,25] <- 1
+    
+    # Asserts that row probabilities sum to about 1
+    
+    for (j in 1:25) {
+      rowsum <- sum(tmatrices[[i]][j,])
+      print(paste(i, j, rowsum, sep = ", "))
+      assert_that((1 - rowsum) < EPSILON,
+                  msg = paste0("Probability for batter ", i, ", row ", j, ", is low."))
+    }
     
   }
 
