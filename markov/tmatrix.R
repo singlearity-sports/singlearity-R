@@ -2,7 +2,7 @@
 
 source("examples/common.R")
 
-library(assertthat)
+suppressPackageStartupMessages(library(assertthat))
 
 # Overall allowed error
 
@@ -2220,7 +2220,6 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     
     for (j in 1:25) {
       rowsum <- sum(tmatrices[[i]][j,])
-      print(paste(i, j, rowsum, sep = ", "))
       assert_that((1 - rowsum) < EPSILON,
                   msg = paste0("Probability for batter ", i, ", row ", j, ", is low."))
     }
