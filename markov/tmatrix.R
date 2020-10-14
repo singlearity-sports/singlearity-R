@@ -1265,7 +1265,8 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     
     # Probability of -2- to 1--, starting with no outs and one-out increase
 
-    tmatrices[[i]][3,10] <- results[3 + 24 * (i - 1),]$fc_o_exp
+    tmatrices[[i]][3,10] <- results[3 + 24 * (i - 1),]$fc_o_exp +
+      results[3 + 24 * (i - 1),]$fo_exp
     
     # Probability of -2- to -2-, starting with no outs and one-out increase
 
@@ -1281,7 +1282,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][3,17] <- results[3 + 24 * (i - 1),]$dp_exp + 
       results[3 + 24 * (i - 1),]$gdp_exp + results[3 + 24 * (i - 1),]$sf_dp_exp + 
-      results[3 + 24 * (i - 1),]$so_dp_exp
+      results[3 + 24 * (i - 1),]$so_dp_exp + results[3 + 24 * (i - 1),]$tp_exp
 
     # Probability of --3 to ---, starting with no outs and no increase
 
@@ -1321,7 +1322,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     
     tmatrices[[i]][4,17] <- results[4 + 24 * (i - 1),]$dp_exp + 
       results[4 + 24 * (i - 1),]$gdp_exp + results[4 + 24 * (i - 1),]$sf_dp_exp + 
-      results[4 + 24 * (i - 1),]$so_dp_exp
+      results[4 + 24 * (i - 1),]$so_dp_exp + results[4 + 24 * (i - 1),]$tp_exp
 
     # Probability of 12- to ---, starting with no outs and no increase
     
@@ -1368,6 +1369,10 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     # Probability of 12- to -23, starting with no outs and one-out increase
 
     tmatrices[[i]][5,15] <- results[5 + 24 * (i - 1),]$sh_exp
+    
+    # Probability of 12- to 1--, starting with no outs and two-out increase
+    
+    tmatrices[[i]][5,18] <- results[5 + 24 * (i - 1),]$sf_dp_exp
 
     # Probability of 12- to -2-, starting with no outs and two-out increase
     
@@ -1465,7 +1470,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     # Probability of -23 to 1-3, starting with no outs and no increase
     
     tmatrices[[i]][7,6] <- p_error_1b * results[7 + 24 * (i - 1),]$e_exp + 
-      results[7 + 24 * (i - 1),]$fc_exp
+      results[7 + 24 * (i - 1),]$fc_exp + results[7 + 24 * (i - 1),]$fo_exp
     
     # Probability of -23 to 123, starting with no outs and no increase
 
@@ -1578,7 +1583,8 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     tmatrices[[i]][9,10] <- results[9 + 24 * (i - 1),]$single_exp + 
       results[9 + 24 * (i - 1),]$hbp_exp + results[9 + 24 * (i - 1),]$ci_exp + 
       results[9 + 24 * (i - 1),]$bb_exp + results[9 + 24 * (i - 1),]$ibb_exp +
-      p_error_1b * results[9 + 24 * (i - 1),]$e_exp
+      p_error_1b * results[9 + 24 * (i - 1),]$e_exp +
+      results[9 + 24 * (i - 1),]$fc_exp
 
     # Probability of --- to -2-, starting with one out and no increase
 
@@ -1592,7 +1598,11 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     # Probability of --- to ---, starting with one out and one-out increase
 
     tmatrices[[i]][9,17] <- results[9 + 24 * (i - 1),]$f_out_exp + 
-      results[9 + 24 * (i - 1),]$so_exp
+      results[9 + 24 * (i - 1),]$so_exp + results[9 + 24 * (i - 1),]$fc_o_exp +
+      results[9 + 24 * (i - 1),]$fo_exp + results[9 + 24 * (i - 1),]$sf_exp +
+      results[9 + 24 * (i - 1),]$sh_exp + results[9 + 24 * (i - 1),]$dp_exp +
+      results[9 + 24 * (i - 1),]$gdp_exp + results[9 + 24 * (i - 1),]$sf_dp_exp +
+      results[9 + 24 * (i - 1),]$so_dp_exp + results[9 + 24 * (i - 1),]$tp_exp
 
     # Probability of 1-- to ---, starting with one out and no increase
     
@@ -1669,7 +1679,8 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     # Probability of -2- to 1--, starting with one out and one-out increase
 
-    tmatrices[[i]][11,18] <- results[11 + 24 * (i - 1),]$fc_o_exp
+    tmatrices[[i]][11,18] <- results[11 + 24 * (i - 1),]$fc_o_exp +
+      results[11 + 24 * (i - 1),]$fo_exp
 
     # Probability of -2- to -2-, starting with one out and one-out increase
 
@@ -1685,7 +1696,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][11,25] <- results[11 + 24 * (i - 1),]$dp_exp + 
       results[11 + 24 * (i - 1),]$gdp_exp + results[11 + 24 * (i - 1),]$sf_dp_exp + 
-      results[11 + 24 * (i - 1),]$so_dp_exp
+      results[11 + 24 * (i - 1),]$so_dp_exp + results[11 + 24 * (i - 1),]$tp_exp
 
     # Probability of --3 to ---, starting with one out and no increase
 
@@ -1729,7 +1740,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][12,25] <- results[12 + 24 * (i - 1),]$dp_exp + 
       results[12 + 24 * (i - 1),]$gdp_exp + results[12 + 24 * (i - 1),]$sf_dp_exp + 
-      results[12 + 24 * (i - 1),]$so_dp_exp
+      results[12 + 24 * (i - 1),]$so_dp_exp + results[12 + 24 * (i - 1),]$tp_exp
 
     # Probability of 12- to ---, starting with one out and no increase
     
@@ -1781,7 +1792,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     
     tmatrices[[i]][13,25] <- results[13 + 24 * (i - 1),]$dp_exp + 
       results[13 + 24 * (i - 1),]$gdp_exp + results[13 + 24 * (i - 1),]$sf_dp_exp + 
-      results[13 + 24 * (i - 1),]$so_dp_exp
+      results[13 + 24 * (i - 1),]$so_dp_exp + results[13 + 24 * (i - 1),]$tp_exp
 
     # Probability of 1-3 to ---, starting with one out and no increase
     
@@ -1886,7 +1897,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][15,25] <- results[15 + 24 * (i - 1),]$dp_exp + 
       results[15 + 24 * (i - 1),]$gdp_exp + results[15 + 24 * (i - 1),]$sf_dp_exp + 
-      results[15 + 24 * (i - 1),]$so_dp_exp
+      results[15 + 24 * (i - 1),]$so_dp_exp + results[15 + 24 * (i - 1),]$tp_exp
 
     # Probability of 123 to ---, starting with one out and no increase
 
@@ -1954,7 +1965,8 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     tmatrices[[i]][17,18] <- results[17 + 24 * (i - 1),]$single_exp + 
       results[17 + 24 * (i - 1),]$bb_exp + results[17 + 24 * (i - 1),]$ibb_exp + 
       results[17 + 24 * (i - 1),]$hbp_exp + results[17 + 24 * (i - 1),]$ci_exp + 
-      p_error_1b * results[17 + 24 * (i - 1),]$e_exp
+      p_error_1b * results[17 + 24 * (i - 1),]$e_exp +
+      results[17 + 24 * (i - 1),]$fc_exp
 
     # Probability of --- to -2-, starting with two out and no increase
 
@@ -1968,7 +1980,11 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     # Probability of --- to end of inning, starting with two out
 
     tmatrices[[i]][17,25] <- results[17 + 24 * (i - 1),]$f_out_exp + 
-      results[17 + 24 * (i - 1),]$so_exp
+      results[17 + 24 * (i - 1),]$so_exp + results[17 + 24 * (i - 1),]$fc_o_exp +
+      results[17 + 24 * (i - 1),]$fo_exp + results[17 + 24 * (i - 1),]$sf_exp +
+      results[17 + 24 * (i - 1),]$sh_exp + results[17 + 24 * (i - 1),]$dp_exp +
+      results[17 + 24 * (i - 1),]$gdp_exp + results[17 + 24 * (i - 1),]$sf_dp_exp +
+      results[17 + 24 * (i - 1),]$so_dp_exp + results[17 + 24 * (i - 1),]$tp_exp
 
     # Probability of 1-- to ---, starting with two out and no increase
     
@@ -2002,7 +2018,10 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][18,25] <- results[18 + 24 * (i - 1),]$f_out_exp + 
       results[18 + 24 * (i - 1),]$fc_o_exp + results[18 + 24 * (i - 1),]$fo_exp + 
-      results[18 + 24 * (i - 1),]$so_exp
+      results[18 + 24 * (i - 1),]$so_exp + results[18 + 24 * (i - 1),]$sf_exp +
+      results[18 + 24 * (i - 1),]$sh_exp + results[18 + 24 * (i - 1),]$dp_exp +
+      results[18 + 24 * (i - 1),]$gdp_exp + results[18 + 24 * (i - 1),]$sf_dp_exp +
+      results[18 + 24 * (i - 1),]$so_dp_exp + results[18 + 24 * (i - 1),]$tp_exp
     
     # Probability of -2- to ---, starting with two out and no increase
 
@@ -2035,7 +2054,11 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     # Probability of -2- to end of inning, starting with two out
 
     tmatrices[[i]][19,25] <- results[19 + 24 * (i - 1),]$fc_o_exp + 
-      results[19 + 24 * (i - 1),]$f_out_exp + results[19 + 24 * (i - 1),]$so_exp
+      results[19 + 24 * (i - 1),]$f_out_exp + results[19 + 24 * (i - 1),]$so_exp +
+      results[19 + 24 * (i - 1),]$fo_exp + results[19 + 24 * (i - 1),]$sf_exp +
+      results[19 + 24 * (i - 1),]$sh_exp + results[19 + 24 * (i - 1),]$dp_exp +
+      results[19 + 24 * (i - 1),]$gdp_exp + results[19 + 24 * (i - 1),]$sf_dp_exp +
+      results[19 + 24 * (i - 1),]$so_dp_exp + results[19 + 24 * (i - 1),]$tp_exp
 
     # Probability of --3 to ---, starting with two out and no increase
     
@@ -2066,7 +2089,10 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][20,25] <- results[20 + 24 * (i - 1),]$f_out_exp + 
       results[20 + 24 * (i - 1),]$fc_o_exp + results[20 + 24 * (i - 1),]$so_exp +
-      results[20 + 24 * (i - 1),]$fo_exp
+      results[20 + 24 * (i - 1),]$fo_exp + results[20 + 24 * (i - 1),]$sf_exp +
+      results[20 + 24 * (i - 1),]$sh_exp + results[20 + 24 * (i - 1),]$dp_exp +
+      results[20 + 24 * (i - 1),]$gdp_exp + results[20 + 24 * (i - 1),]$sf_dp_exp +
+      results[20 + 24 * (i - 1),]$so_dp_exp + results[20 + 24 * (i - 1),]$tp_exp
 
     # Probability of 12- to ---, starting with two out and no increase
 
@@ -2104,7 +2130,10 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][21,25] <- results[21 + 24 * (i - 1),]$f_out_exp + 
       results[21 + 24 * (i - 1),]$fc_o_exp + results[21 + 24 * (i - 1),]$fo_exp + 
-      results[21 + 24 * (i - 1),]$so_exp
+      results[21 + 24 * (i - 1),]$so_exp + results[21 + 24 * (i - 1),]$sf_exp +
+      results[21 + 24 * (i - 1),]$sh_exp + results[21 + 24 * (i - 1),]$dp_exp +
+      results[21 + 24 * (i - 1),]$gdp_exp + results[21 + 24 * (i - 1),]$sf_dp_exp +
+      results[21 + 24 * (i - 1),]$so_dp_exp + results[21 + 24 * (i - 1),]$tp_exp
     
     # Probability of 1-3 to ---, starting with two out and no increase
     
@@ -2179,7 +2208,10 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
 
     tmatrices[[i]][23,25] <- results[23 + 24 * (i - 1),]$f_out_exp + 
       results[23 + 24 * (i - 1),]$fc_o_exp + results[23 + 24 * (i - 1),]$so_exp +
-      results[23 + 24 * (i - 1),]$fo_exp
+      results[23 + 24 * (i - 1),]$fo_exp + results[23 + 24 * (i - 1),]$sf_exp +
+      results[23 + 24 * (i - 1),]$sh_exp + results[23 + 24 * (i - 1),]$dp_exp +
+      results[23 + 24 * (i - 1),]$gdp_exp + results[23 + 24 * (i - 1),]$sf_dp_exp +
+      results[23 + 24 * (i - 1),]$so_dp_exp + results[23 + 24 * (i - 1),]$tp_exp
 
     # Probability of 123 to ---, starting with two out and no increase
 
