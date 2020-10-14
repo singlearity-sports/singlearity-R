@@ -1187,7 +1187,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
       results[1 + 24 * (i - 1),]$so_exp + results[1 + 24 * (i - 1),]$fc_o_exp +
       results[1 + 24 * (i - 1),]$fo_exp + results[1 + 24 * (i - 1),]$sf_exp +
       results[1 + 24 * (i - 1),]$sh_exp + results[1 + 24 * (i - 1),]$dp_exp +
-      results[1 + 24 * (i - 1),]$gdp_exp + results[1 + 24 * (i - 1),]sf_dp_exp +
+      results[1 + 24 * (i - 1),]$gdp_exp + results[1 + 24 * (i - 1),]$sf_dp_exp +
       results[1 + 24 * (i - 1),]$so_dp_exp + results[1 + 24 * (i - 1),]$tp_exp
 
     # Probability of 1-- to ---, starting with no outs and no increase
