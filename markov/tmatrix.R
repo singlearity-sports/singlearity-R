@@ -1153,6 +1153,11 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
   results <- get_results(batters, pitcher, stadium, home, temp, date,
                          away, inning, pitch_ct)
   
+  # Each of these transitions includes probabilities for impossible events
+  # i.e., DP probability with nobody on base, or two outs
+  # These are used when summing what's judged to be the most relevant probability
+  # In the DP/nobody on situation, the DP prob. will be included in the +1 out prob.
+  
   for (i in 1:9) {
     
     # Probability of --- to ---, starting with no outs and no increase
@@ -1164,7 +1169,8 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     tmatrices[[i]][1,2] <- results[1 + 24 * (i - 1),]$single_exp + 
       results[1 + 24 * (i - 1),]$hbp_exp + results[1 + 24 * (i - 1),]$ci_exp + 
       results[1 + 24 * (i - 1),]$bb_exp + results[1 + 24 * (i - 1),]$ibb_exp +
-      p_error_1b * results[1 + 24 * (i - 1),]$e_exp
+      p_error_1b * results[1 + 24 * (i - 1),]$e_exp + 
+      results[1 + 24 * (i - 1),]$fc_exp
     
     # Probability of --- to -2-, starting with no outs and no increase
 
@@ -1178,7 +1184,11 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     # Probability of --- to ---, starting with no outs and one-out increase
 
     tmatrices[[i]][1,9] <- results[1 + 24 * (i - 1),]$f_out_exp + 
-      results[1 + 24 * (i - 1),]$so_exp
+      results[1 + 24 * (i - 1),]$so_exp + results[1 + 24 * (i - 1),]$fc_o_exp +
+      results[1 + 24 * (i - 1),]$fo_exp + results[1 + 24 * (i - 1),]$sf_exp +
+      results[1 + 24 * (i - 1),]$sh_exp + results[1 + 24 * (i - 1),]$dp_exp +
+      results[1 + 24 * (i - 1),]$gdp_exp + results[1 + 24 * (i - 1),]sf_dp_exp +
+      results[1 + 24 * (i - 1),]$so_dp_exp + results[1 + 24 * (i - 1),]$tp_exp
 
     # Probability of 1-- to ---, starting with no outs and no increase
     
