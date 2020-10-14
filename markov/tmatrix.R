@@ -1012,14 +1012,13 @@ tmatrix_std <- function(bb_exp = bb_exp_lg,
   # The actual effect is minimal - the row sums are within .05 of 1
   
   for (i in 1:25) {
-    rowsum <- sum(tmatrices[i,])
-    tmatrices[i,] <- tmatrices[i,] / rowsum
+    rowsum <- sum(tmatrix[i,])
+    tmatrix[i,] <- tmatrix[i,] / rowsum
   }
   
   return(tmatrix)
   
   }
-
 
 # Function to get results of a plate appearance
 # This is essentially copied/pasted from pa_pred_simple.R

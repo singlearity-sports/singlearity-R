@@ -6,7 +6,7 @@ suppressPackageStartupMessages(library(optparse))
 
 # Assumes user is in the overarching "Singlearity" directory 
 
-invisible(capture.output(source(file = "markov/markov.R")))
+source(file = "markov/markov.R")
 source(file = "examples/common.R")
 
 # Creates list of command-line argument options
@@ -41,6 +41,8 @@ option_list = list(
               help = "Date of matchup. Default %default"),
   make_option(c("--pitchnumber", "-c"), type = "integer", default = 0,
               help = "Pitcher's pitch count at start of the at-bat. Default %default"),
+  make_option(c("--standard"), action = "store_true", default = FALSE,
+              help = "True if using league avg. for transition matrices. Default %default"),
   make_option(c("--plot"), type = "character", default = '',
               help = "Comma-separated list of values to plot; e.g., 'woba, hr, so'")
 )
@@ -93,9 +95,13 @@ state <- State$new(inning = opt$inning, outs = opt$outs, top = opt$away,
                    on_1b = opt$on1b, on_2b = opt$on2b, on_3b = opt$on3b,
                    pitch_number = opt$pitchnumber)
 
+# Grabs transition matrix setting
+
+standard <- opt$standard
+
 # Calling Markov function
 
-results <- markov_half_inning(start, info, state)
+results <- markov_half_inning(start, info, state, standard)
 results[[1]]
 results[[2]]
 

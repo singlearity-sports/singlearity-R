@@ -24,7 +24,8 @@ EPSILON <- 1 / 100000
 
 # Uses Markov chains to get run-scoring probability distributions for a half-inning
 
-markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
+markov_half_inning <- function(idx, info, state = State$new(top = FALSE),
+                               standard = FALSE) {
   
   # Assigns values from function
   # Also creates a list of the 24 possible batting states
@@ -40,9 +41,42 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE)) {
   pitch_ct <- state$pitch_number
   
   # List of the transition matrices for the nine batters
+  # Capabilities for either avg. transition matrix or Singlearity-based
   
-  tmatrix_list <- tmatrix_sing(batters, pitcher, stadium, home, temp, date,
-                               away, inning, pitch_ct)
+  if (standard) {
+    
+    # Some of this code is taken from the Singlearity transition matrix function
+    # From tmatrix.R
+    
+    tmatrix_1 <- matrix(0, 25, 25)
+    tmatrix_2 <- matrix(0, 25, 25)
+    tmatrix_3 <- matrix(0, 25, 25)
+    tmatrix_4 <- matrix(0, 25, 25)
+    tmatrix_5 <- matrix(0, 25, 25)
+    tmatrix_6 <- matrix(0, 25, 25)
+    tmatrix_7 <- matrix(0, 25, 25)
+    tmatrix_8 <- matrix(0, 25, 25)
+    tmatrix_9 <- matrix(0, 25, 25)
+    
+    # Initializes list to improve speed and functionality
+    
+    tmatrix_list <- list(tmatrix_1, tmatrix_2, tmatrix_3, tmatrix_4, tmatrix_5,
+                         tmatrix_6, tmatrix_7, tmatrix_8, tmatrix_9)
+    
+    for (i in 1:9) {
+      
+      tmatrix_list[[i]] <- tmatrix_std()
+      
+    }
+    
+  }
+  
+  else {
+    
+    tmatrix_list <- tmatrix_sing(batters, pitcher, stadium, home, temp, date,
+                                 away, inning, pitch_ct)
+    
+  }
 
   # Initializing 21x25 scorekeeping matrix
   # 21 rows because we assume teams can score from 0 to 20 runs in a game
@@ -227,4 +261,8 @@ main <- function() {
 
 }
 
-main()
+if (sys.nframe() == 0L) {
+  
+  main()
+  
+}
