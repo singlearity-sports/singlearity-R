@@ -1620,13 +1620,14 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
     
     # Probability of 1-- to -2-, starting with one out and one-out increase
 
-    tmatrices[[i]][10,19] <- results[10 + 24 * (i - 1),]$sh_exp
+    tmatrices[[i]][10,19] <- results[10 + 24 * (i - 1),]$sh_exp +
+      results[10 + 24 * (i - 1),]$sf_exp
 
     # Probability of 1-- to end of inning, starting with one out
 
     tmatrices[[i]][10,25] <- results[10 + 24 * (i - 1),]$dp_exp + 
       results[10 + 24 * (i - 1),]$gdp_exp + results[10 + 24 * (i - 1),]$sf_dp_exp + 
-      results[10 + 24 * (i - 1),]$so_dp_exp
+      results[10 + 24 * (i - 1),]$so_dp_exp + results[10 + 24 * (i - 1),]$tp_exp
     
     # Probability of -2- to ---, starting with one out and no increase
     
@@ -2122,8 +2123,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
       p_error_2b * results[22 + 24 * (i - 1),]$e_exp
 
     # Probability of 1-3 to 123, starting with two out and no increase
-    
-    
+
     tmatrices[[i]][22,24] <- results[22 + 24 * (i - 1),]$bb_exp + 
       results[22 + 24 * (i - 1),]$ibb_exp + results[22 + 24 * (i - 1),]$hbp_exp + 
       results[22 + 24 * (i - 1),]$ci_exp
