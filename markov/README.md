@@ -79,6 +79,8 @@ And the resulting output:
 8 7+                        0.000966
 ```
 
+To run the file using league-average transition matrices from the 2020 season, use the `--standard` argument.
+
 ## Acknowledgments
 
 Singlearity is by no means the first to explore the applicability of Markov chains in baseball. For their prior work on the subject, we'd like to thank [Mark Pankin](http://www.pankin.com/markov/theory.htm) for his efforts in developing the theory of Markov and baseball, [statshacker](http://statshacker.com/blog/2018/05/07/the-markov-chain-model-of-baseball) for the linear algebra refresher, and [Daniel Ursin](https://dc.uwm.edu/cgi/viewcontent.cgi?article=1969&context=etd) for the foundation of the algorithm used in this file.
