@@ -3,7 +3,8 @@
 # could be used by the Padres to select a relief pitcher, or the Dodgers to select
 # a pinch hitter.
 
-source(file='common.R')
+library(singlearity)
+sing=GetSinglearityClient()
 
 # load required packages
 library(ggplot2)

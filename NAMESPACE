@@ -22,3 +22,7 @@ export(Venue)
 
 # APIs
 export(APIsApi)
+
+#Singlearity Startup
+export(GetSinglearityClient)
+

@@ -1,6 +1,7 @@
 # comment out file path when running test files
 
-source(file='common.R')
+library(singlearity)
+sing <- GetSinglearityClient()
 
 # turning this into a function, with a default matchup
 

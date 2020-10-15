@@ -1,8 +1,9 @@
 #!/usr/local/bin/Rscript
 
 
-source(file='common.R')
-source(file='pa_pred_simple.R')
+library(singlearity)
+sing <- GetSinglearityClient()
+
 source(file='utils.R')
 
   library("optparse")
@@ -74,13 +75,16 @@ source(file='utils.R')
   atmosphere <- Atmosphere$new(venue = venue, temperature = opt$temperature, home_team = sing$GetTeams(name = opt$hometeam)[[1]])
    
  
-  results = pa_pred_simple(batters = candidate_batters,
-                              pitchers = candidate_pitchers,
-                              state = state,
-                              atmosphere = atmosphere, 
-                              date = opt$date,
-                              predictiontype = opt$predictiontype
-                          )
+  matchups <- list()
+  for (b in candidate_batters) 
+  {
+    for (p in candidate_pitchers)
+    {
+      matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, atmosphere = atmosphere, state = state, date = opt$date))
+    }
+  }
+
+  results <- sing$GetPaSim(matchup = matchups, model.name = opt$predictiontype)
   print(results)
   
   if (length(plot_list) > 0) {

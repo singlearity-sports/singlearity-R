@@ -2,7 +2,8 @@
 # Let's try to sign a veteran RH 1B or DH to platoon against the Yankees lefty pitchers 
 ###############################################################
 
-source(file = 'common.R')
+library(singlearity)
+sing <- GetSinglearityClient()
 
 pitcher_list = c('J.A. Happ', 'James Paxton', 'Jordan Montgomery')
 

@@ -2,7 +2,8 @@
 # Make predictions for groups of batters vs groups of pitchers
 ##########################################
 
-source(file = 'common.R')
+library(singlearity)
+sing <- GetSinglearityClient()
 
 #list of batters
 batter_list = c('Mookie Betts', 'Justin Turner', 'Max Muncy', 'Cody Bellinger')

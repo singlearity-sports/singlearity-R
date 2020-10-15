@@ -1,5 +1,7 @@
 #show predicted wOBA based on pitch count
-source(file='common.R')
+
+library(singlearity)
+sing <- GetSinglearityClient()
 
 # load required packages
 library(ggplot2)

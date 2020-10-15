@@ -2,7 +2,8 @@
 # Show the input features used to form the prediction
 ##########################################
 
-source(file = 'common.R')
+library(singlearity)
+sing <- GetSinglearityClient()
 
 #list of batters
 batter_list = c('Mookie Betts')

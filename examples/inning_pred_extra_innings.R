@@ -1,4 +1,6 @@
-source(file='common.R')
+library(singlearity)
+
+sing <- GetSinglearityClient()
 library(glue)
 
 home_lineup_pos=c(
