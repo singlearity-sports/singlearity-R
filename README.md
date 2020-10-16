@@ -41,8 +41,6 @@ devtools::install_github("singlearity-sports/singlearity-R")
 
 **Create it**
 
-Copy ```examples/common.R``` to a local directory.
-
 Create a file ```pa_pred_very_simple.R``` in the same local directory with:
 
 ```
@@ -51,7 +49,8 @@ Create a file ```pa_pred_very_simple.R``` in the same local directory with:
 ##########################################
 # Make predictions for groups of batters vs groups of pitchers
 ##########################################
-source('common.R')
+library(singlearity)
+sing <- GetSinglearityClient()
 
 #list of batters
 batter_list = c('Mookie Betts', 'Justin Turner', 'Max Muncy', 'Cody Bellinger')
