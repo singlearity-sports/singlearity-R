@@ -2,12 +2,14 @@
 
 # Command-line functionality for Markov chains
 
+library(singlearity)
 suppressPackageStartupMessages(library(optparse))
 
 # Assumes user is in the overarching "Singlearity" directory 
 
+sing <- GetSinglearityClient()
+
 source(file = "markov/markov.R")
-source(file = "examples/common.R")
 
 # Creates list of command-line argument options
 

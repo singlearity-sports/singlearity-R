@@ -11,10 +11,11 @@
 # The sum of all transition probabilities in a given row must equal 1
 
 # With help from https://tinyurl.com/y3t4om6o
+library(singlearity)
+sing <- GetSinglearityClient()
 
 suppressPackageStartupMessages(library(wordspace))
 suppressPackageStartupMessages(library(tidyverse))
-source("examples/common.R")
 source("markov/tmatrix.R")
 
 # The error in the probability
