@@ -82,7 +82,7 @@ if (standard) {
   results <- markov_half_inning(idx = start, 
                                 tmatrix_list = matrices, 
                                 state = state)
-  results[[1]]
+  print(results[[1]])
   results[[2]]
   
 } else {
@@ -131,8 +131,7 @@ if (standard) {
   results <- markov_half_inning(idx = start, 
                                 tmatrix_list = matrices, 
                                 state = state)
-  results[[1]]
+  print(results[[1]])
   results[[2]]
-  
   
 }
