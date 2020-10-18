@@ -12,11 +12,12 @@
 
 # With help from https://tinyurl.com/y3t4om6o
 library(singlearity)
+source(file = "markov/tmatrix.R")
+source(file = "R/get_singlearity_client.R")
 sing <- GetSinglearityClient()
 
 suppressPackageStartupMessages(library(wordspace))
 suppressPackageStartupMessages(library(tidyverse))
-source("markov/tmatrix.R")
 
 # The error in the probability
 # Exits when difference between the sum of all run-scoring probabilities and 1 is < EPSILON

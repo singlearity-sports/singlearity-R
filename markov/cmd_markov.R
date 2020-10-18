@@ -7,9 +7,10 @@ suppressPackageStartupMessages(library(optparse))
 
 # Assumes user is in the overarching "Singlearity" directory 
 
-sing <- GetSinglearityClient()
-
 source(file = "markov/markov.R")
+source(file = "R/get_singlearity_client.R")
+
+sing <- GetSinglearityClient()
 
 # Creates list of command-line argument options
 

@@ -1,6 +1,7 @@
 # Functions (in separate file) to get transition matrix
 
 library(singlearity)
+source(file = "R/get_singlearity_client.R")
 sing <- GetSinglearityClient()
 
 suppressPackageStartupMessages(library(assertthat))
