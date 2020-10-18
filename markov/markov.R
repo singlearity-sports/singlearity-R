@@ -23,26 +23,26 @@ source("markov/tmatrix.R")
 
 EPSILON <- 1 / 100000
 
-# Uses Markov chains to get run-scoring probability distributions for a half-inning
+# Default list for Singlearity transition matrices
 
-markov_half_inning <- function(idx, info, state = State$new(top = FALSE),
-                               standard = FALSE) {
+info_default <- list()
+
+info_default[[1]] <- list("Mookie Betts", "Max Muncy", "Justin Turner", 
+                          "Cody Bellinger", "Corey Seager", "AJ Pollock", 
+                          "Joc Pederson", "Austin Barnes", "Gavin Lux")
+info_default[[2]] <- "Chris Paddack"
+info_default[[3]] <- "Dodger Stadium"
+info_default[[4]] <- "Dodgers"
+info_default[[5]] <- 70
+info_default[[6]] <- "2020-10-01"
+
+# Gets proper transition matrices for the Markov simulation
+
+markov_matrices <- function(standard = FALSE, 
+                            state = State$new(top = FALSE), 
+                            info = info_default) {
   
-  # Assigns values from function
-  # Also creates a list of the 24 possible batting states
-  
-  batters <- info[[1]]
-  pitcher <- info[[2]]
-  stadium <- info[[3]]
-  home <- info[[4]]
-  temp <- info[[5]]
-  date <- info[[6]]
-  away <- state$top
-  inning <- state$inning
-  pitch_ct <- state$pitch_number
-  
-  # List of the transition matrices for the nine batters
-  # Capabilities for either avg. transition matrix or Singlearity-based
+  # If the user just wants the default league transition matrices
   
   if (standard) {
     
@@ -74,11 +74,33 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE),
   
   else {
     
+    # Assigns values from function
+    # Also creates a list of the 24 possible batting states
+    
+    batters <- info[[1]]
+    pitcher <- info[[2]]
+    stadium <- info[[3]]
+    home <- info[[4]]
+    temp <- info[[5]]
+    date <- info[[6]]
+    away <- state$top
+    inning <- state$inning
+    pitch_ct <- state$pitch_number
+    
     tmatrix_list <- tmatrix_sing(batters, pitcher, stadium, home, temp, date,
                                  away, inning, pitch_ct)
     
   }
+  
+  return(tmatrix_list)
+  
+}
 
+# Uses Markov chains to get run-scoring probability distributions for a half-inning
+
+markov_half_inning <- function(idx = 1, tmatrix_list = markov_matrices(), 
+                               state = State$new(top = FALSE)) {
+  
   # Initializing 21x25 scorekeeping matrix
   # 21 rows because we assume teams can score from 0 to 20 runs in a game
   # 25 columns because there are 25 unique states (including end of inning)
@@ -231,31 +253,13 @@ markov_half_inning <- function(idx, info, state = State$new(top = FALSE),
   
 }
 
-# Creating function for dynamic user input
+# Main function
 
 main <- function() {
 
   # Creates default situation for prediction
 
-  idx <- 1
-  
-  batters <- c("Mookie Betts", "Max Muncy", "Justin Turner", "Cody Bellinger",
-               "Corey Seager", "AJ Pollock", "Joc Pederson", "Austin Barnes",
-               "Gavin Lux")
-
-  pitcher <- "Chris Paddack"
-
-  stadium <- "Dodger Stadium"
-
-  home <- "Dodgers"
-
-  temp <- 70
-
-  date <- as.character(Sys.Date())
-  
-  info <- list(batters, pitcher, stadium, home, temp, date)
-  
-  results <- markov_half_inning(idx, info)
+  results <- markov_half_inning()
   
   print(results[[1]])
   print(results[[2]])
