@@ -250,7 +250,7 @@ markov_half_inning <- function(idx = 1, tmatrix_list = markov_matrices(),
             "Probability" = sum(select(slice(runs, 8:21), "Probability"))) %>% 
     slice(c(1:7, 22))
 
-  return(list(paste("Expected Runs:", exp_runs), runs))
+  return(list(exp_runs, runs))
   
 }
 

@@ -222,6 +222,25 @@ re24_2018_first <- season_re24(pbp_2018_first)
 re24_2017_first <- season_re24(pbp_2017_first)
 re24_2016_first <- season_re24(pbp_2016_first)
 
+# Function to get difference between Singlearity predictions and runs scored
 
+inning_diff <- function(game_id, half) {
+  
+  # Gets batting orders using game ID
+  # Creates lineup using markov_matrices(), including vars. like date
+  # For each PA:
+  # Gets expected runs using markov_half_inning()
+  # Finds difference between prediction and runs_to_end_inning
+  # Squares and adds to running Singlearity total
+  # Also gets expected runs in the state from RE24 tables
+  # Finds difference between RE24 pred. and runs_to_end_inning
+  # Squares and adds to running RE24 total
+  # Goal: at end, compare Singlearity and RE24 totals
+  
+  
+  # Use RE24 table from year before?
+  # Exclude innings where pitcher changes?
+
+}
 
 
