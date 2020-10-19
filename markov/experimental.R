@@ -194,3 +194,34 @@ pbp_first <- bind_rows(pbp_2020_first, pbp_2019_first, pbp_2018_first,
                        pbp_2017_first, pbp_2016_first) %>% 
   arrange(desc(game_date))
 
+# Creates 1st inning RE24 tables for each season
+
+season_re24 <- function(pbp) {
+  
+  table <- pbp %>% 
+    run_expectancy_table() %>% 
+    mutate(on_1b = str_detect(base_out_state, "1b"),
+           on_2b = str_detect(base_out_state, "2b"),
+           on_3b = str_detect(base_out_state, "3b"),
+           outs = case_when(
+             str_detect(base_out_state, "0  outs") ~ 0,
+             str_detect(base_out_state, "1  outs") ~ 1,
+             str_detect(base_out_state, "2  outs") ~ 2
+           )) %>% 
+    select(outs, on_1b, on_2b, on_3b, base_out_state, avg_re)
+  
+  return(table)
+  
+}
+
+# Uses above function to get 1st inning RE24 tables for each year
+
+re24_2020_first <- season_re24(pbp_2020_first)
+re24_2019_first <- season_re24(pbp_2019_first)
+re24_2018_first <- season_re24(pbp_2018_first)
+re24_2017_first <- season_re24(pbp_2017_first)
+re24_2016_first <- season_re24(pbp_2016_first)
+
+
+
+
