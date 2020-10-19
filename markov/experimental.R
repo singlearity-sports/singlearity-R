@@ -227,7 +227,7 @@ re24_2016_first <- season_re24(pbp_2016_first)
 inning_diff <- function(game_id, half) {
   
   # Gets batting orders using game ID
-  # Creates lineup using markov_matrices(), including vars. like date
+  # Creates lineup using one call to markov_matrices(), including vars. like date
   # For each PA:
   # Gets expected runs using markov_half_inning()
   # Finds difference between prediction and runs_to_end_inning
