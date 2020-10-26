@@ -239,6 +239,62 @@ inning_diff <- function(game_id) {
     arrange(batting_order)
   
   # Creates lineup using one call to markov_matrices(), including vars. like date
+  
+  game_info <- get_game_info_mlb(game_id)
+  
+  info_away <- list()
+  
+  # Creates list of player names
+  
+  info_away[[1]] <- as.list(lineup_away$fullName)
+  
+  # Gets pitcher name
+  
+  info_away[[2]] <- pbp_first %>% 
+    filter(game_pk == game_id, inning_topbot == "Top") %>% 
+    select(pitcher) %>% 
+    pull() %>% 
+    sing$GetPlayers(id = .) %>% 
+    pluck(1, "full_name")
+  
+  # Gets stadium name
+  
+  info_away[[3]] <- game_info %>% 
+    select(venue_name) %>% 
+    pull()
+  
+  # Gets name of home team
+  
+  info_away[[4]] <- lineup_home %>% 
+    select(teamName) %>% 
+    slice(1) %>% 
+    pull() %>% 
+    word(2, -1)
+  
+  # Corrects team name if what's pulled above is incorrect
+  
+  if (info_away[[4]] %in% c("Bay Rays", "York Yankees", "City Royals",
+                            "Angeles Angels", "York Mets", "Louis Cardinals",
+                            "Angeles Dodgers", "Diego Padres", "Francisco Giants")) {
+    
+    info_away[[4]] <- info_away[[4]] %>% 
+      word(2)
+      
+  }
+  
+  # Gets temperature
+  
+  info_away[[5]] <- game_info %>% 
+    select(temperature) %>% 
+    pull() %>% 
+    as.integer()
+  
+  # Gets date
+  
+  info_away[[6]] <- game_info %>% 
+    select(game_date) %>% 
+    pull()
+  
   # For each PA:
   # Gets expected runs using markov_half_inning()
   # Finds difference between prediction and runs_to_end_inning
