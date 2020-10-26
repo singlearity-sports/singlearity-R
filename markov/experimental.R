@@ -432,6 +432,75 @@ inning_diff <- function(game_id) {
       as.Date() %>% 
       year() - 1
     
+    re24 <- get(paste0("re24_", year_prev, "_first"))
+    
+    re_est <- re24 %>% 
+      filter(outs == test_state$outs,
+             on_1b == test_state$on_1b,
+             on_2b == test_state$on_2b,
+             on_3b == test_state$on_3b)
+    
+    error[2] <- (re_est - pull(select(ab, runs_to_end_inning)))^2
+    num_pa <- num_pa + 1
+    
+  }
+  
+  for (pa in seq_len(nrow(pbp_home))) {
+    
+    # Gets index for batting order, w/ extra precaution should a team bat around
+    
+    index <- pa %% 9
+    
+    if (index == 0) {
+      
+      index <- 9
+      
+    }
+    
+    # Grabs the specific plate appearance
+    
+    ab <- pbp_home %>% 
+      slice(pa)
+    
+    # Creates state
+    
+    test_state <- State$new(top = FALSE,
+                            outs = pull(select(ab, outs_when_up)),
+                            on_1b = !is.na(pull(select(ab, on_1b))),
+                            on_2b = !is.na(pull(select(ab, on_2b))),
+                            on_3b = !is.na(pull(select(ab, on_3b))))
+    
+    # Gets Markov predictions, specifically expected runs
+    
+    runs_exp <- markov_half_inning(idx = index,
+                                   tmatrix_list = tmatrices_away,
+                                   state = test_state) %>% 
+      pluck(1)
+    
+    # Updates error for Singlearity
+    
+    error[1] <- (runs_exp - pull(select(ab, runs_to_end_inning)))^2
+    num_pa <- num_pa + 1
+    
+    # Updates error for standard pred., using previous year's RE24 table
+    
+    year_prev <- game_info %>% 
+      select(game_date) %>% 
+      pull() %>% 
+      as.Date() %>% 
+      year() - 1
+    
+    re24 <- get(paste0("re24_", year_prev, "_first"))
+    
+    re_est <- re24 %>% 
+      filter(outs == test_state$outs,
+             on_1b == test_state$on_1b,
+             on_2b == test_state$on_2b,
+             on_3b == test_state$on_3b)
+    
+    error[2] <- (re_est - pull(select(ab, runs_to_end_inning)))^2
+    num_pa <- num_pa + 1
+    
   }
   
   # For each PA:
