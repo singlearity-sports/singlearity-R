@@ -267,6 +267,9 @@ num_pa <- 0
 
 inning_diff <- function(game_id) {
   
+  error <- c(0, 0)
+  num_pa <- 0
+  
   # Gets batting orders using game ID
   
   lineups <- get_batting_orders(game_id)
@@ -411,17 +414,18 @@ inning_diff <- function(game_id) {
                             on_1b = !is.na(pull(select(ab, on_1b))),
                             on_2b = !is.na(pull(select(ab, on_2b))),
                             on_3b = !is.na(pull(select(ab, on_3b))))
-    
+
     # Gets Markov predictions, specifically expected runs
     
     runs_exp <- markov_half_inning(idx = index,
                                    tmatrix_list = tmatrices_away,
                                    state = test_state) %>% 
-      pluck(1)
-    
+      pluck(1) %>% 
+      as.numeric()
+
     # Updates error for Singlearity
     
-    error[1] <- (runs_exp - pull(select(ab, runs_to_end_inning)))^2
+    error[1] <- error[1] + (runs_exp - as.numeric(pull(select(ab, runs_to_end_inning))))^2
     num_pa <- num_pa + 1
     
     # Updates error for standard pred., using previous year's RE24 table
@@ -438,11 +442,13 @@ inning_diff <- function(game_id) {
       filter(outs == test_state$outs,
              on_1b == test_state$on_1b,
              on_2b == test_state$on_2b,
-             on_3b == test_state$on_3b)
-    
-    error[2] <- (re_est - pull(select(ab, runs_to_end_inning)))^2
-    num_pa <- num_pa + 1
-    
+             on_3b == test_state$on_3b) %>% 
+      select(avg_re) %>% 
+      pull() %>% 
+      as.numeric()
+
+    error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
+
   }
   
   for (pa in seq_len(nrow(pbp_home))) {
@@ -469,17 +475,18 @@ inning_diff <- function(game_id) {
                             on_1b = !is.na(pull(select(ab, on_1b))),
                             on_2b = !is.na(pull(select(ab, on_2b))),
                             on_3b = !is.na(pull(select(ab, on_3b))))
-    
+
     # Gets Markov predictions, specifically expected runs
     
     runs_exp <- markov_half_inning(idx = index,
                                    tmatrix_list = tmatrices_away,
                                    state = test_state) %>% 
-      pluck(1)
-    
+      pluck(1) %>% 
+      as.numeric()
+
     # Updates error for Singlearity
     
-    error[1] <- (runs_exp - pull(select(ab, runs_to_end_inning)))^2
+    error[1] <- error[1] + (runs_exp - as.numeric(pull(select(ab, runs_to_end_inning))))^2
     num_pa <- num_pa + 1
     
     # Updates error for standard pred., using previous year's RE24 table
@@ -496,11 +503,13 @@ inning_diff <- function(game_id) {
       filter(outs == test_state$outs,
              on_1b == test_state$on_1b,
              on_2b == test_state$on_2b,
-             on_3b == test_state$on_3b)
-    
-    error[2] <- (re_est - pull(select(ab, runs_to_end_inning)))^2
-    num_pa <- num_pa + 1
-    
+             on_3b == test_state$on_3b) %>% 
+      select(avg_re) %>% 
+      pull() %>% 
+      as.numeric()
+
+    error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
+
   }
   
   # For each PA:
