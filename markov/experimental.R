@@ -509,7 +509,7 @@ inning_diff <- function(game_id) {
       as.numeric()
 
     error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
-
+    
   }
   
   # For each PA:
@@ -525,6 +525,34 @@ inning_diff <- function(game_id) {
   # Use RE24 table from year before?
   # Exclude innings where pitcher changes?
 
+  return(list(error, num_pa))
+  
 }
+
+# for (game in unique(pull(select(pbp_first, game_pk)))
+# Instead using random sample of 20 games
+
+set.seed(2020)
+games_random <- pbp_first %>% 
+  filter(game_pk %in% sample(unique(game_pk), 10)) %>% 
+  select(game_pk) %>% 
+  pull() %>% 
+  unique()
+
+for (game in games_random) {
+  
+  results <- inning_diff(game)
+  print(results)
+  
+  error <- error + results[[1]]
+  print(error)
+  
+  num_pa <- num_pa + results[[2]]
+  print(num_pa)
+  
+}
+
+error <- sqrt(error / num_pa)
+
 
 
