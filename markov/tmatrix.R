@@ -1084,13 +1084,21 @@ get_results <- function(bat, pitch, stad, home, temp, date,
   
   for (batter in bat)
   {
-    candidate_batters <- append(candidate_batters, sing$GetPlayers(name=batter))
+    if (batter == "Will Smith") {
+      candidate_batters <- append(candidate_batters, sing$GetPlayers(name="Will Smith")[[2]])
+    } else {
+      candidate_batters <- append(candidate_batters, sing$GetPlayers(name=batter))
+    }
     last_names <- append(last_names, word(batter, -1))
   }
   
   for (pitcher in pitch)
   {
-    candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(name=pitcher))
+    if (pitcher == "Will Smith") {
+      candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(name="Will Smith")[[1]])
+    } else {
+      candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(name=pitcher))
+    }
   }
   
   venue <- sing$GetVenues(stadium.name = stad)[[1]]

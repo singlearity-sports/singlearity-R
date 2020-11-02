@@ -307,6 +307,34 @@ inning_diff <- function(game_id) {
     select(venue_name) %>% 
     pull()
   
+  if (info_away[[3]] %in% c("Sahlen Field", "Turner Field", "Tokyo Dome",
+                            "Globe Life Park in Arlington", "London Stadium",
+                            "Estadio de Beisbol Monterrey")) {
+    
+    info_away[[3]] <- "Miller Park"
+    
+  } else if (info_away[[3]] == "Safeco Field") {
+    
+    info_away[[3]] <- "T-Mobile Park"
+    
+  } else if (info_away[[3]] == "SunTrust Park") {
+    
+    info_away[[3]] <- "Truist Park"
+    
+  } else if (info_away[[3]] == "AT&T Park") {
+    
+    info_away[[3]] <- "Oracle Park"
+    
+  } else if (info_away[[3]] == "O.co Coliseum") {
+    
+    info_away[[3]] <- "Oakland Coliseum"
+    
+  } else if (info_away[[3]] == "U.S. Cellular Field") {
+    
+    info_away[[3]] <- "Guaranteed Rate Field"
+    
+  }
+  
   # Gets name of home team
   
   info_away[[4]] <- lineup_home %>% 
@@ -530,16 +558,21 @@ inning_diff <- function(game_id) {
 }
 
 # for (game in unique(pull(select(pbp_first, game_pk)))
-# Instead using random sample of 20 games
+# Instead using random sample of 100 games
 
 set.seed(2020)
 games_random <- pbp_first %>% 
-  filter(game_pk %in% sample(unique(game_pk), 10)) %>% 
+  filter(game_pk %in% sample(unique(game_pk), 100)) %>% 
   select(game_pk) %>% 
   pull() %>% 
   unique()
 
+tracker <- 0
+
 for (game in games_random) {
+  
+  tracker <- tracker + 1
+  print(tracker)
   
   results <- inning_diff(game)
   print(results)
