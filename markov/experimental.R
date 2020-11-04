@@ -602,6 +602,7 @@ games_random <- pbp_2019_first %>%
   pull()
 
 # Creates tracker and results tibble
+# Tracker = 1709 at end of last results
 
 tracker <- 0
 results_all <- tibble(game_date = character(),
