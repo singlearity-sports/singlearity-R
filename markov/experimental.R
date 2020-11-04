@@ -262,6 +262,13 @@ re24_2015_first <- season_re24(pbp_2015_first)
 
 error <- c(0, 0)
 num_pa <- 0
+result_data <- tibble(game_date = character(),
+                      game_id = numeric(), 
+                      start_re24 = character(),
+                      end_re24 = character(),
+                      pred_sing = numeric(),
+                      pred_re24 = numeric(),
+                      actual = numeric())
 
 # Function to get difference between Singlearity predictions and runs scored
 
@@ -309,7 +316,8 @@ inning_diff <- function(game_id) {
   
   if (info_away[[3]] %in% c("Sahlen Field", "Turner Field", "Tokyo Dome",
                             "Globe Life Park in Arlington", "London Stadium",
-                            "Estadio de Beisbol Monterrey")) {
+                            "Estadio de Beisbol Monterrey",
+                            "TD Ameritrade Park", "BB&T Ballpark")) {
     
     info_away[[3]] <- "Miller Park"
     
@@ -450,7 +458,7 @@ inning_diff <- function(game_id) {
                                    state = test_state) %>% 
       pluck(1) %>% 
       as.numeric()
-
+    
     # Updates error for Singlearity
     
     error[1] <- error[1] + (runs_exp - as.numeric(pull(select(ab, runs_to_end_inning))))^2
@@ -476,6 +484,17 @@ inning_diff <- function(game_id) {
       as.numeric()
 
     error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
+    
+    # Adds into tibble
+    
+    result_data <- result_data %>% 
+      add_row(game_date = info_away[[6]],
+              game_id = game_id,
+              start_re24 = ab$base_out_state,
+              end_re24 = ab$next_base_out_state,
+              pred_sing = runs_exp,
+              pred_re24 = re_est,
+              actual = ab$runs_to_end_inning)
 
   }
   
@@ -538,6 +557,15 @@ inning_diff <- function(game_id) {
 
     error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
     
+    result_data <- result_data %>% 
+      add_row(game_date = info_away[[6]],
+              game_id = game_id,
+              start_re24 = ab$base_out_state,
+              end_re24 = ab$next_base_out_state,
+              pred_sing = runs_exp,
+              pred_re24 = re_est,
+              actual = ab$runs_to_end_inning)
+    
   }
   
   # For each PA:
@@ -553,7 +581,7 @@ inning_diff <- function(game_id) {
   # Use RE24 table from year before?
   # Exclude innings where pitcher changes?
 
-  return(list(error, num_pa))
+  return(result_data)
   
 }
 
@@ -561,31 +589,47 @@ inning_diff <- function(game_id) {
 # Instead using random sample of 100 games
 
 set.seed(2020)
-games_random <- pbp_first %>% 
-  filter(game_pk %in% sample(unique(game_pk), 100)) %>% 
+games_random <- pbp_2019_first %>% 
+  #filter(game_pk %in% sample(unique(game_pk), 25)) %>% 
   select(game_pk) %>% 
   pull() %>% 
   unique()
 
+games_random <- pbp_2019_first %>% 
+  select(game_pk) %>% 
+  unique() %>% 
+  slice(847:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
+  pull()
+
+# Creates tracker and results tibble
+
 tracker <- 0
+results_all <- tibble(game_date = character(),
+                      game_id = numeric(), 
+                      start_re24 = character(),
+                      end_re24 = character(),
+                      pred_sing = numeric(),
+                      pred_re24 = numeric(),
+                      actual = numeric())
+
 
 for (game in games_random) {
   
   tracker <- tracker + 1
   print(tracker)
   
-  results <- inning_diff(game)
-  print(results)
-  
-  error <- error + results[[1]]
-  print(error)
-  
-  num_pa <- num_pa + results[[2]]
-  print(num_pa)
-  
+  results_all <- bind_rows(results_all, inning_diff(game))
+
 }
 
-error <- sqrt(error / num_pa)
+# Adds in differential variable
 
+results_all <- results_all %>% 
+  mutate(sqdiff_sing = (pred_sing - actual)^2,
+         sqdiff_re24 = (pred_re24 - actual)^2)
 
+# Finds errors
+
+rmse_sing <- sqrt((results_all %>% mutate(sqdiff_sing = (pred_sing - actual)^2) %>% select(sqdiff_sing) %>% pull() %>% sum()) / nrow(results_all))
+rmse_re24 <- sqrt((results_all %>% mutate(sqdiff_re24 = (pred_re24 - actual)^2) %>% select(sqdiff_re24) %>% pull() %>% sum()) / nrow(results_all))
 
