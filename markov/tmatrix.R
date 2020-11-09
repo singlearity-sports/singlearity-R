@@ -1080,24 +1080,35 @@ get_results <- function(bat, pitch, stad, home, temp, date,
   #initialize empty lists/vectors
   candidate_batters <- list()
   candidate_pitchers <- list()
-  last_names <- vector()
+  id <- vector()
   
-  for (batter in bat)
-  {
-    if (batter == "Will Smith") {
-      candidate_batters <- append(candidate_batters, sing$GetPlayers(name="Will Smith")[[2]])
-    } else {
-      candidate_batters <- append(candidate_batters, sing$GetPlayers(name=batter))
+  for (batter in bat) {
+    if (is.numeric(batter)) {
+      candidate_batters <- append(candidate_batters, sing$GetPlayers(id=batter)[[1]])
+      id <- append(id, batter)
     }
-    last_names <- append(last_names, word(batter, -1))
+    else {
+      if (batter == "Will Smith") {
+        smith <- sing$GetPlayers(name="Will Smith")[[2]]
+        candidate_batters <- append(candidate_batters, smith)
+        id <- append(id, smith$mlb_id)
+      } else {
+        player <- sing$GetPlayers(name=batter)[[1]]
+        candidate_batters <- append(candidate_batters, player)
+        id <- append(id, player$mlb_id)
+      }
+    }
   }
   
-  for (pitcher in pitch)
-  {
-    if (pitcher == "Will Smith") {
-      candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(name="Will Smith")[[1]])
+  for (pitcher in pitch) {
+    if (is.numeric(pitcher)) {
+      candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(id=pitcher)[[1]])
     } else {
-      candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(name=pitcher))
+      if (pitcher == "Will Smith") {
+        candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(name="Will Smith")[[1]])
+      } else {
+        candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(name=pitcher)[[1]])
+      }
     }
   }
   
@@ -1110,12 +1121,9 @@ get_results <- function(bat, pitch, stad, home, temp, date,
   
   matchups <- list()
   
-  for (b in candidate_batters) 
-  {
-    for (p in candidate_pitchers)
-    {
-      for (s in states) 
-      {
+  for (b in candidate_batters) {
+    for (p in candidate_pitchers) {
+      for (s in states) {
         matchups <- append(matchups, Matchup$new(batter = b, pitcher = p,
                                                  atmosphere = atmosphere,
                                                  state = s, date = d))
@@ -1125,9 +1133,8 @@ get_results <- function(bat, pitch, stad, home, temp, date,
   
   results <- sing$GetPaSim(matchup = matchups) %>%
     dplyr::mutate(num_on = reduce(dplyr::select(., starts_with("on_")), `+`)) %>%
-    dplyr::arrange(match(word(batter_name, -1), last_names), outs, num_on,
-                   desc(on_1b), desc(on_2b)) %>%
-    dplyr::mutate(lineup_spot = match(batter_name, unique(batter_name))) %>% 
+    dplyr::arrange(match(batter, id), outs, num_on, desc(on_1b), desc(on_2b)) %>%
+    dplyr::mutate(lineup_spot = match(batter, unique(batter))) %>% 
     dplyr::select(-c(num_on))
   
   return(results)

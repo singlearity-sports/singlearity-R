@@ -26,22 +26,25 @@ EPSILON <- 1 / 100000
 
 # Default list for Singlearity transition matrices
 
-info_default <- list()
-
-info_default[[1]] <- list("Mookie Betts", "Max Muncy", "Justin Turner", 
-                          "Cody Bellinger", "Corey Seager", "AJ Pollock", 
-                          "Joc Pederson", "Austin Barnes", "Gavin Lux")
-info_default[[2]] <- "Chris Paddack"
-info_default[[3]] <- "Dodger Stadium"
-info_default[[4]] <- "Dodgers"
-info_default[[5]] <- 70
-info_default[[6]] <- "2020-10-01"
+lineup_default <- list("Mookie Betts", "Max Muncy", "Justin Turner", 
+                       "Cody Bellinger", "Corey Seager", "AJ Pollock", 
+                       "Joc Pederson", "Austin Barnes", "Gavin Lux")
+pitcher_default <- "Chris Paddack"
+stadium_default <- "Dodger Stadium"
+home_default <- "Dodgers"
+temp_default <- 70
+date_default <- "2020-10-01"
 
 # Gets proper transition matrices for the Markov simulation
 
 markov_matrices <- function(standard = FALSE, 
                             state = State$new(top = FALSE), 
-                            info = info_default) {
+                            lineup = lineup_default,
+                            pitcher = pitcher_default,
+                            stadium = stadium_default,
+                            home = home_default,
+                            temp = temp_default,
+                            date = date_default) {
   
   # If the user just wants the default league transition matrices
   
@@ -78,17 +81,17 @@ markov_matrices <- function(standard = FALSE,
     # Assigns values from function
     # Also creates a list of the 24 possible batting states
     
-    batters <- info[[1]]
-    pitcher <- info[[2]]
-    stadium <- info[[3]]
-    home <- info[[4]]
-    temp <- info[[5]]
-    date <- info[[6]]
+    batters <- lineup
+    pitcher <- pitcher
+    stadium <- stadium
+    home <- home
+    temp <- temp
+    date <- date
     away <- state$top
     inning <- state$inning
     pitch_ct <- state$pitch_number
     
-    tmatrix_list <- tmatrix_sing(batters, pitcher, stadium, home, temp, date,
+    tmatrix_list <- tmatrix_sing(lineup, pitcher, stadium, home, temp, date,
                                  away, inning, pitch_ct)
     
   }

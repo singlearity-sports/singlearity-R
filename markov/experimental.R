@@ -598,7 +598,7 @@ games_random <- pbp_2019_first %>%
 games_random <- pbp_2019_first %>% 
   select(game_pk) %>% 
   unique() %>% 
-  slice(847:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
+  slice(1710:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
   pull()
 
 # Creates tracker and results tibble
