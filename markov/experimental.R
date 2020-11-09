@@ -293,59 +293,57 @@ inning_diff <- function(game_id) {
   
   game_info <- get_game_info_mlb(game_id)
   
-  info_away <- list()
-  
   # Creates list of player names
   
-  info_away[[1]] <- as.list(lineup_away$fullName)
+  away_lineup <- as.list(lineup_away$id)
   
   # Gets pitcher name
   
-  info_away[[2]] <- pbp_first %>% 
+  pitcher_vs_away <- pbp_first %>% 
     filter(game_pk == game_id, inning_topbot == "Top") %>% 
     select(pitcher) %>% 
     pull() %>% 
     sing$GetPlayers(id = .) %>% 
-    pluck(1, "full_name")
+    pluck(1, "mlb_id")
   
   # Gets stadium name
   
-  info_away[[3]] <- game_info %>% 
+  stadium <- game_info %>% 
     select(venue_name) %>% 
     pull()
   
-  if (info_away[[3]] %in% c("Sahlen Field", "Turner Field", "Tokyo Dome",
-                            "Globe Life Park in Arlington", "London Stadium",
-                            "Estadio de Beisbol Monterrey",
-                            "TD Ameritrade Park", "BB&T Ballpark")) {
+  if (stadium %in% c("Sahlen Field", "Turner Field", "Tokyo Dome",
+                     "Globe Life Park in Arlington", "London Stadium",
+                     "Estadio de Beisbol Monterrey",
+                     "TD Ameritrade Park", "BB&T Ballpark")) {
     
-    info_away[[3]] <- "Miller Park"
+    stadium <- "Miller Park"
     
-  } else if (info_away[[3]] == "Safeco Field") {
+  } else if (stadium == "Safeco Field") {
     
-    info_away[[3]] <- "T-Mobile Park"
+    stadium <- "T-Mobile Park"
     
-  } else if (info_away[[3]] == "SunTrust Park") {
+  } else if (stadium == "SunTrust Park") {
     
-    info_away[[3]] <- "Truist Park"
+    stadium <- "Truist Park"
     
-  } else if (info_away[[3]] == "AT&T Park") {
+  } else if (stadium == "AT&T Park") {
     
-    info_away[[3]] <- "Oracle Park"
+    stadium <- "Oracle Park"
     
-  } else if (info_away[[3]] == "O.co Coliseum") {
+  } else if (stadium == "O.co Coliseum") {
     
-    info_away[[3]] <- "Oakland Coliseum"
+    stadium <- "Oakland Coliseum"
     
-  } else if (info_away[[3]] == "U.S. Cellular Field") {
+  } else if (stadium == "U.S. Cellular Field") {
     
-    info_away[[3]] <- "Guaranteed Rate Field"
+    stadium <- "Guaranteed Rate Field"
     
   }
   
   # Gets name of home team
   
-  info_away[[4]] <- lineup_home %>% 
+  home_name <- lineup_home %>% 
     select(teamName) %>% 
     slice(1) %>% 
     pull() %>% 
@@ -353,25 +351,25 @@ inning_diff <- function(game_id) {
   
   # Corrects team name if what's pulled above is incorrect
   
-  if (info_away[[4]] %in% c("Bay Rays", "York Yankees", "City Royals",
-                            "Angeles Angels", "York Mets", "Louis Cardinals",
-                            "Angeles Dodgers", "Diego Padres", "Francisco Giants")) {
+  if (home_name %in% c("Bay Rays", "York Yankees", "City Royals",
+                       "Angeles Angels", "York Mets", "Louis Cardinals",
+                       "Angeles Dodgers", "Diego Padres", "Francisco Giants")) {
     
-    info_away[[4]] <- info_away[[4]] %>% 
+    home_name <- home_name %>% 
       word(2)
       
   }
   
   # Gets temperature
   
-  info_away[[5]] <- game_info %>% 
+  temp <- game_info %>% 
     select(temperature) %>% 
     pull() %>% 
     as.integer()
   
   # Gets date
   
-  info_away[[6]] <- game_info %>% 
+  game_date <- game_info %>% 
     select(game_date) %>% 
     pull()
   
@@ -379,44 +377,38 @@ inning_diff <- function(game_id) {
   
   tmatrices_away <- markov_matrices(standard = FALSE,
                                     state = State$new(top = TRUE),
-                                    info = info_away)
+                                    lineup = away_lineup,
+                                    pitcher = pitcher_vs_away,
+                                    stadium = stadium,
+                                    home = home_name,
+                                    temp = temp,
+                                    date = game_date)
   
   # Does same as above, but for the home lineup
   
-  info_home <- list()
-  
   # Creates list of player names
   
-  info_home[[1]] <- as.list(lineup_home$fullName)
+  home_lineup <- as.list(lineup_home$id)
   
   # Gets pitcher name
   
-  info_home[[2]] <- pbp_first %>% 
+  pitcher_vs_home <- pbp_first %>% 
     filter(game_pk == game_id, inning_topbot == "Bot") %>% 
     select(pitcher) %>% 
     pull() %>% 
     sing$GetPlayers(id = .) %>% 
-    pluck(1, "full_name")
-  
-  # Gets stadium name
-  
-  info_home[[3]] <- info_away[[3]]
-  
-  # Gets name of home team
-  
-  info_home[[4]] <- info_away[[4]]
-  
-  # Gets temperature
-  
-  info_home[[5]] <- info_away[[5]]
-  
-  # Gets date
-  
-  info_home[[6]] <- info_away[[6]]
+    pluck(1, "mlb_id")
   
   # Gets transition matrices for home team
   
-  tmatrices_home <- markov_matrices(info = info_home)
+  tmatrices_home <- markov_matrices(standard = FALSE,
+                                    state = State$new(top = FALSE),
+                                    lineup = home_lineup,
+                                    pitcher = pitcher_vs_home,
+                                    stadium = stadium,
+                                    home = home_name,
+                                    temp = temp,
+                                    date = game_date)
   
   # Isolates play-by-play outcomes for each half-inning
   
@@ -488,7 +480,7 @@ inning_diff <- function(game_id) {
     # Adds into tibble
     
     result_data <- result_data %>% 
-      add_row(game_date = info_away[[6]],
+      add_row(game_date = game_date,
               game_id = game_id,
               start_re24 = ab$base_out_state,
               end_re24 = ab$next_base_out_state,
@@ -526,7 +518,7 @@ inning_diff <- function(game_id) {
     # Gets Markov predictions, specifically expected runs
     
     runs_exp <- markov_half_inning(idx = index,
-                                   tmatrix_list = tmatrices_away,
+                                   tmatrix_list = tmatrices_home,
                                    state = test_state) %>% 
       pluck(1) %>% 
       as.numeric()
@@ -558,7 +550,7 @@ inning_diff <- function(game_id) {
     error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
     
     result_data <- result_data %>% 
-      add_row(game_date = info_away[[6]],
+      add_row(game_date = game_date,
               game_id = game_id,
               start_re24 = ab$base_out_state,
               end_re24 = ab$next_base_out_state,
