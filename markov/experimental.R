@@ -260,12 +260,15 @@ re24_2015_first <- season_re24(pbp_2015_first)
 
 # Error tracker (first elmt. = Singlearity, second elmt. = standard)
 
-error <- c(0, 0)
-num_pa <- 0
+# error <- c(0, 0)
+# num_pa <- 0
 result_data <- tibble(game_date = character(),
-                      game_id = numeric(), 
-                      start_re24 = character(),
-                      end_re24 = character(),
+                      game_id = numeric(),
+                      batter_id = numeric(),
+                      pitcher_id = numeric(),
+                      top_bot = character(),
+                      start = character(),
+                      end = character(),
                       pred_sing = numeric(),
                       pred_re24 = numeric(),
                       actual = numeric())
@@ -274,8 +277,8 @@ result_data <- tibble(game_date = character(),
 
 inning_diff <- function(game_id) {
   
-  error <- c(0, 0)
-  num_pa <- 0
+  # error <- c(0, 0)
+  # num_pa <- 0
   
   # Gets batting orders using game ID
   
@@ -311,6 +314,9 @@ inning_diff <- function(game_id) {
   stadium <- game_info %>% 
     select(venue_name) %>% 
     pull()
+  
+  # Replaces stadiums not in Singlearity w/ Miller Park, a neutral ballpark
+  # Also renames stadiums that have changed names over the past few years
   
   if (stadium %in% c("Sahlen Field", "Turner Field", "Tokyo Dome",
                      "Globe Life Park in Arlington", "London Stadium",
@@ -453,8 +459,8 @@ inning_diff <- function(game_id) {
     
     # Updates error for Singlearity
     
-    error[1] <- error[1] + (runs_exp - as.numeric(pull(select(ab, runs_to_end_inning))))^2
-    num_pa <- num_pa + 1
+    # error[1] <- error[1] + (runs_exp - as.numeric(pull(select(ab, runs_to_end_inning))))^2
+    # num_pa <- num_pa + 1
     
     # Updates error for standard pred., using previous year's RE24 table
     
@@ -475,15 +481,18 @@ inning_diff <- function(game_id) {
       pull() %>% 
       as.numeric()
 
-    error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
+    # error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
     
     # Adds into tibble
     
     result_data <- result_data %>% 
       add_row(game_date = game_date,
               game_id = game_id,
-              start_re24 = ab$base_out_state,
-              end_re24 = ab$next_base_out_state,
+              batter_id = ab$batter,
+              pitcher_id = ab$pitcher,
+              top_bot = ab$top_bot,
+              start = ab$base_out_state,
+              end = ab$next_base_out_state,
               pred_sing = runs_exp,
               pred_re24 = re_est,
               actual = ab$runs_to_end_inning)
@@ -525,8 +534,8 @@ inning_diff <- function(game_id) {
 
     # Updates error for Singlearity
     
-    error[1] <- error[1] + (runs_exp - as.numeric(pull(select(ab, runs_to_end_inning))))^2
-    num_pa <- num_pa + 1
+    # error[1] <- error[1] + (runs_exp - as.numeric(pull(select(ab, runs_to_end_inning))))^2
+    # num_pa <- num_pa + 1
     
     # Updates error for standard pred., using previous year's RE24 table
     
@@ -547,13 +556,16 @@ inning_diff <- function(game_id) {
       pull() %>% 
       as.numeric()
 
-    error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
+    # error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
     
     result_data <- result_data %>% 
       add_row(game_date = game_date,
               game_id = game_id,
-              start_re24 = ab$base_out_state,
-              end_re24 = ab$next_base_out_state,
+              batter_id = ab$batter,
+              pitcher_id = ab$pitcher,
+              top_bot = ab$top_bot,
+              start = ab$base_out_state,
+              end = ab$next_base_out_state,
               pred_sing = runs_exp,
               pred_re24 = re_est,
               actual = ab$runs_to_end_inning)
