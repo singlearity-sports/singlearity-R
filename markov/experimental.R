@@ -490,7 +490,7 @@ inning_diff <- function(game_id) {
               game_id = game_id,
               batter_id = ab$batter,
               pitcher_id = ab$pitcher,
-              top_bot = ab$top_bot,
+              top_bot = ab$inning_topbot,
               start = ab$base_out_state,
               end = ab$next_base_out_state,
               pred_sing = runs_exp,
@@ -563,7 +563,7 @@ inning_diff <- function(game_id) {
               game_id = game_id,
               batter_id = ab$batter,
               pitcher_id = ab$pitcher,
-              top_bot = ab$top_bot,
+              top_bot = ab$inning_topbot,
               start = ab$base_out_state,
               end = ab$next_base_out_state,
               pred_sing = runs_exp,
@@ -593,16 +593,21 @@ inning_diff <- function(game_id) {
 # Instead using random sample of 100 games
 
 set.seed(2020)
-games_random <- pbp_2019_first %>% 
-  #filter(game_pk %in% sample(unique(game_pk), 25)) %>% 
-  select(game_pk) %>% 
-  pull() %>% 
-  unique()
+# games_random <- pbp_2019_first %>% 
+#   filter(game_pk %in% sample(unique(game_pk), 50)) %>% 
+#   select(game_pk) %>% 
+#   pull() %>% 
+#   unique()
 
-games_random <- pbp_2019_first %>% 
+# games_random <- pbp_2019_first %>% 
+#   select(game_pk) %>% 
+#   unique() %>% 
+#   slice(1710:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
+#   pull()
+
+game_ids <- pbp_2019_first %>% 
   select(game_pk) %>% 
   unique() %>% 
-  slice(1710:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
   pull()
 
 # Creates tracker and results tibble
@@ -610,15 +615,18 @@ games_random <- pbp_2019_first %>%
 
 tracker <- 0
 results_all <- tibble(game_date = character(),
-                      game_id = numeric(), 
-                      start_re24 = character(),
-                      end_re24 = character(),
+                      game_id = numeric(),
+                      batter_id = numeric(),
+                      pitcher_id = numeric(),
+                      top_bot = character(),
+                      start = character(),
+                      end = character(),
                       pred_sing = numeric(),
                       pred_re24 = numeric(),
                       actual = numeric())
 
 
-for (game in games_random) {
+for (game in game_ids) {
   
   tracker <- tracker + 1
   print(tracker)
@@ -629,9 +637,9 @@ for (game in games_random) {
 
 # Adds in differential variable
 
-results_all <- results_all %>% 
-  mutate(sqdiff_sing = (pred_sing - actual)^2,
-         sqdiff_re24 = (pred_re24 - actual)^2)
+# results_all <- results_all %>% 
+#   mutate(sqdiff_sing = (pred_sing - actual)^2,
+#          sqdiff_re24 = (pred_re24 - actual)^2)
 
 # Finds errors
 
