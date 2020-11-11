@@ -608,12 +608,13 @@ set.seed(2020)
 game_ids <- pbp_2019_first %>% 
   select(game_pk) %>% 
   unique() %>% 
+  slice(1376:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
   pull()
 
 # Creates tracker and results tibble
-# Tracker = 1709 at end of last results
+# Tracker = 1375 at end of last results
 
-tracker <- 0
+tracker <- 1375
 results_all <- tibble(game_date = character(),
                       game_id = numeric(),
                       batter_id = numeric(),

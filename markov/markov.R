@@ -91,7 +91,7 @@ markov_matrices <- function(standard = FALSE,
     inning <- state$inning
     pitch_ct <- state$pitch_number
     
-    tmatrix_list <- tmatrix_sing(lineup, pitcher, stadium, home, temp, date,
+    tmatrix_list <- tmatrix_sing(batters, pitcher, stadium, home, temp, date,
                                  away, inning, pitch_ct)
     
   }
