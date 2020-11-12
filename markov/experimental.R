@@ -377,7 +377,8 @@ inning_diff <- function(game_id) {
   
   game_date <- game_info %>% 
     select(game_date) %>% 
-    pull()
+    pull() %>% 
+    as.character()
   
   # Gets transition matrices for away team
   
@@ -608,13 +609,13 @@ set.seed(2020)
 game_ids <- pbp_2019_first %>% 
   select(game_pk) %>% 
   unique() %>% 
-  slice(1376:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
+  slice(1710:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
   pull()
 
 # Creates tracker and results tibble
-# Tracker = 1375 at end of last results
+# Tracker = 1709 at end of last results
 
-tracker <- 1375
+tracker <- 1709
 results_all <- tibble(game_date = character(),
                       game_id = numeric(),
                       batter_id = numeric(),
@@ -644,6 +645,6 @@ for (game in game_ids) {
 
 # Finds errors
 
-rmse_sing <- sqrt((results_all %>% mutate(sqdiff_sing = (pred_sing - actual)^2) %>% select(sqdiff_sing) %>% pull() %>% sum()) / nrow(results_all))
 rmse_re24 <- sqrt((results_all %>% mutate(sqdiff_re24 = (pred_re24 - actual)^2) %>% select(sqdiff_re24) %>% pull() %>% sum()) / nrow(results_all))
+rmse_sing <- sqrt((results_all %>% mutate(sqdiff_sing = (pred_sing - actual)^2) %>% select(sqdiff_sing) %>% pull() %>% sum()) / nrow(results_all))
 
