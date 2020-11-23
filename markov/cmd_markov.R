@@ -116,15 +116,16 @@ if (standard) {
   
   date <- opt$date
   
-  # Creating list of above inputs
-  
-  info <- list(lineup, pitcher, stad, home, temp, date)
-  
   # Gets transition matrices
   
   matrices <- markov_matrices(standard = FALSE,
                               state = state,
-                              info = info)
+                              lineup = lineup,
+                              pitcher = pitcher,
+                              stadium = stad,
+                              home = home,
+                              temp = temp,
+                              date = date)
   
   # Gets Markov chain results, using given matrices
   

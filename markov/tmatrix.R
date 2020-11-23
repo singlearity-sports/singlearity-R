@@ -5,6 +5,7 @@ source(file = "R/get_singlearity_client.R")
 sing <- GetSinglearityClient()
 
 suppressPackageStartupMessages(library(assertthat))
+suppressPackageStartupMessages(library(tidyverse))
 
 # Overall allowed error
 
@@ -28,7 +29,7 @@ p_1b_first_to_second <- 1 - p_1b_first_to_third
 
 # Probability of going second to third on a field out
 
-p_fo_second_to_third <- 0.15
+p_fo_second_to_third <- 0.25
 p_fo_second_stay <- 1 - p_fo_second_to_third
 
 # League-wide default event probabilities, as of 9/24/20
@@ -1027,7 +1028,7 @@ tmatrix_std <- function(bb_exp = bb_exp_lg,
 
 get_results <- function(bat, pitch, stad, home, temp, date,
                         away, inning = 1, pitch_ct = 0) {
-  
+
   # Create list of states to iterate over
   states <- list(State$new(top = away, inning = inning, pitch_number = pitch_ct), 
                  State$new(on_1b = T, top = away, inning = inning, 
@@ -1132,7 +1133,7 @@ get_results <- function(bat, pitch, stad, home, temp, date,
   }
   
   results <- sing$GetPaSim(matchup = matchups) %>%
-    dplyr::mutate(num_on = reduce(dplyr::select(., starts_with("on_")), `+`)) %>%
+    dplyr::mutate(num_on = purrr::reduce(dplyr::select(., tidyselect::starts_with("on_")), `+`)) %>%
     dplyr::arrange(match(batter, id), outs, num_on, desc(on_1b), desc(on_2b)) %>%
     dplyr::mutate(lineup_spot = match(batter, unique(batter))) %>% 
     dplyr::select(-c(num_on))

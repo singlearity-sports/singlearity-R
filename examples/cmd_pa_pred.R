@@ -3,9 +3,10 @@
 
 library(singlearity)
 library(optparse)
+source(file = "R/get_singlearity_client.R")
 sing <- GetSinglearityClient()
 
-source(file='utils.R')
+source(file='examples/utils.R')
 
     option_list = list(
     make_option(c("--batters"), type="character", default="Mookie Betts, Cody Bellinger",
@@ -84,7 +85,7 @@ source(file='utils.R')
     }
   }
 
-  results <- sing$GetPaSim(matchup = matchups, model.name = opt$predictiontype)
+  results <- sing$GetPaSim(matchup = matchups)
   print(results)
   
   if (length(plot_list) > 0) {

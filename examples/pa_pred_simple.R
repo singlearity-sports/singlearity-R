@@ -24,8 +24,7 @@ pa_pred_simple <- function(batters = sing$GetPlayers(name="Mookie Betts"),
     }
   }
   
-  results <- sing$GetPaSim(matchup = matchups, model.name = predictiontype )
-  results = results[order(results$woba_exp, decreasing = TRUE), ]
+  results <- sing$GetPaSim(matchup = matchups)
   return(results)
 }
 

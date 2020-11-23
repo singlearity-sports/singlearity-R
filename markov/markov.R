@@ -79,8 +79,7 @@ markov_matrices <- function(standard = FALSE,
   else {
     
     # Assigns values from function
-    # Also creates a list of the 24 possible batting states
-    
+
     batters <- lineup
     pitcher <- pitcher
     stadium <- stadium

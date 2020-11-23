@@ -9,6 +9,7 @@ suppressPackageStartupMessages(library(lubridate))
 
 source(file = "markov/markov.R")
 source(file = "R/get_singlearity_client.R")
+source(file = "examples/pa_pred_simple.R")
 sing <- GetSinglearityClient()
 
 # Loads in the different relevant data files
@@ -258,10 +259,6 @@ re24_2017_first <- season_re24(pbp_2017_first)
 re24_2016_first <- season_re24(pbp_2016_first)
 re24_2015_first <- season_re24(pbp_2015_first)
 
-# Error tracker (first elmt. = Singlearity, second elmt. = standard)
-
-# error <- c(0, 0)
-# num_pa <- 0
 result_data <- tibble(game_date = character(),
                       game_id = numeric(),
                       batter_id = numeric(),
@@ -269,6 +266,7 @@ result_data <- tibble(game_date = character(),
                       top_bot = character(),
                       start = character(),
                       end = character(),
+                      pred_woba = numeric(),
                       pred_sing = numeric(),
                       pred_re24 = numeric(),
                       actual = numeric())
@@ -315,7 +313,7 @@ inning_diff <- function(game_id) {
     select(venue_name) %>% 
     pull()
   
-  # Replaces stadiums not in Singlearity w/ Miller Park, a neutral ballpark
+  # Replaces stadiums not in Singlearity w/ Progressive Field, a neutral ballpark
   # Also renames stadiums that have changed names over the past few years
   
   if (stadium %in% c("Sahlen Field", "Turner Field", "Tokyo Dome",
@@ -323,7 +321,7 @@ inning_diff <- function(game_id) {
                      "Estadio de Beisbol Monterrey",
                      "TD Ameritrade Park", "BB&T Ballpark")) {
     
-    stadium <- "Miller Park"
+    stadium <- "Progressive Field"
     
   } else if (stadium == "Safeco Field") {
     
@@ -364,6 +362,14 @@ inning_diff <- function(game_id) {
     home_name <- home_name %>% 
       word(2)
       
+  }
+  
+  # Changes stadium home teams to properly align with normal home team
+  
+  if (stadium == "Progressive Field") {
+    
+    home_name <- "Indians"
+    
   }
   
   # Gets temperature
@@ -450,6 +456,18 @@ inning_diff <- function(game_id) {
                             on_2b = !is.na(pull(select(ab, on_2b))),
                             on_3b = !is.na(pull(select(ab, on_3b))))
 
+    # Gets wOBA prediction
+    
+    woba <- pa_pred_simple(batters = sing$GetPlayers(id = ab$batter),
+                           pitchers = sing$GetPlayers(id = ab$pitcher),
+                           state = test_state,
+                           atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = stadium)[[1]], 
+                                                       temperature = temp, 
+                                                       home_team = sing$GetTeams(name = home_name)[[1]]),
+                           date = game_date) %>% 
+      select(woba_exp) %>% 
+      pull()
+    
     # Gets Markov predictions, specifically expected runs
     
     runs_exp <- markov_half_inning(idx = index,
@@ -494,6 +512,7 @@ inning_diff <- function(game_id) {
               top_bot = ab$inning_topbot,
               start = ab$base_out_state,
               end = ab$next_base_out_state,
+              pred_woba = woba,
               pred_sing = runs_exp,
               pred_re24 = re_est,
               actual = ab$runs_to_end_inning)
@@ -524,6 +543,18 @@ inning_diff <- function(game_id) {
                             on_1b = !is.na(pull(select(ab, on_1b))),
                             on_2b = !is.na(pull(select(ab, on_2b))),
                             on_3b = !is.na(pull(select(ab, on_3b))))
+    
+    # Gets wOBA prediction
+    
+    woba <- pa_pred_simple(batters = sing$GetPlayers(id = ab$batter),
+                           pitchers = sing$GetPlayers(id = ab$pitcher),
+                           state = test_state,
+                           atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = stadium)[[1]], 
+                                                       temperature = temp, 
+                                                       home_team = sing$GetTeams(name = home_name)[[1]]),
+                           date = game_date) %>% 
+      select(woba_exp) %>% 
+      pull()
 
     # Gets Markov predictions, specifically expected runs
     
@@ -567,6 +598,7 @@ inning_diff <- function(game_id) {
               top_bot = ab$inning_topbot,
               start = ab$base_out_state,
               end = ab$next_base_out_state,
+              pred_woba = woba,
               pred_sing = runs_exp,
               pred_re24 = re_est,
               actual = ab$runs_to_end_inning)
@@ -590,32 +622,14 @@ inning_diff <- function(game_id) {
   
 }
 
-# for (game in unique(pull(select(pbp_first, game_pk)))
-# Instead using random sample of 100 games
-
-set.seed(2020)
-# games_random <- pbp_2019_first %>% 
-#   filter(game_pk %in% sample(unique(game_pk), 50)) %>% 
-#   select(game_pk) %>% 
-#   pull() %>% 
-#   unique()
-
-# games_random <- pbp_2019_first %>% 
-#   select(game_pk) %>% 
-#   unique() %>% 
-#   slice(1710:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
-#   pull()
-
 game_ids <- pbp_2019_first %>% 
   select(game_pk) %>% 
   unique() %>% 
-  slice(1710:length(unique(pull(select(pbp_2019_first, game_pk))))) %>% 
   pull()
 
 # Creates tracker and results tibble
-# Tracker = 1709 at end of last results
 
-tracker <- 1709
+tracker <- 0
 results_all <- tibble(game_date = character(),
                       game_id = numeric(),
                       batter_id = numeric(),
@@ -623,10 +637,10 @@ results_all <- tibble(game_date = character(),
                       top_bot = character(),
                       start = character(),
                       end = character(),
+                      pred_woba = numeric(),
                       pred_sing = numeric(),
                       pred_re24 = numeric(),
                       actual = numeric())
-
 
 for (game in game_ids) {
   
@@ -636,12 +650,6 @@ for (game in game_ids) {
   results_all <- bind_rows(results_all, inning_diff(game))
 
 }
-
-# Adds in differential variable
-
-# results_all <- results_all %>% 
-#   mutate(sqdiff_sing = (pred_sing - actual)^2,
-#          sqdiff_re24 = (pred_re24 - actual)^2)
 
 # Finds errors
 
