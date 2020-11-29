@@ -10,6 +10,7 @@ suppressPackageStartupMessages(library(lubridate))
 source(file = "markov/markov.R")
 source(file = "R/get_singlearity_client.R")
 source(file = "examples/pa_pred_simple.R")
+source(file = "markov/get_core_data.R")
 sing <- GetSinglearityClient()
 
 # Loads in the different relevant data files
@@ -17,215 +18,53 @@ sing <- GetSinglearityClient()
 # Uses baseballr to get important info like runs to end of inning as well
 # We then merge them all into one file
 
-pbp_2020_first <- read_csv("markov/data/pbp_2020_first.csv") %>% 
-  mutate(release_speed = as.numeric(release_speed),
-         release_pos_x = as.numeric(release_pos_x),
-         release_pos_y = as.numeric(release_pos_y),
-         release_pos_z = as.numeric(release_pos_z),
-         zone = as.numeric(zone),
-         pfx_x = as.numeric(pfx_x),
-         pfx_z = as.numeric(pfx_z),
-         plate_x = as.numeric(plate_x),
-         plate_z = as.numeric(plate_z),
-         vx0 = as.numeric(vx0),
-         vy0 = as.numeric(vy0),
-         vz0 = as.numeric(vz0),
-         ax = as.numeric(ax),
-         ay = as.numeric(ay),
-         az = as.numeric(az),
-         sz_top = as.numeric(sz_top),
-         sz_bot = as.numeric(sz_bot),
-         effective_speed = as.numeric(effective_speed),
-         release_spin_rate = as.numeric(release_spin_rate),
-         release_extension = as.numeric(release_extension),
-         fielder_2 = as.numeric(fielder_2),
-         fielder_3 = as.numeric(fielder_3),
-         fielder_4 = as.numeric(fielder_4),
-         fielder_5 = as.numeric(fielder_5),
-         fielder_6 = as.numeric(fielder_6),
-         fielder_7 = as.numeric(fielder_7),
-         fielder_8 = as.numeric(fielder_8),
-         fielder_9 = as.numeric(fielder_9)) %>% 
-  select(-fielder_2_1) %>% 
-  mutate(on_3b = na_if(on_3b, "null"),
-         on_2b = na_if(on_2b, "null"),
-         on_1b = na_if(on_1b, "null")) %>% 
-  run_expectancy_code
+read_pbp_file <- function(filepath) {
+  
+  file <- read_csv(filepath) %>% 
+    mutate(release_speed = as.numeric(release_speed),
+           release_pos_x = as.numeric(release_pos_x),
+           release_pos_y = as.numeric(release_pos_y),
+           release_pos_z = as.numeric(release_pos_z),
+           zone = as.numeric(zone),
+           pfx_x = as.numeric(pfx_x),
+           pfx_z = as.numeric(pfx_z),
+           plate_x = as.numeric(plate_x),
+           plate_z = as.numeric(plate_z),
+           vx0 = as.numeric(vx0),
+           vy0 = as.numeric(vy0),
+           vz0 = as.numeric(vz0),
+           ax = as.numeric(ax),
+           ay = as.numeric(ay),
+           az = as.numeric(az),
+           sz_top = as.numeric(sz_top),
+           sz_bot = as.numeric(sz_bot),
+           effective_speed = as.numeric(effective_speed),
+           release_spin_rate = as.numeric(release_spin_rate),
+           release_extension = as.numeric(release_extension),
+           fielder_2 = as.numeric(fielder_2),
+           fielder_3 = as.numeric(fielder_3),
+           fielder_4 = as.numeric(fielder_4),
+           fielder_5 = as.numeric(fielder_5),
+           fielder_6 = as.numeric(fielder_6),
+           fielder_7 = as.numeric(fielder_7),
+           fielder_8 = as.numeric(fielder_8),
+           fielder_9 = as.numeric(fielder_9)) %>% 
+    select(-fielder_2_1) %>% 
+    mutate(on_3b = na_if(on_3b, "null"),
+           on_2b = na_if(on_2b, "null"),
+           on_1b = na_if(on_1b, "null")) %>% 
+    run_expectancy_code
+  
+  return(file)
+  
+}
 
-pbp_2019_first <- read_csv("markov/data/pbp_2019_first.csv") %>% 
-  mutate(release_speed = as.numeric(release_speed),
-         release_pos_x = as.numeric(release_pos_x),
-         release_pos_y = as.numeric(release_pos_y),
-         release_pos_z = as.numeric(release_pos_z),
-         zone = as.numeric(zone),
-         pfx_x = as.numeric(pfx_x),
-         pfx_z = as.numeric(pfx_z),
-         plate_x = as.numeric(plate_x),
-         plate_z = as.numeric(plate_z),
-         vx0 = as.numeric(vx0),
-         vy0 = as.numeric(vy0),
-         vz0 = as.numeric(vz0),
-         ax = as.numeric(ax),
-         ay = as.numeric(ay),
-         az = as.numeric(az),
-         sz_top = as.numeric(sz_top),
-         sz_bot = as.numeric(sz_bot),
-         effective_speed = as.numeric(effective_speed),
-         release_spin_rate = as.numeric(release_spin_rate),
-         release_extension = as.numeric(release_extension),
-         fielder_2 = as.numeric(fielder_2),
-         fielder_3 = as.numeric(fielder_3),
-         fielder_4 = as.numeric(fielder_4),
-         fielder_5 = as.numeric(fielder_5),
-         fielder_6 = as.numeric(fielder_6),
-         fielder_7 = as.numeric(fielder_7),
-         fielder_8 = as.numeric(fielder_8),
-         fielder_9 = as.numeric(fielder_9)) %>% 
-  select(-fielder_2_1) %>% 
-  mutate(on_3b = na_if(on_3b, "null"),
-         on_2b = na_if(on_2b, "null"),
-         on_1b = na_if(on_1b, "null")) %>% 
-  run_expectancy_code
-
-pbp_2018_first <- read_csv("markov/data/pbp_2018_first.csv") %>% 
-  mutate(release_speed = as.numeric(release_speed),
-         release_pos_x = as.numeric(release_pos_x),
-         release_pos_y = as.numeric(release_pos_y),
-         release_pos_z = as.numeric(release_pos_z),
-         zone = as.numeric(zone),
-         pfx_x = as.numeric(pfx_x),
-         pfx_z = as.numeric(pfx_z),
-         plate_x = as.numeric(plate_x),
-         plate_z = as.numeric(plate_z),
-         vx0 = as.numeric(vx0),
-         vy0 = as.numeric(vy0),
-         vz0 = as.numeric(vz0),
-         ax = as.numeric(ax),
-         ay = as.numeric(ay),
-         az = as.numeric(az),
-         sz_top = as.numeric(sz_top),
-         sz_bot = as.numeric(sz_bot),
-         effective_speed = as.numeric(effective_speed),
-         release_spin_rate = as.numeric(release_spin_rate),
-         release_extension = as.numeric(release_extension),
-         fielder_2 = as.numeric(fielder_2),
-         fielder_3 = as.numeric(fielder_3),
-         fielder_4 = as.numeric(fielder_4),
-         fielder_5 = as.numeric(fielder_5),
-         fielder_6 = as.numeric(fielder_6),
-         fielder_7 = as.numeric(fielder_7),
-         fielder_8 = as.numeric(fielder_8),
-         fielder_9 = as.numeric(fielder_9)) %>% 
-  select(-fielder_2_1) %>% 
-  mutate(on_3b = na_if(on_3b, "null"),
-         on_2b = na_if(on_2b, "null"),
-         on_1b = na_if(on_1b, "null")) %>% 
-  run_expectancy_code
-
-pbp_2017_first <- read_csv("markov/data/pbp_2017_first.csv") %>% 
-  mutate(release_speed = as.numeric(release_speed),
-         release_pos_x = as.numeric(release_pos_x),
-         release_pos_y = as.numeric(release_pos_y),
-         release_pos_z = as.numeric(release_pos_z),
-         zone = as.numeric(zone),
-         pfx_x = as.numeric(pfx_x),
-         pfx_z = as.numeric(pfx_z),
-         plate_x = as.numeric(plate_x),
-         plate_z = as.numeric(plate_z),
-         vx0 = as.numeric(vx0),
-         vy0 = as.numeric(vy0),
-         vz0 = as.numeric(vz0),
-         ax = as.numeric(ax),
-         ay = as.numeric(ay),
-         az = as.numeric(az),
-         sz_top = as.numeric(sz_top),
-         sz_bot = as.numeric(sz_bot),
-         effective_speed = as.numeric(effective_speed),
-         release_spin_rate = as.numeric(release_spin_rate),
-         release_extension = as.numeric(release_extension),
-         fielder_2 = as.numeric(fielder_2),
-         fielder_3 = as.numeric(fielder_3),
-         fielder_4 = as.numeric(fielder_4),
-         fielder_5 = as.numeric(fielder_5),
-         fielder_6 = as.numeric(fielder_6),
-         fielder_7 = as.numeric(fielder_7),
-         fielder_8 = as.numeric(fielder_8),
-         fielder_9 = as.numeric(fielder_9)) %>% 
-  select(-fielder_2_1) %>% 
-  mutate(on_3b = na_if(on_3b, "null"),
-         on_2b = na_if(on_2b, "null"),
-         on_1b = na_if(on_1b, "null")) %>% 
-  run_expectancy_code
-
-pbp_2016_first <- read_csv("markov/data/pbp_2016_first.csv") %>% 
-  mutate(release_speed = as.numeric(release_speed),
-         release_pos_x = as.numeric(release_pos_x),
-         release_pos_y = as.numeric(release_pos_y),
-         release_pos_z = as.numeric(release_pos_z),
-         zone = as.numeric(zone),
-         pfx_x = as.numeric(pfx_x),
-         pfx_z = as.numeric(pfx_z),
-         plate_x = as.numeric(plate_x),
-         plate_z = as.numeric(plate_z),
-         vx0 = as.numeric(vx0),
-         vy0 = as.numeric(vy0),
-         vz0 = as.numeric(vz0),
-         ax = as.numeric(ax),
-         ay = as.numeric(ay),
-         az = as.numeric(az),
-         sz_top = as.numeric(sz_top),
-         sz_bot = as.numeric(sz_bot),
-         effective_speed = as.numeric(effective_speed),
-         release_spin_rate = as.numeric(release_spin_rate),
-         release_extension = as.numeric(release_extension),
-         fielder_2 = as.numeric(fielder_2),
-         fielder_3 = as.numeric(fielder_3),
-         fielder_4 = as.numeric(fielder_4),
-         fielder_5 = as.numeric(fielder_5),
-         fielder_6 = as.numeric(fielder_6),
-         fielder_7 = as.numeric(fielder_7),
-         fielder_8 = as.numeric(fielder_8),
-         fielder_9 = as.numeric(fielder_9)) %>% 
-  select(-fielder_2_1) %>% 
-  mutate(on_3b = na_if(on_3b, "null"),
-         on_2b = na_if(on_2b, "null"),
-         on_1b = na_if(on_1b, "null")) %>% 
-  run_expectancy_code
-
-pbp_2015_first <- read_csv("markov/data/pbp_2015_first.csv") %>% 
-  mutate(release_speed = as.numeric(release_speed),
-         release_pos_x = as.numeric(release_pos_x),
-         release_pos_y = as.numeric(release_pos_y),
-         release_pos_z = as.numeric(release_pos_z),
-         zone = as.numeric(zone),
-         pfx_x = as.numeric(pfx_x),
-         pfx_z = as.numeric(pfx_z),
-         plate_x = as.numeric(plate_x),
-         plate_z = as.numeric(plate_z),
-         vx0 = as.numeric(vx0),
-         vy0 = as.numeric(vy0),
-         vz0 = as.numeric(vz0),
-         ax = as.numeric(ax),
-         ay = as.numeric(ay),
-         az = as.numeric(az),
-         sz_top = as.numeric(sz_top),
-         sz_bot = as.numeric(sz_bot),
-         effective_speed = as.numeric(effective_speed),
-         release_spin_rate = as.numeric(release_spin_rate),
-         release_extension = as.numeric(release_extension),
-         fielder_2 = as.numeric(fielder_2),
-         fielder_3 = as.numeric(fielder_3),
-         fielder_4 = as.numeric(fielder_4),
-         fielder_5 = as.numeric(fielder_5),
-         fielder_6 = as.numeric(fielder_6),
-         fielder_7 = as.numeric(fielder_7),
-         fielder_8 = as.numeric(fielder_8),
-         fielder_9 = as.numeric(fielder_9)) %>% 
-  select(-fielder_2_1) %>% 
-  mutate(on_3b = na_if(on_3b, "null"),
-         on_2b = na_if(on_2b, "null"),
-         on_1b = na_if(on_1b, "null")) %>% 
-  run_expectancy_code
+pbp_2020_first <- read_pbp_file("markov/data/pbp_2020_first.csv")
+pbp_2019_first <- read_pbp_file("markov/data/pbp_2019_first.csv")
+pbp_2018_first <- read_pbp_file("markov/data/pbp_2018_first.csv") 
+pbp_2017_first <- read_pbp_file("markov/data/pbp_2017_first.csv")
+pbp_2016_first <- read_pbp_file("markov/data/pbp_2016_first.csv")
+pbp_2015_first <- read_pbp_file("markov/data/pbp_2015_first.csv")
 
 pbp_first <- bind_rows(pbp_2020_first, pbp_2019_first, pbp_2018_first, 
                        pbp_2017_first, pbp_2016_first) %>% 
@@ -258,6 +97,10 @@ re24_2018_first <- season_re24(pbp_2018_first)
 re24_2017_first <- season_re24(pbp_2017_first)
 re24_2016_first <- season_re24(pbp_2016_first)
 re24_2015_first <- season_re24(pbp_2015_first)
+
+######################
+# CALL get_core_data.R FILE HERE TO GET INFO FOR LINEUPS/GAMES
+######################
 
 result_data <- tibble(game_date = character(),
                       game_id = numeric(),
