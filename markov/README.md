@@ -26,7 +26,15 @@ Next is the `season_re24` function. This takes the year-by-year play-by-play dat
 
 After this, we want to get the game-level information from which we can accurately construct our transition matrices. To do this, we use a function sourced from `get_core_data.R` to get the relevant information and store it locally in a tibble (more on this function below). Now, when we compute our transition matrices, we can search our pre-created tibble for the right data, as opposed to making a call to the `baseballr` server for each game.
 
-INNING DIFF
+Next is the `inning_diff` function. This takes a game ID as input and returns the results tibble with a new row for that game. The first step is using the game info dataset to get the players, stadium, etc. for that game. Once obtained, the transition matrices for both the home and away teams are calculated using this info as inpu (see below for a more detailed explanation). Before going into more detailed computations, we filter the overall play-by-play dataset to get the plate appearances for the home and away teams for that game.
+
+We then iterate over both the home and away team plate appearances (away first). We get the batting order position for the player of that plate appearance and pull the relevant PA from the segmented dataset. We then take the base-out state from that pulled PA to create the state to base our calculations off of. In addition to our Markov chain predictions, we also want to get Singlearity's wOBA prediction for this plate appearance, so we use `pa_pred_simple` and info already gathered to obtain both that prediction and the player names.
+
+To get expected runs via the Markov chain, we call `markov_half_inning`, passing in the batting order position of the player at bat, the list of transition matrices for their team, and the current base-out state. As for the run expectancy prediction, the naive prediction is the average runs scored from that point forward in the previous season in the first inning - i.e., the relevant RE24 (RE for run expectancy, 24 for the 24 possible base-out states). This grabs that previous year's RE24 table, isolates the situation that matches the current base-out state, and grabs that run prediction.
+
+For each plate appearance for both home and away, we add a row to our results tibble, tracking the game date and ID, batter/pitcher names and IDs, the half of the inning, the state before and after the PA, the PA wOBA prediction, runs scored for both Singlearity and RE24, and the actual number of runs scored.
+
+Exiting the `inning_diff` function, we have a few lines of code designed to iterate over the different games in a similar fashion to what was done to obtain game-level info a few hundred lines earlier. We then have two lines to calculate the RMSE for both the RE24 and Singlearity methods of prediction.
 
 ### `get_core_data.R`
 
