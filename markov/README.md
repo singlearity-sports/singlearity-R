@@ -20,6 +20,28 @@ There are four files that directly contribute to these Markov chain calculations
 
 ### `experimental.R`
 
+After loading in several required packages and sourcing various other files, the first function `read_pbp_file` reads in downloaded first inning play-by-play data (from Baseball Savant) and saves locally, via the provided file path. The last line uses a `baseballr` function to convert it into a format that can later be further converted into a run expectancy table. Combined into one file, this collects all plate appearances from the first inning over the past six seasons.
+
+Next is the `season_re24` function. This takes the year-by-year play-by-play data and converts it into a run expectancy table for each year using another `baseballr` function. This is used later when comparing Singlearity's predictions to the expected results.
+
+After this, we want to get the game-level information from which we can accurately construct our transition matrices. To do this, we use a function sourced from `get_core_data.R` to get the relevant information and store it locally in a tibble (more on this function below). Now, when we compute our transition matrices, we can search our pre-created tibble for the right data, as opposed to making a call to the `baseballr` server for each game.
+
+INNING DIFF
+
+### `get_core_data.R`
+
+This file is oriented around one function, `get_game_info`, which takes as input a unique game identification code and returns a line to add into the existing game information tibble. The file starts by declaring a blank tibble so that the environment has a reference to add the newest information to.
+
+The function itself again relies on existing `baseballr` functionality. `get_batting_orders` gets the starting lineups for a given game, and we separate those into home and away, focusing on player IDs. Next, we filter our overall play-by-play dataset for the relevant game and half-inning, obtaining the player ID for the pitcher facing each of these lineups. 
+
+Other information is environment-specific: using `get_game_info_mlb`, we can obtain stadium, home team, temperature, and date information in a relatively straightforward manner. A complication here is that there are some stadiums not in Singlearity's database, so we replace those with Progressive Field, a relatively neutral ballpark; additionally, some stadiums have changed names over the past few years, so those are manually adjusted as well. For team names with more than two words (e.g., "St. Louis Cardinals" or "New York Yankees" as opposed to "Baltimore Orioles"), we also make sure we're grabbing the proper name for those - straightforward because there aren't that many of these.
+
+Along with date and temperature info, this is returned as an addition to the existing dataset.
+
+### `markov.R`
+
+### `tmatrix.R`
+
 ## Usage
 
 ### Installation
