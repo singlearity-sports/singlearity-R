@@ -98,14 +98,43 @@ re24_2017_first <- season_re24(pbp_2017_first)
 re24_2016_first <- season_re24(pbp_2016_first)
 re24_2015_first <- season_re24(pbp_2015_first)
 
+# Tibble in which to collect game information
+
+game_ids <- pbp_2018_first %>%
+  filter(!(game_pk %in% pull(select(game_info, game_id)))) %>% 
+  select(game_pk) %>% 
+  unique() %>%
+  pull()
+
+game_info <- tibble(game_date = character(),
+                    game_id = numeric(),
+                    away_lineup = list(),
+                    pitcher_vs_away = numeric(),
+                    home_lineup = list(),
+                    pitcher_vs_home = numeric(),
+                    stadium = character(),
+                    team_home = character(),
+                    temperature = numeric())
+
 ######################
 # CALL get_core_data.R FILE HERE TO GET INFO FOR LINEUPS/GAMES
 ######################
 
+for (game in game_ids) {
+  
+  tracker <- tracker + 1
+  print(tracker)
+  
+  game_info <- bind_rows(game_info, get_game_info(game))
+  
+}
+
 result_data <- tibble(game_date = character(),
                       game_id = numeric(),
                       batter_id = numeric(),
+                      batter_name = character(),
                       pitcher_id = numeric(),
+                      pitcher_name = character(),
                       top_bot = character(),
                       start = character(),
                       end = character(),
@@ -116,163 +145,43 @@ result_data <- tibble(game_date = character(),
 
 # Function to get difference between Singlearity predictions and runs scored
 
-inning_diff <- function(game_id) {
-  
-  # error <- c(0, 0)
-  # num_pa <- 0
-  
-  # Gets batting orders using game ID
-  
-  lineups <- get_batting_orders(game_id)
-  
-  lineup_away <- lineups %>% 
-    filter(team == "away") %>% 
-    arrange(batting_order)
-  
-  lineup_home <- lineups %>% 
-    filter(team == "home") %>% 
-    arrange(batting_order)
+inning_diff <- function(game) {
   
   # Creates lineup using one call to markov_matrices(), including vars. like date
+  # Uses info we've already gathered
   
-  game_info <- get_game_info_mlb(game_id)
-  
-  # Creates list of player names
-  
-  away_lineup <- as.list(lineup_away$id)
-  
-  # Gets pitcher name
-  
-  pitcher_vs_away <- pbp_first %>% 
-    filter(game_pk == game_id, inning_topbot == "Top") %>% 
-    select(pitcher) %>% 
-    pull() %>% 
-    sing$GetPlayers(id = .) %>% 
-    pluck(1, "mlb_id")
-  
-  # Gets stadium name
-  
-  stadium <- game_info %>% 
-    select(venue_name) %>% 
-    pull()
-  
-  # Replaces stadiums not in Singlearity w/ Progressive Field, a neutral ballpark
-  # Also renames stadiums that have changed names over the past few years
-  
-  if (stadium %in% c("Sahlen Field", "Turner Field", "Tokyo Dome",
-                     "Globe Life Park in Arlington", "London Stadium",
-                     "Estadio de Beisbol Monterrey",
-                     "TD Ameritrade Park", "BB&T Ballpark")) {
-    
-    stadium <- "Progressive Field"
-    
-  } else if (stadium == "Safeco Field") {
-    
-    stadium <- "T-Mobile Park"
-    
-  } else if (stadium == "SunTrust Park") {
-    
-    stadium <- "Truist Park"
-    
-  } else if (stadium == "AT&T Park") {
-    
-    stadium <- "Oracle Park"
-    
-  } else if (stadium == "O.co Coliseum") {
-    
-    stadium <- "Oakland Coliseum"
-    
-  } else if (stadium == "U.S. Cellular Field") {
-    
-    stadium <- "Guaranteed Rate Field"
-    
-  }
-  
-  # Gets name of home team
-  
-  home_name <- lineup_home %>% 
-    select(teamName) %>% 
-    slice(1) %>% 
-    pull() %>% 
-    word(2, -1)
-  
-  # Corrects team name if what's pulled above is incorrect
-  
-  if (home_name %in% c("Bay Rays", "York Yankees", "City Royals",
-                       "Angeles Angels", "York Mets", "Louis Cardinals",
-                       "Angeles Dodgers", "Diego Padres", "Francisco Giants")) {
-    
-    home_name <- home_name %>% 
-      word(2)
-      
-  }
-  
-  # Changes stadium home teams to properly align with normal home team
-  
-  if (stadium == "Progressive Field") {
-    
-    home_name <- "Indians"
-    
-  }
-  
-  # Gets temperature
-  
-  temp <- game_info %>% 
-    select(temperature) %>% 
-    pull() %>% 
-    as.integer()
-  
-  # Gets date
-  
-  game_date <- game_info %>% 
-    select(game_date) %>% 
-    pull() %>% 
-    as.character()
-  
+  indiv_game_info <- game_info %>% 
+    filter(game_id == game)
+
   # Gets transition matrices for away team
   
   tmatrices_away <- markov_matrices(standard = FALSE,
                                     state = State$new(top = TRUE),
-                                    lineup = away_lineup,
-                                    pitcher = pitcher_vs_away,
-                                    stadium = stadium,
-                                    home = home_name,
-                                    temp = temp,
-                                    date = game_date)
-  
-  # Does same as above, but for the home lineup
-  
-  # Creates list of player names
-  
-  home_lineup <- as.list(lineup_home$id)
-  
-  # Gets pitcher name
-  
-  pitcher_vs_home <- pbp_first %>% 
-    filter(game_pk == game_id, inning_topbot == "Bot") %>% 
-    select(pitcher) %>% 
-    pull() %>% 
-    sing$GetPlayers(id = .) %>% 
-    pluck(1, "mlb_id")
+                                    lineup = as.list(indiv_game_info$away_lineup[[1]]),
+                                    pitcher = indiv_game_info$pitcher_vs_away,
+                                    stadium = indiv_game_info$stadium,
+                                    home = indiv_game_info$team_home,
+                                    temp = indiv_game_info$temperature,
+                                    date = indiv_game_info$game_date)
   
   # Gets transition matrices for home team
   
   tmatrices_home <- markov_matrices(standard = FALSE,
                                     state = State$new(top = FALSE),
-                                    lineup = home_lineup,
-                                    pitcher = pitcher_vs_home,
-                                    stadium = stadium,
-                                    home = home_name,
-                                    temp = temp,
-                                    date = game_date)
+                                    lineup = as.list(indiv_game_info$home_lineup[[1]]),
+                                    pitcher = indiv_game_info$pitcher_vs_home,
+                                    stadium = indiv_game_info$stadium,
+                                    home = indiv_game_info$team_home,
+                                    temp = indiv_game_info$temperature,
+                                    date = indiv_game_info$game_date)
   
   # Isolates play-by-play outcomes for each half-inning
   
   pbp_away <- pbp_first %>% 
-    filter(game_pk == game_id, inning_topbot == "Top")
+    filter(game_pk == game, inning_topbot == "Top")
   
   pbp_home <- pbp_first %>% 
-    filter(game_pk == game_id, inning_topbot == "Bot")
+    filter(game_pk == game, inning_topbot == "Bot")
   
   for (pa in seq_len(nrow(pbp_away))) {
     
@@ -301,14 +210,24 @@ inning_diff <- function(game_id) {
 
     # Gets wOBA prediction
     
-    woba <- pa_pred_simple(batters = sing$GetPlayers(id = ab$batter),
-                           pitchers = sing$GetPlayers(id = ab$pitcher),
-                           state = test_state,
-                           atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = stadium)[[1]], 
-                                                       temperature = temp, 
-                                                       home_team = sing$GetTeams(name = home_name)[[1]]),
-                           date = game_date) %>% 
+    pa_pred <- pa_pred_simple(batters = sing$GetPlayers(id = ab$batter),
+                              pitchers = sing$GetPlayers(id = indiv_game_info$pitcher_vs_away),
+                              state = test_state,
+                              atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = indiv_game_info$stadium)[[1]], 
+                                                          temperature = indiv_game_info$temperature, 
+                                                          home_team = sing$GetTeams(name = indiv_game_info$team_home)[[1]]),
+                              date = indiv_game_info$game_date)
+    
+    woba <- pa_pred %>% 
       select(woba_exp) %>% 
+      pull()
+    
+    batter_name <- pa_pred %>% 
+      select(batter_name) %>% 
+      pull()
+    
+    pitcher_name <- pa_pred %>% 
+      select(pitcher_name) %>% 
       pull()
     
     # Gets Markov predictions, specifically expected runs
@@ -326,7 +245,7 @@ inning_diff <- function(game_id) {
     
     # Updates error for standard pred., using previous year's RE24 table
     
-    year_prev <- game_info %>% 
+    year_prev <- indiv_game_info %>% 
       select(game_date) %>% 
       pull() %>% 
       as.Date() %>% 
@@ -348,10 +267,12 @@ inning_diff <- function(game_id) {
     # Adds into tibble
     
     result_data <- result_data %>% 
-      add_row(game_date = game_date,
-              game_id = game_id,
+      add_row(game_date = indiv_game_info$game_date,
+              game_id = game,
               batter_id = ab$batter,
+              batter_name = batter_name,
               pitcher_id = ab$pitcher,
+              pitcher_name = pitcher_name,
               top_bot = ab$inning_topbot,
               start = ab$base_out_state,
               end = ab$next_base_out_state,
@@ -389,14 +310,24 @@ inning_diff <- function(game_id) {
     
     # Gets wOBA prediction
     
-    woba <- pa_pred_simple(batters = sing$GetPlayers(id = ab$batter),
-                           pitchers = sing$GetPlayers(id = ab$pitcher),
-                           state = test_state,
-                           atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = stadium)[[1]], 
-                                                       temperature = temp, 
-                                                       home_team = sing$GetTeams(name = home_name)[[1]]),
-                           date = game_date) %>% 
+    pa_pred <- pa_pred_simple(batters = sing$GetPlayers(id = ab$batter),
+                              pitchers = sing$GetPlayers(id = indiv_game_info$pitcher_vs_home),
+                              state = test_state,
+                              atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = indiv_game_info$stadium)[[1]], 
+                                                          temperature = indiv_game_info$temperature, 
+                                                          home_team = sing$GetTeams(name = indiv_game_info$team_home)[[1]]),
+                              date = indiv_game_info$game_date)
+    
+    woba <- pa_pred %>% 
       select(woba_exp) %>% 
+      pull()
+    
+    batter_name <- pa_pred %>% 
+      select(batter_name) %>% 
+      pull()
+    
+    pitcher_name <- pa_pred %>% 
+      select(pitcher_name) %>% 
       pull()
 
     # Gets Markov predictions, specifically expected runs
@@ -414,7 +345,7 @@ inning_diff <- function(game_id) {
     
     # Updates error for standard pred., using previous year's RE24 table
     
-    year_prev <- game_info %>% 
+    year_prev <- indiv_game_info %>% 
       select(game_date) %>% 
       pull() %>% 
       as.Date() %>% 
@@ -434,10 +365,12 @@ inning_diff <- function(game_id) {
     # error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
     
     result_data <- result_data %>% 
-      add_row(game_date = game_date,
-              game_id = game_id,
+      add_row(game_date = indiv_game_info$game_date,
+              game_id = game,
               batter_id = ab$batter,
+              batter_name = batter_name,
               pitcher_id = ab$pitcher,
+              pitcher_name = pitcher_name,
               top_bot = ab$inning_topbot,
               start = ab$base_out_state,
               end = ab$next_base_out_state,
@@ -465,9 +398,10 @@ inning_diff <- function(game_id) {
   
 }
 
-game_ids <- pbp_2019_first %>% 
+game_ids <- pbp_2018_first %>% 
   select(game_pk) %>% 
   unique() %>% 
+  slice(176:2431) %>% 
   pull()
 
 # Creates tracker and results tibble
@@ -476,7 +410,9 @@ tracker <- 0
 results_all <- tibble(game_date = character(),
                       game_id = numeric(),
                       batter_id = numeric(),
+                      batter_name = character(),
                       pitcher_id = numeric(),
+                      pitcher_name = character(),
                       top_bot = character(),
                       start = character(),
                       end = character(),
