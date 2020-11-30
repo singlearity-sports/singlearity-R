@@ -6,11 +6,19 @@ This repository contains R code for simulating the results of baseball half-inni
 
 Baseball has a relatively clean, distinct structure. Each plate appearance can be viewed as a separate matchup or event, and there are a fixed number of possible baserunner/out combinations, or states, for each plate appearance. While different plate appearances are distinct and exhibit a strong degree of independence, the results do rely heavily on which of the 24 states the game may be in before the start of plate appearance. For example, a double with nobody on base has a much different effect on the game than one with the bases loaded. As such, we want a way to combine the independence of individual plate appearances with the dependence of these events within innings. 
 
-A Markov chain is a random probability model that exhibits one-step dependence. Put another way, the probability of transitioning from state *i* to state *j* is always the same, no matter what happened before, and only depends on state *i*. This is called the Markov property, and it simplifies probability calculations: we don't have to account for the entire past, only the most recent state. 
+A Markov chain is a random probability model that exhibits one-step dependence. Put another way, the probability of transitioning from state *i* to state *j* is always the same, no matter what happened prior to state *i* - this probability depends solely on state *i*. This is called the Markov property, and it simplifies probability calculations: we don't have to account for the entire past, only the most recent state. 
 
-In a baseball sense, this means that the probability of an event happening is just dependent on the starting state, or baserunner/out combination. If we say *p<sub>i,j</sub>* is the probability of going from state *i* to state *j*, we can construct a 25 by 25 matrix containing all these probabilities, which is called the transition matrix (25, not 24, because we also need to be able to transition to an inning-ending three-out state). Many of these probabilities, of course, will be zero, as it's impossible to go from a one-out state to a zero-out state, or directly from a non-baserunner state to a bases-loaded state. 
+In a baseball sense, this means that the probability of an event happening is just dependent on the starting state, or baserunner/out combination. If we say *p<sub>i,j</sub>* is the probability of going from state *i* to state *j*, we can construct a 25 by 25 matrix containing all these probabilities, which is called the transition matrix (25, not 24, because we also need to be able to transition to an inning-ending three-out state). Many of these probabilities will be zero by definition, as it's impossible to go from a one-out state to a zero-out state, or directly from a non-baserunner state to a bases-loaded state. 
 
 This file combines the power of Markov chains for simulating an inning of baseball with Singlearity's machine learning-based plate appearance prediction capabilities. By being able to more accurately predict the outcome of the matchups at baseball's core, we can leverage these capabilities to move Markov chain baseball prediction methods to practical and applicable situations from its current position in the more theoretical realm.
+
+## Description
+
+### Structure
+
+There are four files that directly contribute to these Markov chain calculations: `tmatrix.R`, which calculates the transition matrices for each batter in a given lineup; `markov.R`, which contains functions to both source these transition matrices and also to calculate the expected runs from a half-inning; `get_core_data.R`, a file to get game-by-game player and environment information for a given season; and `experimental.R`, used to compare Markov chain predictions to actual results. We will walk through these files in the reverse order as mentioned above.
+
+### `experimental.R`
 
 ## Usage
 
