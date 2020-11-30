@@ -68,6 +68,14 @@ Having calculated this expected run distribution, we do a bit of cleaning to cre
 
 ### `tmatrix.R`
 
+This file contains functions that use either league averages or Singlearity to create player transition matrices. It starts by calling and sourcing requisite packages and files, and then creates variables for relevant transitions. The first portion, which consists of different event probabilities like the percent of errors that are two-base errors or the likelihood a runner scores from first base on a double, is important when categorizing the probabilities of different events in a transition matrix. The second has assorted league-wide averages from the 2020 season, averages used to create a league-average transition matrix.
+
+Starting with `tmatrix_std`, the inputs are a wide array of league-wide event probabilities, from the probability of a single to the probability of a triple play. Using the `elmt_fill` function, which takes a matrix, row/column indices, and probabilities to sum and impute into said location, this function iterates over all 625 positions in a transition matrix, filling in the relevant probabilities for each transition. For example, for the 23rd row of the 24th column, which denotes the transition from a two-out state with runners on second and third to a two-out state with the bases loaded, the probability of such a transition occurring is the sum of the probabilities of a walk (both intentional and not), a hit-by-pitch, and a catcher's interference. 
+
+This is done for all possible transitions, and then because it's possible to have multiple events occur in one play (like a single and an error), the rows are normalized to make sure the probabilities for each starting state sum to one. The full transition matrix is then returned.
+
+`tmatrix_sing` follows a similar procedure, but it uses `get_results` to obtain Singlearity predictions on which the transition matrices are based. `get_results` takes as input the batter list, pitcher, stadium, home team, temperature, date, half, inning, and date information passed into `tmatrix_sing`. It then creates a list of batting states and uses Singlearity functions to create a new batter list, pitcher, venue, and atmosphere that's in a Singlearity-compatible format.
+
 ## Usage
 
 ### Installation
