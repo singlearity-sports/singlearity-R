@@ -4,6 +4,16 @@ suppressPackageStartupMessages(library(baseballr))
 # Replicating much of the code previously in experimental.R
 # Downloading this data will reduce future runtime
 
+all_game_info <- tibble(game_date = character(),
+                        game_id = numeric(),
+                        away_lineup = list(),
+                        pitcher_vs_away = numeric(),
+                        home_lineup = list(),
+                        pitcher_vs_home = numeric(),
+                        stadium = character(),
+                        team_home = character(),
+                        temperature = numeric())
+
 get_game_info <- function(game_id) {
   
   # Gets batting orders and pitchers

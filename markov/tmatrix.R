@@ -1122,143 +1122,144 @@ get_results <- function(bat, pitch, stad, home, temp, date,
   
   matchups <- list()
   
+  batter_num <- 1
+  
   for (b in candidate_batters) {
-    
     if (length(candidate_batters) > 1) {
       # Create list of states to iterate over
       states <- list(State$new(top = away, 
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, 
                                top = away, 
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_2b = T, 
                                top = away, 
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_3b = T, 
                                top = away, 
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)),
+                                 4 * (batter_num - 1)),
                      State$new(on_1b = T, on_2b = T, 
                                top = away, 
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, on_3b = T, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)),
+                                 4 * (batter_num - 1)),
                      State$new(on_2b = T, on_3b = T, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, on_2b = T, on_3b = T, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)),
+                                 4 * (batter_num - 1)),
                      State$new(outs = 1, 
                                top = away, 
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, 
                                outs = 1, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_2b = T, 
                                outs = 1, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_3b = T, 
                                outs = 1, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)),
+                                 4 * (batter_num - 1)),
                      State$new(on_1b = T, on_2b = T, 
                                outs = 1, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, on_3b = T, 
                                outs = 1, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)),
+                                 4 * (batter_num - 1)),
                      State$new(on_2b = T, on_3b = T, 
                                outs = 1, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, on_2b = T, on_3b = T, 
                                outs = 1, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)),
+                                 4 * (batter_num - 1)),
                      State$new(outs = 2, 
                                top = away, 
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, 
                                outs = 2, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_2b = T, 
                                outs = 2, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_3b = T, 
                                outs = 2, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)),
+                                 4 * (batter_num - 1)),
                      State$new(on_1b = T, on_2b = T, 
                                outs = 2, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, on_3b = T, 
                                outs = 2, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)),
+                                 4 * (batter_num - 1)),
                      State$new(on_2b = T, on_3b = T, 
                                outs = 2, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)), 
+                                 4 * (batter_num - 1)), 
                      State$new(on_1b = T, on_2b = T, on_3b = T, 
                                outs = 2, 
                                top = away,
                                inning = inning, 
                                pitch_number = pitch_ct + 
-                                 4 * (match(b, candidate_batters) - 1)))
+                                 4 * (batter_num - 1)))
       
     }
     for (p in candidate_pitchers) {
@@ -1268,6 +1269,7 @@ get_results <- function(bat, pitch, stad, home, temp, date,
                                                  state = s, date = d))
       }
     }
+    batter_num <- batter_num + 1
   }
   
   results <- sing$GetPaSim(matchup = matchups) %>%
@@ -1307,7 +1309,7 @@ tmatrix_sing <- function(batters, pitcher, stadium, home, temp, date,
   
   results <- get_results(batters, pitcher, stadium, home, temp, date,
                          away, inning, pitch_ct)
-  
+
   # Each of these transitions includes probabilities for impossible events
   # i.e., DP probability with nobody on base, or two outs
   # These are used when summing what's judged to be the most relevant probability

@@ -101,7 +101,6 @@ re24_2015_first <- season_re24(pbp_2015_first)
 # Tibble in which to collect game information
 
 game_ids <- pbp_2018_first %>%
-  filter(!(game_pk %in% pull(select(game_info, game_id)))) %>% 
   select(game_pk) %>% 
   unique() %>%
   pull()
@@ -119,6 +118,8 @@ game_info <- tibble(game_date = character(),
 ######################
 # CALL get_core_data.R FILE HERE TO GET INFO FOR LINEUPS/GAMES
 ######################
+
+tracker <- 0
 
 for (game in game_ids) {
   
@@ -163,7 +164,7 @@ inning_diff <- function(game) {
                                     home = indiv_game_info$team_home,
                                     temp = indiv_game_info$temperature,
                                     date = indiv_game_info$game_date)
-  
+
   # Gets transition matrices for home team
   
   tmatrices_home <- markov_matrices(standard = FALSE,
@@ -174,7 +175,7 @@ inning_diff <- function(game) {
                                     home = indiv_game_info$team_home,
                                     temp = indiv_game_info$temperature,
                                     date = indiv_game_info$game_date)
-  
+
   # Isolates play-by-play outcomes for each half-inning
   
   pbp_away <- pbp_first %>% 
@@ -217,7 +218,7 @@ inning_diff <- function(game) {
                                                           temperature = indiv_game_info$temperature, 
                                                           home_team = sing$GetTeams(name = indiv_game_info$team_home)[[1]]),
                               date = indiv_game_info$game_date)
-    
+
     woba <- pa_pred %>% 
       select(woba_exp) %>% 
       pull()
@@ -238,12 +239,7 @@ inning_diff <- function(game) {
       pluck(1) %>% 
       as.numeric()
     
-    # Updates error for Singlearity
-    
-    # error[1] <- error[1] + (runs_exp - as.numeric(pull(select(ab, runs_to_end_inning))))^2
-    # num_pa <- num_pa + 1
-    
-    # Updates error for standard pred., using previous year's RE24 table
+    # Gets prediction for this state using previous year's RE24
     
     year_prev <- indiv_game_info %>% 
       select(game_date) %>% 
@@ -262,8 +258,6 @@ inning_diff <- function(game) {
       pull() %>% 
       as.numeric()
 
-    # error[2] <- error[2] + (re_est - as.numeric(pull(select(ab, runs_to_end_inning))))^2
-    
     # Adds into tibble
     
     result_data <- result_data %>% 
@@ -317,7 +311,7 @@ inning_diff <- function(game) {
                                                           temperature = indiv_game_info$temperature, 
                                                           home_team = sing$GetTeams(name = indiv_game_info$team_home)[[1]]),
                               date = indiv_game_info$game_date)
-    
+
     woba <- pa_pred %>% 
       select(woba_exp) %>% 
       pull()
@@ -401,7 +395,6 @@ inning_diff <- function(game) {
 game_ids <- pbp_2018_first %>% 
   select(game_pk) %>% 
   unique() %>% 
-  slice(176:2431) %>% 
   pull()
 
 # Creates tracker and results tibble
