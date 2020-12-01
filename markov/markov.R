@@ -191,7 +191,7 @@ markov_half_inning <- function(idx = 1, tmatrix_list = markov_matrices(),
     
     temp <- matrix(0, 21, 25)
     
-    # Adds expected runs to matrix, using same algorithm
+    # Adds expected runs to matrix, using algorithm mentioned
     
     for (j in 1:21) {
       

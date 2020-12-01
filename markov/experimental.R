@@ -99,6 +99,7 @@ re24_2016_first <- season_re24(pbp_2016_first)
 re24_2015_first <- season_re24(pbp_2015_first)
 
 # Tibble in which to collect game information
+# Getting the relevant game IDs before that
 
 game_ids <- pbp_2018_first %>%
   select(game_pk) %>% 
@@ -115,9 +116,7 @@ game_info <- tibble(game_date = character(),
                     team_home = character(),
                     temperature = numeric())
 
-######################
-# CALL get_core_data.R FILE HERE TO GET INFO FOR LINEUPS/GAMES
-######################
+# Iterating over the selected games to grab info
 
 tracker <- 0
 
@@ -129,6 +128,8 @@ for (game in game_ids) {
   game_info <- bind_rows(game_info, get_game_info(game))
   
 }
+
+# Similar procedure as above, but now getting predictions instead
 
 result_data <- tibble(game_date = character(),
                       game_id = numeric(),
