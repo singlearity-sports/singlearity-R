@@ -8,7 +8,6 @@ suppressPackageStartupMessages(library(lubridate))
 # Assumes user is in the overarching "Singlearity" directory 
 
 source(file = "markov/markov.R")
-source(file = "R/get_singlearity_client.R")
 source(file = "markov/get_core_data.R")
 sing <- GetSinglearityClient()
 

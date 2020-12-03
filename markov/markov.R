@@ -13,7 +13,6 @@
 # With help from https://tinyurl.com/y3t4om6o
 library(singlearity)
 source(file = "markov/tmatrix.R")
-source(file = "R/get_singlearity_client.R")
 sing <- GetSinglearityClient()
 
 suppressPackageStartupMessages(library(wordspace))
