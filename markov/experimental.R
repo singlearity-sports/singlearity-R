@@ -9,7 +9,6 @@ suppressPackageStartupMessages(library(lubridate))
 
 source(file = "markov/markov.R")
 source(file = "R/get_singlearity_client.R")
-source(file = "examples/pa_pred_simple.R")
 source(file = "markov/get_core_data.R")
 sing <- GetSinglearityClient()
 
