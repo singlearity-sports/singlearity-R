@@ -72,7 +72,7 @@ get_results <- function(bat, pitch, stad, home, temp, date,
   
   for (batter in bat) {
     if (is.numeric(batter)) {
-      candidate_batters <- append(candidate_batters, sing$GetPlayers(id=batter)[[1]])
+      candidate_batters <- append(candidate_batters, pluck(sing$GetPlayers(id=batter), 1))
       id <- append(id, batter)
     }
     else {

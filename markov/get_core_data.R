@@ -59,9 +59,9 @@ get_game_info <- function(game_id) {
   # Also renames stadiums that have changed names over the past few years
   
   if (stad %in% c("Sahlen Field", "Turner Field", "Tokyo Dome",
-                     "Globe Life Park in Arlington", "London Stadium",
-                     "Estadio de Beisbol Monterrey",
-                     "TD Ameritrade Park", "BB&T Ballpark")) {
+                  "Globe Life Park in Arlington", "London Stadium",
+                  "Estadio de Beisbol Monterrey", "BB&T Ballpark",
+                  "TD Ameritrade Park", "Hiram Bithorn Stadium")) {
     
     stad <- "Progressive Field"
     
@@ -84,6 +84,10 @@ get_game_info <- function(game_id) {
   } else if (stad == "U.S. Cellular Field") {
     
     stad <- "Guaranteed Rate Field"
+    
+  } else if (stad == "Angel Stadium of Anaheim") {
+    
+    stad <- "Angel Stadium"
     
   }
   

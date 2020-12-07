@@ -99,7 +99,7 @@ re24_2015_first <- season_re24(pbp_2015_first)
 # Tibble in which to collect game information
 # Getting the relevant game IDs before that
 
-game_ids <- pbp_2018_first %>%
+game_ids <- pbp_2016_first %>%
   select(game_pk) %>% 
   unique() %>%
   pull()
@@ -128,62 +128,62 @@ for (game in game_ids) {
 }
 
 # Creates PA prediction function for use in grabbing wOBAs
-
-pa_pred_fn <- function(batters = c(605141),
-                       pitchers = c(605182),
-                       states =  list(State$new()), 
-                       atmosphere = Atmosphere$new(venue = 
-                                                     sing$GetVenues(stadium.name = 
-                                                                      'Dodger Stadium')[[1]], 
-                                                   temperature = 70, 
-                                                   home_team = sing$GetTeams(name = 
-                                                                               'Dodgers')[[1]]),
-                           date = format(Sys.Date(), "%Y-%m-%d"),
-                           predictiontype = 'ab_outcome') 
-  {
-  
-  candidate_batters <- list()
-  candidate_pitchers <- list()
-  
-  for (batter in batters)
-  {
-    candidate_batters <- append(candidate_batters, sing$GetPlayers(id=batter))
-  }
-  
-  for (pitcher in pitchers)
-  {
-    candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(id=pitcher))
-  }
-  
-  #initialize empty lists
-  matchups <- list()
-  
-  for (i in seq(length(states))) {
-    for (p in candidate_pitchers) {
-      matchups <- append(matchups, Matchup$new(batter = candidate_batters[[i]], 
-                                               pitcher = candidate_pitchers[[1]], 
-                                               atmosphere = atmosphere, 
-                                               state = states[[i]], 
-                                               date = date))
-    }
-  }
-  
-  results <- sing$GetPaSim(matchup = matchups)
-  return(results)
-}
+# 
+# pa_pred_fn <- function(batters = c(605141),
+#                        pitchers = c(605182),
+#                        states =  list(State$new()), 
+#                        atmosphere = Atmosphere$new(venue = 
+#                                                      sing$GetVenues(stadium.name = 
+#                                                                       'Dodger Stadium')[[1]], 
+#                                                    temperature = 70, 
+#                                                    home_team = sing$GetTeams(name = 
+#                                                                                'Dodgers')[[1]]),
+#                            date = format(Sys.Date(), "%Y-%m-%d"),
+#                            predictiontype = 'ab_outcome') 
+#   {
+#   
+#   candidate_batters <- list()
+#   candidate_pitchers <- list()
+#   
+#   for (batter in batters)
+#   {
+#     candidate_batters <- append(candidate_batters, sing$GetPlayers(id=batter))
+#   }
+#   
+#   for (pitcher in pitchers)
+#   {
+#     candidate_pitchers <- append(candidate_pitchers, sing$GetPlayers(id=pitcher))
+#   }
+#   
+#   #initialize empty lists
+#   matchups <- list()
+#   
+#   for (i in seq(length(states))) {
+#     for (p in candidate_pitchers) {
+#       matchups <- append(matchups, Matchup$new(batter = candidate_batters[[i]], 
+#                                                pitcher = candidate_pitchers[[1]], 
+#                                                atmosphere = atmosphere, 
+#                                                state = states[[i]], 
+#                                                date = date))
+#     }
+#   }
+#   
+#   results <- sing$GetPaSim(matchup = matchups)
+#   return(results)
+# }
 
 # Similar procedure as above, but now getting predictions instead
 
 result_data <- tibble(game_date = character(),
                       game_id = numeric(),
                       batter_id = numeric(),
-                      batter_name = character(),
+                      # batter_name = character(),
                       pitcher_id = numeric(),
-                      pitcher_name = character(),
+                      # pitcher_name = character(),
                       top_bot = character(),
                       start = character(),
                       end = character(),
-                      pred_woba = numeric(),
+                      # pred_woba = numeric(),
                       pred_sing = numeric(),
                       pred_re24 = numeric(),
                       actual = numeric())
@@ -232,40 +232,39 @@ inning_diff <- function(game) {
   
   pa_iterate <- function(pbp, indiv_game_info, tmatrices, away) {
     
-    state_list <- list()
-    for (row in 1:nrow(pbp)) {
+    # state_list <- list()
+    # for (row in 1:nrow(pbp)) {
+    # 
+    #   ab <- pbp %>% 
+    #     slice(row)
+    #   state_list <- append(state_list, 
+    #                        State$new(top = away,
+    #                                  outs = pull(select(ab, outs_when_up)),
+    #                                  on_1b = !is.na(pull(select(ab, on_1b))),
+    #                                  on_2b = !is.na(pull(select(ab, on_2b))),
+    #                                  on_3b = !is.na(pull(select(ab, on_3b)))))
+    # }
 
-      ab <- pbp %>% 
-        slice(row)
-      state_list <- append(state_list, 
-                           State$new(top = away,
-                                     outs = pull(select(ab, outs_when_up)),
-                                     on_1b = !is.na(pull(select(ab, on_1b))),
-                                     on_2b = !is.na(pull(select(ab, on_2b))),
-                                     on_3b = !is.na(pull(select(ab, on_3b)))))
-    }
-
-    if (away) {
-      
-      pa_pred <- pa_pred_fn(batters = indiv_game_info$away_lineup[[1]],
-                            pitchers = indiv_game_info$pitcher_vs_away,
-                            state = state_list,
-                            atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = indiv_game_info$stadium)[[1]],
-                                                        temperature = indiv_game_info$temperature, 
-                                                        home_team = sing$GetTeams(name = indiv_game_info$team_home)[[1]]),
-                            date = indiv_game_info$game_date)
-    } else {
-      
-      pa_pred <- pa_pred_fn(batters = indiv_game_info$home_lineup[[1]],
-                            pitchers = indiv_game_info$pitcher_vs_home,
-                            state = state_list,
-                            atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = indiv_game_info$stadium)[[1]],
-                                                        temperature = indiv_game_info$temperature, 
-                                                        home_team = sing$GetTeams(name = indiv_game_info$team_home)[[1]]),
-                            date = indiv_game_info$game_date)
-    }
+    # if (away) {
+    #   
+    #   pa_pred <- pa_pred_fn(batters = indiv_game_info$away_lineup[[1]],
+    #                         pitchers = indiv_game_info$pitcher_vs_away,
+    #                         state = state_list,
+    #                         atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = indiv_game_info$stadium)[[1]],
+    #                                                     temperature = indiv_game_info$temperature, 
+    #                                                     home_team = sing$GetTeams(name = indiv_game_info$team_home)[[1]]),
+    #                         date = indiv_game_info$game_date)
+    # } else {
+    #   
+    #   pa_pred <- pa_pred_fn(batters = indiv_game_info$home_lineup[[1]],
+    #                         pitchers = indiv_game_info$pitcher_vs_home,
+    #                         state = state_list,
+    #                         atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = indiv_game_info$stadium)[[1]],
+    #                                                     temperature = indiv_game_info$temperature, 
+    #                                                     home_team = sing$GetTeams(name = indiv_game_info$team_home)[[1]]),
+    #                         date = indiv_game_info$game_date)
+    # }
     
-    print(pa_pred)
     for (pa in seq_len(nrow(pbp))) {
 
       # Gets index for batting order, w/ extra precaution should a team bat around
@@ -287,20 +286,20 @@ inning_diff <- function(game) {
 
       # Gets wOBA prediction
       
-      woba <- pa_pred %>% 
-        filter(batter == pull(select(ab, batter))) %>% 
-        select(woba_exp) %>% 
-        pull()
-
-      batter_name <- pa_pred %>% 
-        filter(batter == pull(select(ab, batter))) %>%
-        select(batter_name) %>% 
-        pull()
-      
-      pitcher_name <- pa_pred %>% 
-        filter(batter == pull(select(ab, batter))) %>%
-        select(pitcher_name) %>% 
-        pull()
+      # woba <- pa_pred %>% 
+      #   filter(batter == pull(select(ab, batter))) %>% 
+      #   select(woba_exp) %>% 
+      #   pull()
+      # 
+      # batter_name <- pa_pred %>% 
+      #   filter(batter == pull(select(ab, batter))) %>%
+      #   select(batter_name) %>% 
+      #   pull()
+      # 
+      # pitcher_name <- pa_pred %>% 
+      #   filter(batter == pull(select(ab, batter))) %>%
+      #   select(pitcher_name) %>% 
+      #   pull()
       
       # Gets Markov predictions, specifically expected runs
       
@@ -335,13 +334,13 @@ inning_diff <- function(game) {
         add_row(game_date = indiv_game_info$game_date,
                 game_id = indiv_game_info$game_id,
                 batter_id = ab$batter,
-                batter_name = batter_name,
+                # batter_name = batter_name,
                 pitcher_id = ab$pitcher,
-                pitcher_name = pitcher_name,
+                # pitcher_name = pitcher_name,
                 top_bot = ab$inning_topbot,
                 start = ab$base_out_state,
                 end = ab$next_base_out_state,
-                pred_woba = woba,
+                # pred_woba = woba,
                 pred_sing = runs_exp,
                 pred_re24 = re_est,
                 actual = ab$runs_to_end_inning)
@@ -371,9 +370,10 @@ inning_diff <- function(game) {
   
 }
 
-game_ids <- pbp_2018_first %>% 
+game_ids <- pbp_2016_first %>% 
   select(game_pk) %>% 
   unique() %>% 
+  slice(1922:nrow(.)) %>% 
   pull()
 
 # Creates tracker and results tibble
@@ -382,13 +382,13 @@ tracker <- 0
 results_all <- tibble(game_date = character(),
                       game_id = numeric(),
                       batter_id = numeric(),
-                      batter_name = character(),
+                      # batter_name = character(),
                       pitcher_id = numeric(),
-                      pitcher_name = character(),
+                      # pitcher_name = character(),
                       top_bot = character(),
                       start = character(),
                       end = character(),
-                      pred_woba = numeric(),
+                      # pred_woba = numeric(),
                       pred_sing = numeric(),
                       pred_re24 = numeric(),
                       actual = numeric())
