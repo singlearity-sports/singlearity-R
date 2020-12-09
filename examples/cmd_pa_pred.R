@@ -70,7 +70,7 @@ source(file='utils.R')
                          outs = opt$outs, 
                          top = !(opt$bottom),
                          bat_score = opt$batscore,
-                         fld_score = opt$fld_score,
+                         fld_score = opt$fieldscore,
                          pitch_number = opt$pitchnumber)
   venue <- sing$GetVenues(stadium.name = opt$venue)[[1]]
   atmosphere <- Atmosphere$new(venue = venue, temperature = opt$temperature, home_team = sing$GetTeams(name = opt$hometeam)[[1]])
