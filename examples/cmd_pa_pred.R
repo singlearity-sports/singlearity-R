@@ -20,6 +20,8 @@ source(file='utils.R')
               help="date of the game (use format like 2018-08-25).  Defaults to today's date"),
     make_option(c("--inning"), type="integer", default=1,
                help="inning. Default %default"),
+    make_option(c("--bottom"), action="store_true", default=FALSE,
+              help="true if bottom half of the inning. Default %default"),
     make_option(c("--outs"), type="integer", default=0,
                help="outs. Default %default"),
     make_option(c("--on1b"), action="store_true", default=FALSE,
@@ -45,9 +47,7 @@ source(file='utils.R')
   opt_parser = OptionParser(option_list=option_list)
   opt = parse_args(opt_parser)
   batters_list = as.list(strsplit(opt$batters, ",")[[1]])
-  print(batters_list)
   pitchers_list = as.list(strsplit(opt$pitchers, ",")[[1]])
-  print(pitchers_list)
   
   plot_list = as.list(strsplit(opt$plot, ",")[[1]])
 
@@ -68,6 +68,7 @@ source(file='utils.R')
                          on_2b = opt$on2b,
                          on_3b = opt$on3b, 
                          outs = opt$outs, 
+                         top = !(opt$bottom),
                          bat_score = opt$batscore,
                          fld_score = opt$fld_score,
                          pitch_number = opt$pitchnumber)
