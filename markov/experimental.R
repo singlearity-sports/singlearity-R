@@ -63,6 +63,7 @@ pbp_2018_first <- read_pbp_file("markov/data/pbp_2018_first.csv")
 pbp_2017_first <- read_pbp_file("markov/data/pbp_2017_first.csv")
 pbp_2016_first <- read_pbp_file("markov/data/pbp_2016_first.csv")
 pbp_2015_first <- read_pbp_file("markov/data/pbp_2015_first.csv")
+pbp_2014_first <- read_pbp_file("markov/data/pbp_2014_first.csv")
 
 pbp_first <- bind_rows(pbp_2020_first, pbp_2019_first, pbp_2018_first, 
                        pbp_2017_first, pbp_2016_first) %>% 
@@ -90,11 +91,13 @@ season_re24 <- function(pbp) {
 
 # Uses above function to get 1st inning RE24 tables for each year
 
+re24_2020_first <- season_re24(pbp_2020_first)
 re24_2019_first <- season_re24(pbp_2019_first)
 re24_2018_first <- season_re24(pbp_2018_first)
 re24_2017_first <- season_re24(pbp_2017_first)
 re24_2016_first <- season_re24(pbp_2016_first)
 re24_2015_first <- season_re24(pbp_2015_first)
+re24_2014_first <- season_re24(pbp_2014_first)
 
 # Tibble in which to collect game information
 # Getting the relevant game IDs before that
@@ -402,8 +405,74 @@ for (game in game_ids) {
 
 }
 
+# Reads in past results
+
+results_2016 <- read_csv("markov/data/results_2016-12-07-20.csv", 
+                         col_types = cols(X1 = col_skip(), 
+                                          game_date = col_date(format = "%Y-%m-%d")))
+results_2017 <- read_csv("markov/data/results_2017-12-06-20.csv", 
+                         col_types = cols(X1 = col_skip(), 
+                                          game_date = col_date(format = "%Y-%m-%d")))
+results_2018 <- read_csv("markov/data/results_2018-12-05-20.csv", 
+                         col_types = cols(X1 = col_skip(), 
+                                          game_date = col_date(format = "%Y-%m-%d")))
+results_2019 <- read_csv("markov/data/results_2019-12-05-20.csv",
+                         col_types = cols(X1 = col_skip(), 
+                                          game_date = col_date(format = "%Y-%m-%d")))
+results_2020 <- read_csv("markov/data/results_2020-12-05-20.csv", 
+                         col_types = cols(X1 = col_skip(), 
+                                          game_date = col_date(format = "%Y-%m-%d")))
+
+results_all <- bind_rows(results_2016, results_2017, results_2018, 
+                         results_2019, results_2020)
+
+# Bootstraps to get under-prediction level
+
+set.seed(2020)
+
+diff <- slice_sample(results_all, prop = .2, replace = T) %>% 
+  mutate(ratio = pred_re24 / pred_sing) %>% 
+  select(ratio) %>% 
+  pull() %>% 
+  mean()
+
 # Finds errors
 
-rmse_re24 <- sqrt((results_all %>% mutate(sqdiff_re24 = (pred_re24 - actual)^2) %>% select(sqdiff_re24) %>% pull() %>% sum()) / nrow(results_all))
-rmse_sing <- sqrt((results_all %>% mutate(sqdiff_sing = (pred_sing - actual)^2) %>% select(sqdiff_sing) %>% pull() %>% sum()) / nrow(results_all))
+rmse_re24_all <- sqrt((results_all %>% 
+                         filter(year(game_date) != 2016) %>% 
+                         mutate(sqdiff_re24 = (pred_re24 - actual)^2) %>% 
+                         select(sqdiff_re24) %>% 
+                         pull() %>% 
+                         sum()) / nrow(filter(results_all,
+                                              year(game_date) != 2016)))
+rmse_sing_all <- sqrt((results_all %>% 
+                         filter(year(game_date) != 2016) %>% 
+                         mutate(sqdiff_sing = (pred_sing - actual)^2) %>% 
+                         select(sqdiff_sing) %>% 
+                         pull() %>% 
+                         sum()) / nrow(filter(results_all,
+                                              year(game_date) != 2016)))
+rmse_sing_incr_all <- sqrt((results_all %>% 
+                              filter(year(game_date) != 2016) %>% 
+                              mutate(sqdiff_sing = case_when(year(game_date) == 2017 ~
+                                                               (incr_16*pred_sing -
+                                                                  actual)^2,
+                                                             year(game_date) == 2018 ~
+                                                               (incr_17*pred_sing -
+                                                                  actual)^2,
+                                                             year(game_date) == 2019 ~
+                                                               (incr_18*pred_sing -
+                                                                  actual)^2,
+                                                             year(game_date) == 2020 ~
+                                                               (incr_19*pred_sing -
+                                                                  actual)^2)) %>% 
+                              select(sqdiff_sing) %>% 
+                              pull() %>%
+                              sum()) / nrow(filter(results_all,
+                                                   year(game_date) != 2016)))
 
+
+avg_diff <- replicate(10000, slice_sample(results_all, 
+                                          prop = .01, replace = T) %>% 
+                        mutate(ratio = pred_re24 / pred_sing) %>% 
+                        select(ratio) %>% pull() %>% mean())
