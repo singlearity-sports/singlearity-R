@@ -12,6 +12,37 @@ In a baseball sense, this means that the probability of an event happening is ju
 
 This file combines the power of Markov chains for simulating an inning of baseball with Singlearity's machine learning-based plate appearance prediction capabilities. By being able to more accurately predict the outcome of the matchups at baseball's core, we can leverage these capabilities to move Markov chain baseball prediction methods to practical and applicable situations from its current position in the more theoretical realm.
 
+## APIs
+
+The primary functionality of Singlearity's Markov capabilities are contained within the three functions described below. We hope the outlined description enables both further experimentation with Singlearity and also a more thorough look into the applicability of Markov chains in baseball.
+
+### `markov_matrices`
+
+Returns a list of nine 25 by 25 transition matrices.
+
+ARGUMENTS: `standard`: true or false. If true, all nine matrices returned are the league-average matrices from 2020. Default is false.  
+`state`: a Singlearity state containing information on the half of the inning, baserunners, and number of outs. Default is nobody on and no outs in the home half of the inning.  
+`lineup`: a list of nine MLB players, which serves as the batting lineup. Can be either player IDs or strings of names, preferably the former. Default can be changed in the `markov.R` file but is currently the Dodgers lineup.  
+`pitcher`: the opposing pitcher, either as a player ID or a string. Default is currently Chris Paddack.  
+`stadium`: a string with the current name of the home stadium. Default is currently Dodger Stadium.  
+`home`: a string with the nickname of the home team (i.e., "Red Sox" or "Athletics"). Default is currently Dodgers.  
+`temp`: an integer with the game temperature, in Fahrenheit. Default is currently 70.  
+`date`: a string with the game date, in YYYY-MM-DD format. Default is currently 2020-10-01.
+
+### `markov_half_inning`
+
+Returns a list of length two, the first the numeric value of expected runs in the inning and the second a table containing the probability distribution for runs in the inning.
+
+ARGUMENTS: `idx`: an integer from 1 to 9, inclusive, corresponding to the position in the batting order from which point to compute expected runs. Default is 1 (i.e., from the top of the lineup).  
+`tmatrix_list`: a list of nine 25 by 25 transition matrices, corresponding to spots 1 through 9 in the batting order. Default is an empty call to `markov_matrices`, which returns the matrices for the default Singlearity call to that function.  
+`state`: a Singlearity state containing information on the half of the inning, baserunners, and number of outs. Default is nobody on and no outs in the home half of the inning.
+
+### `inning_diff`
+
+Returns a dataframe of play-by-play players, states, predictions, and results, updated with each game.
+
+ARGUMENTS: `game`: an integer corresponding to an MLB game ID, which is used to grab plate appearances from that game, information from which is then used with the previous two functions to get Markov-based predictions.
+
 ## Description
 
 ### Structure
@@ -26,9 +57,9 @@ Next is the `season_re24` function. This takes the year-by-year play-by-play dat
 
 After this, we want to get the game-level information from which we can accurately construct our transition matrices. To do this, we use a function sourced from `get_core_data.R` to get the relevant information and store it locally in a tibble (more on this function below). Now, when we compute our transition matrices, we can search our pre-created tibble for the right data, as opposed to making a call to the `baseballr` server for each game.
 
-Next is the `inning_diff` function. This takes a game ID as input and returns the results tibble with a new row for that game. The first step is using the game info dataset to get the players, stadium, etc. for that game. Once obtained, the transition matrices for both the home and away teams are calculated using this info as inpu (see below for a more detailed explanation). Before going into more detailed computations, we filter the overall play-by-play dataset to get the plate appearances for the home and away teams for that game.
+Next is the `inning_diff` function. This takes a game ID as input and returns the results tibble with a new row for each plate appearance in that game. The first step is using the game info dataset to get the players, stadium, etc. for that game. Once obtained, the transition matrices for both the home and away teams are calculated using this info as input. Before going into more detailed computations, we filter the overall play-by-play dataset to get the plate appearances for the home and away teams for that game.
 
-We then iterate over both the home and away team plate appearances (away first). We get the batting order position for the player of that plate appearance and pull the relevant PA from the segmented dataset. We then take the base-out state from that pulled PA to create the state to base our calculations off of. In addition to our Markov chain predictions, we also want to get Singlearity's wOBA prediction for this plate appearance, so we use `pa_pred_simple` and info already gathered to obtain both that prediction and the player names.
+We then iterate over both the home and away team plate appearances (away first) using the `pa_iterate` function. For each plate appearance, we get the batting order position for the player of that plate appearance and pull the relevant PA from the segmented dataset. We then take the base-out state from that pulled PA to create the state to base our calculations off of. In addition to our Markov chain predictions, we also want to get Singlearity's wOBA prediction for this plate appearance, so we use `pa_pred_simple` and info already gathered to obtain both that prediction and the player names.
 
 To get expected runs via the Markov chain, we call `markov_half_inning`, passing in the batting order position of the player at bat, the list of transition matrices for their team, and the current base-out state. As for the run expectancy prediction, the naive prediction is the average runs scored from that point forward in the previous season in the first inning - i.e., the relevant RE24 (RE for run expectancy, 24 for the 24 possible base-out states). This grabs that previous year's RE24 table, isolates the situation that matches the current base-out state, and grabs that run prediction.
 
