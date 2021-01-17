@@ -11,32 +11,34 @@ validate_two_outs <- function(results) {
   # This function tests that a value is less than a given one
 
   # double plays, overall
-
-  expect_lt(results[1,]$dp_exp, 1e-04)
-
-  # double plays, ground balls
-
-  expect_lt(results[1,]$gdp_exp, 1e-04)
-
-  # sacrifice flies, overall
-
-  expect_lt(results[1,]$sf_exp, 1e-04)
-
-  # sacrifice fly double plays
-
-  expect_lt(results[1,]$sf_dp_exp, 1e-04)
-
-  # sacrifice hits
-
-  expect_lt(results[1,]$sh_exp, 1e-04)
-
-  # strikeout double plays
-
-  expect_lt(results[1,]$so_dp_exp, 1e-04)
-
-  # triple plays
-
-  expect_lt(results[1,]$tp_exp, 1e-04)
+  for (i in 1:dim(results)[1]) {  #iterate over each results
+    
+    expect_lt(results[i,]$dp_exp, 1e-04)
+  
+    # double plays, ground balls
+  
+    expect_lt(results[i,]$gdp_exp, 1e-04)
+  
+    # sacrifice flies, overall
+  
+    expect_lt(results[i,]$sf_exp, 1e-04)
+  
+    # sacrifice fly double plays
+  
+    expect_lt(results[i,]$sf_dp_exp, 1e-04)
+  
+    # sacrifice hits
+  
+    expect_lt(results[i,]$sh_exp, 1e-04)
+  
+    # strikeout double plays
+  
+    expect_lt(results[i,]$so_dp_exp, 1e-04)
+  
+    # triple plays
+  
+    expect_lt(results[i,]$tp_exp, 1e-04)
+  }
 }
 
 validate_empty_bases <- function(results) {
@@ -44,36 +46,37 @@ validate_empty_bases <- function(results) {
   print('validating empty bases')
   # fielder's choice
 
-  expect_lt(results[1,]$fc_exp, 1e-03)
+  for (i in 1:dim(results)[1]) {  #iterate over each results
+    expect_lt(results[i,]$fc_exp, 1e-03)
 
   # fielder's choice out
 
-  expect_lt(results[1,]$fc_o_exp, 1e-03)
-
-  # force out
-
-  expect_lt(results[1,]$fo, 1e-04)
-
-  # sacrifice flies, overall
-
-  expect_lt(results[1,]$sf_exp, 1e-04)
-
-  # sacrifice fly double plays
-
-  expect_lt(results[1,]$sf_dp_exp, 1e-04)
-
-  # sacrifice hits
-
-  expect_lt(results[1,]$sh_exp, 1e-04)
-
-  # strikeout double plays
-
-  expect_lt(results[1,]$so_dp_exp, 1e-04)
-
-  # triple plays
-
-  expect_lt(results[1,]$tp_exp, 1e-04)
-
+      expect_lt(results[i,]$fc_o_exp, 1e-03)
+    
+      # force out
+    
+      expect_lt(results[i,]$fo, 1e-04)
+    
+      # sacrifice flies, overall
+    
+      expect_lt(results[i,]$sf_exp, 1e-04)
+    
+      # sacrifice fly double plays
+    
+      expect_lt(results[i,]$sf_dp_exp, 1e-04)
+    
+      # sacrifice hits
+    
+      expect_lt(results[i,]$sh_exp, 1e-04)
+    
+      # strikeout double plays
+    
+      expect_lt(results[i,]$so_dp_exp, 1e-04)
+    
+      # triple plays
+    
+      expect_lt(results[i,]$tp_exp, 1e-04)
+  }
 }
 
 
