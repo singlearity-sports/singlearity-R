@@ -142,6 +142,7 @@ test_that("two_outs_comprehensive", {
   #print(results)
   validate_two_outs(results)
 })
+
 test_that("bases_empty", {
   candidate_batters <- sing$GetPlayers(team.name='Yankees', on.40=TRUE)[1:10]
   candidate_pitchers <- sing$GetPlayers(team.name='Red Sox', on.40=TRUE)[1:10]
@@ -165,31 +166,48 @@ test_that("bases_empty", {
   validate_empty_bases(results)
 })
 
-
 test_that("intentional walk", {
   print("validating intional walks")
   candidate_batters <- sing$GetPlayers(name='Mike Trout')
   candidate_pitchers <- sing$GetPlayers(name='Aroldis Chapman')
   atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Angel Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Angels')[[1]])
 
+  #man on 3rd with one out should have some intentional walk probability late in the game
+  state = State$new(outs=1, on_3b=TRUE, inning=9, pitch_number=20)
   matchups <- list()
-  #bases empty test.  do all outs
-  matchups <- list()
-  for (outs in 0:2) 
+  for (b in candidate_batters)
   {
-    #man on 3rd with one out should have some intentional walk probability late in the game
-    state = State$new(outs=1, on_3b=TRUE, inning=9, pitch_number=20)
-    for (b in candidate_batters)
+    for (p in candidate_pitchers)
     {
-      for (p in candidate_pitchers)
-      {
-       matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, atmosphere = atmosphere, state = state))
-       }
-    }
+     matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, date = '2015-05-19', atmosphere = atmosphere, state = state))
+     }
   }
   results <- sing$GetPaSim(matchup = matchups) 
   expect_gt(results[1,]$ibb_exp, .01)
 })
+
+
+test_that("dp and sf and force out", {
+  print("validating dp and sf")
+  batter <- sing$GetPlayers(name='Mike Trout')[[1]]
+  pitcher <- sing$GetPlayers(name='Aroldis Chapman')[[1]]
+  atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Angel Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Angels')[[1]])
+  
+  #test gdp and force out
+  browser()
+  matchup <- Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = State$new(outs=1, on_1b=TRUE, pitch_number=20))
+  results <- sing$GetPaSim(matchup = list(matchups))
+  expect_gt(results[1,]$gdp_exp, .01)
+  expect_gt(results[1,]$fo_exp, .01)   #force out
+  
+  #test sf
+  matchup <- Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = State$new(outs=1, on_3b=TRUE, pitch_number=20))
+  results <- sing$GetPaSim(matchup = list(matchups))
+  expect_gt(results[1,]$sf_exp, .01)
+})
+
+
+
 
 
 
