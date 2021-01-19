@@ -11,32 +11,34 @@ validate_two_outs <- function(results) {
   # This function tests that a value is less than a given one
 
   # double plays, overall
-
-  expect_lt(results[1,]$dp_exp, 1e-04)
-
-  # double plays, ground balls
-
-  expect_lt(results[1,]$gdp_exp, 1e-04)
-
-  # sacrifice flies, overall
-
-  expect_lt(results[1,]$sf_exp, 1e-04)
-
-  # sacrifice fly double plays
-
-  expect_lt(results[1,]$sf_dp_exp, 1e-04)
-
-  # sacrifice hits
-
-  expect_lt(results[1,]$sh_exp, 1e-04)
-
-  # strikeout double plays
-
-  expect_lt(results[1,]$so_dp_exp, 1e-04)
-
-  # triple plays
-
-  expect_lt(results[1,]$tp_exp, 1e-04)
+  for (i in 1:dim(results)[1]) {  #iterate over each results
+    
+    expect_lt(results[i,]$dp_exp, 1e-04)
+  
+    # double plays, ground balls
+  
+    expect_lt(results[i,]$gdp_exp, 1e-04)
+  
+    # sacrifice flies, overall
+  
+    expect_lt(results[i,]$sf_exp, 1e-04)
+  
+    # sacrifice fly double plays
+  
+    expect_lt(results[i,]$sf_dp_exp, 1e-04)
+  
+    # sacrifice hits
+  
+    expect_lt(results[i,]$sh_exp, 1e-04)
+  
+    # strikeout double plays
+  
+    expect_lt(results[i,]$so_dp_exp, 1e-04)
+  
+    # triple plays
+  
+    expect_lt(results[i,]$tp_exp, 1e-04)
+  }
 }
 
 validate_empty_bases <- function(results) {
@@ -44,36 +46,37 @@ validate_empty_bases <- function(results) {
   print('validating empty bases')
   # fielder's choice
 
-  expect_lt(results[1,]$fc_exp, 1e-03)
+  for (i in 1:dim(results)[1]) {  #iterate over each results
+    expect_lt(results[i,]$fc_exp, 1e-03)
 
   # fielder's choice out
 
-  expect_lt(results[1,]$fc_o_exp, 1e-03)
-
-  # force out
-
-  expect_lt(results[1,]$fo, 1e-04)
-
-  # sacrifice flies, overall
-
-  expect_lt(results[1,]$sf_exp, 1e-04)
-
-  # sacrifice fly double plays
-
-  expect_lt(results[1,]$sf_dp_exp, 1e-04)
-
-  # sacrifice hits
-
-  expect_lt(results[1,]$sh_exp, 1e-04)
-
-  # strikeout double plays
-
-  expect_lt(results[1,]$so_dp_exp, 1e-04)
-
-  # triple plays
-
-  expect_lt(results[1,]$tp_exp, 1e-04)
-
+      expect_lt(results[i,]$fc_o_exp, 1e-03)
+    
+      # force out
+    
+      expect_lt(results[i,]$fo, 1e-04)
+    
+      # sacrifice flies, overall
+    
+      expect_lt(results[i,]$sf_exp, 1e-04)
+    
+      # sacrifice fly double plays
+    
+      expect_lt(results[i,]$sf_dp_exp, 1e-04)
+    
+      # sacrifice hits
+    
+      expect_lt(results[i,]$sh_exp, 1e-04)
+    
+      # strikeout double plays
+    
+      expect_lt(results[i,]$so_dp_exp, 1e-04)
+    
+      # triple plays
+    
+      expect_lt(results[i,]$tp_exp, 1e-04)
+  }
 }
 
 
@@ -162,5 +165,49 @@ test_that("bases_empty", {
   results <- sing$GetPaSim(matchup = matchups) 
   validate_empty_bases(results)
 })
+
+test_that("intentional walk", {
+  print("validating intional walks")
+  candidate_batters <- sing$GetPlayers(name='Mike Trout')
+  candidate_pitchers <- sing$GetPlayers(name='Aroldis Chapman')
+  atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Angel Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Angels')[[1]])
+
+  #man on 3rd with one out should have some intentional walk probability late in the game
+  state = State$new(outs=1, on_3b=TRUE, inning=9, pitch_number=20)
+  matchups <- list()
+  for (b in candidate_batters)
+  {
+    for (p in candidate_pitchers)
+    {
+     matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, date = '2015-05-19', atmosphere = atmosphere, state = state))
+     }
+  }
+  results <- sing$GetPaSim(matchup = matchups) 
+  expect_gt(results[1,]$ibb_exp, .01)
+})
+
+
+test_that("dp and sf and force out", {
+  print("validating dp and sf")
+  batter <- sing$GetPlayers(name='Mike Trout')[[1]]
+  pitcher <- sing$GetPlayers(name='Aroldis Chapman')[[1]]
+  atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Angel Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Angels')[[1]])
+  
+  #test gdp and force out
+  browser()
+  matchup <- Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = State$new(outs=1, on_1b=TRUE, pitch_number=20))
+  results <- sing$GetPaSim(matchup = list(matchups))
+  expect_gt(results[1,]$gdp_exp, .01)
+  expect_gt(results[1,]$fo_exp, .01)   #force out
+  
+  #test sf
+  matchup <- Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = State$new(outs=1, on_3b=TRUE, pitch_number=20))
+  results <- sing$GetPaSim(matchup = list(matchups))
+  expect_gt(results[1,]$sf_exp, .01)
+})
+
+
+
+
 
 

@@ -140,6 +140,12 @@ Options:
 	--inning=INNING
 		inning. Default 1
 
+	--bottom
+		true if bottom of the inning. Default FALSE 
+
+--bottom
+		true if top half of the inning. Default FALSE
+
 	--outs=OUTS
 		outs. Default 0
 

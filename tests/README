@@ -1,1 +1,1 @@
-To run these tests, start R and run devtools::test() from the testthat (i.e. the current) directory
+To run these tests, start R and run devtools::test() from the current directory. 
