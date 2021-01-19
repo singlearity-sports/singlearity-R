@@ -7,9 +7,10 @@ suppressPackageStartupMessages(library(optparse))
 
 # Assumes user is in the overarching "Singlearity" directory 
 
-sing <- GetSinglearityClient()
-
 source(file = "markov/markov.R")
+source(file = "R/get_singlearity_client.R")
+
+sing <- GetSinglearityClient()
 
 # Creates list of command-line argument options
 
@@ -60,50 +61,78 @@ opt <- parse_args(opt_parser)
 
 start <- opt$start
 
-# Lineup
-
-lineup <- as.list(strsplit(opt$batters, ",")[[1]])
-for (i in 1:length(lineup)) {
-  lineup[[i]] = trimws(lineup[[i]])
-}
-
-# Pitcher
-
-pitcher <- opt$pitcher
-
-# Stadium
-
-stad <- opt$venue
-
-# Home team
-
-home <- opt$hometeam
-
-# Temperature
-
-temp <- opt$temperature
-
-# Date
-
-date <- opt$date
-
-# Creating list of above inputs
-
-info <- list(lineup, pitcher, stad, home, temp, date)
-
 # Creates new state
 
 state <- State$new(inning = opt$inning, outs = opt$outs, top = opt$away,
                    on_1b = opt$on1b, on_2b = opt$on2b, on_3b = opt$on3b,
                    pitch_number = opt$pitchnumber)
 
-# Grabs transition matrix setting
+# Runs generic Markov if standard option is true
 
 standard <- opt$standard
 
-# Calling Markov function
-
-results <- markov_half_inning(start, info, state, standard)
-results[[1]]
-results[[2]]
-
+if (standard) {
+  
+  # Gets transition matrices for standard option
+  
+  matrices <- markov_matrices(standard = TRUE)
+  
+  # Gets Markov chain results, using given matrices
+  
+  results <- markov_half_inning(idx = start, 
+                                tmatrix_list = matrices, 
+                                state = state)
+  print(results[[1]])
+  results[[2]]
+  
+} else {
+  
+  # Runs Singlearity Markov chain otherwise
+  
+  # Lineup
+  
+  lineup <- as.list(strsplit(opt$batters, ",")[[1]])
+  for (i in 1:length(lineup)) {
+    lineup[[i]] = trimws(lineup[[i]])
+  }
+  
+  # Pitcher
+  
+  pitcher <- opt$pitcher
+  
+  # Stadium
+  
+  stad <- opt$venue
+  
+  # Home team
+  
+  home <- opt$hometeam
+  
+  # Temperature
+  
+  temp <- opt$temperature
+  
+  # Date
+  
+  date <- opt$date
+  
+  # Gets transition matrices
+  
+  matrices <- markov_matrices(standard = FALSE,
+                              state = state,
+                              lineup = lineup,
+                              pitcher = pitcher,
+                              stadium = stad,
+                              home = home,
+                              temp = temp,
+                              date = date)
+  
+  # Gets Markov chain results, using given matrices
+  
+  results <- markov_half_inning(idx = start, 
+                                tmatrix_list = matrices, 
+                                state = state)
+  print(results[[1]])
+  results[[2]]
+  
+}
