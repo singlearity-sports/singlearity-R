@@ -179,11 +179,11 @@ test_that("intentional walk", {
   {
     for (p in candidate_pitchers)
     {
-     matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, date = '2015-05-19', atmosphere = atmosphere, state = state))
+     matchups <- append(matchups, Matchup$new(batter = b, pitcher = p, atmosphere = atmosphere, state = state))
      }
   }
   results <- sing$GetPaSim(matchup = matchups) 
-  expect_gt(results[1,]$ibb_exp, .01)
+  expect_gt(results[1,]$ibb_exp, .05)
 })
 
 
