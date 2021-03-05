@@ -194,14 +194,13 @@ test_that("dp and sf and force out", {
   atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Angel Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Angels')[[1]])
   
   #test gdp and force out
-  browser()
-  matchup <- Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = State$new(outs=1, on_1b=TRUE, pitch_number=20))
+  matchups <- Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = State$new(outs=1, on_1b=TRUE, pitch_number=20))
   results <- sing$GetPaSim(matchup = list(matchups))
   expect_gt(results[1,]$gdp_exp, .01)
   expect_gt(results[1,]$fo_exp, .01)   #force out
   
   #test sf
-  matchup <- Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = State$new(outs=1, on_3b=TRUE, pitch_number=20))
+  matchups <- Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = State$new(outs=1, on_3b=TRUE, pitch_number=20))
   results <- sing$GetPaSim(matchup = list(matchups))
   expect_gt(results[1,]$sf_exp, .01)
 })
