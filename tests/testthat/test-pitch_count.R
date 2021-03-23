@@ -14,7 +14,7 @@ test_that("test-pitch_count", {
   atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Yankee Stadium')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Yankees')[[1]])
 
   state_t1 <- State$new(pitch_number = 0, inning = 1)
-  state_t7 <- State$new(pitch_number = 100, inning = 7)
+  state_t7 <- State$new(pitch_number = 100, inning = 6)
 
   matchups <- c(Matchup$new(batter = batter, pitcher = pitcher, atmosphere = atmosphere, state = state_t1))
   results_t1 <- sing$GetPaSim(matchup = matchups) 

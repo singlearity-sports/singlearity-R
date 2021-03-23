@@ -139,7 +139,6 @@ test_that("two_outs_comprehensive", {
     }
   }
   results <- sing$GetPaSim(matchup = matchups) 
-  #print(results)
   validate_two_outs(results)
 })
 
