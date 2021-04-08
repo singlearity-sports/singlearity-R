@@ -4,6 +4,8 @@
 
 Singlearity is a web-based service for baseball analytics.  It uses machine learning to make predictions based on a wide range of player and historical data.    These predictions can be used to make more effective pre-game and in-game strategy decisions and to provide for more accurate game simulations.
 
+This work was presented at the [2021 SABR Conference](https://sabr.org/analytics/presentations) and the [2021 Sloan Sports Analytics Conference](https://www.sloansportsconference.com/)
+
 You can view the technical description of Singlearity at [Baseball Prospectus](https://www.baseballprospectus.com/news/article/59993/singlearity-using-a-neural-network-to-predict-the-outcome-of-plate-appearances/)
 
 # Description
@@ -15,6 +17,10 @@ There are two closely related types of predictions that can be obtained:
 * **Batter vs. Pitcher predictions (Singlearity-PA)**.   To generate batter vs. pitcher predictions, you must programmatically generate a **Matchup**.  A Matchup consists of a **Batter**, a **Pitcher**, the **Atmosphere** (containing things such as game location and weather), and a **State** (containing things such as score, inning, and baserunners).  A list of matchups can be submitted to the Singlearity server and it will return predicted outcomes for each matchup.  Visit the [singlearity.com](https://www.singlearity.com) website to see a GUI version of Singlearity-PA.
 
 * **Game simulation predictions (Singlearity-Game)**.   Game simulations work by running hundreds or thousands of Monte Carlo simulations using the plate appearance outcomes provided by Singlearity-PA.   To generate game simulations, you must programmatically create home and away **Lineup**s.   The simulation may optionally include a starting **State** at some intermediate point in the game.  This would allow you to simulate, for instance, a tie game in the bottom of the 9th inning game with multiple runners on base, the #5 hitter coming to bat with a tired pitcher on the mound.   Currently, Singlearity-Game only supports simulating to the end of the half-inning.  With a very short piece of code, you could, for instance, simulate how successful each of ten different relievers would be in holding a lead in the bottom of the 10th inning when facing a given portion of the lineup.    It is possible to accurately simulate hundreds or thousands of games in just a few seconds. 
+
+# Markov Chain Based Simulations
+
+There is open source code included here for generating run expectancies using Singlearity-PA projections in combination with Markov chains.   See [https://github.com/singlearity-sports/singlearity-R/tree/master/markov](here) for a full description.
 
 # Requirements
 
