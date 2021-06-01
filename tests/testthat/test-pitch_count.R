@@ -28,5 +28,6 @@ test_that("test-pitch_count", {
   expect_gt(results_t7$obp_exp, results_t1$obp_exp)
   expect_gt(results_t7$slg_exp, results_t1$slg_exp)
   expect_gt(results_t7$woba_exp, results_t1$woba_exp)
+  expect_lt(results_t7$so_exp, results_t1$so_exp)
   
 })

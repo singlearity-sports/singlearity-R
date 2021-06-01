@@ -52,20 +52,20 @@ test_that("basic_values", {
   expect_gt(results[1,]$so_exp, 1e-03)
   expect_lt(results[1,]$so_exp, 3/4)
   
-  # We expect HR rate to be significantly lower: .01% to 33%
+  # We expect HR rate to be significantly lower: 1% to 15%
   
-  expect_gt(results[1,]$hr_exp, 1e-04)
+  expect_gt(results[1,]$hr_exp, .01)
   expect_lt(results[1,]$hr_exp, 1/3)
   
 
-
   # We also expect there to be essentially no chance of an intentional walk
   
-  expect_lt(results[1,]$ibb_exp, 1e-04)
+  expect_lt(results[1,]$ibb_exp, .01)
   
   # A triple play is possible, so we test that probability is not equal to zero
   
-  expect_false(isTRUE(all.equal(results[1,]$tp_exp, 0)))
+  expect_gt(results[1,]$tp_exp, 1e-7)
+  expect_lt(results[1,]$tp_exp, .01)
 
 
 })
