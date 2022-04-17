@@ -13,31 +13,31 @@ validate_two_outs <- function(results) {
   # double plays, overall
   for (i in 1:dim(results)[1]) {  #iterate over each results
     
-    expect_lt(results[i,]$dp_exp, 1e-04)
+    expect_lt(results[i,]$dp_exp, 1e-03)
   
     # double plays, ground balls
   
-    expect_lt(results[i,]$gdp_exp, 1e-04)
+    expect_lt(results[i,]$gdp_exp, 1e-03)
   
     # sacrifice flies, overall
   
-    expect_lt(results[i,]$sf_exp, 1e-04)
+    expect_lt(results[i,]$sf_exp, 1e-03)
   
     # sacrifice fly double plays
   
-    expect_lt(results[i,]$sf_dp_exp, 1e-04)
+    expect_lt(results[i,]$sf_dp_exp, 1e-03)
   
     # sacrifice hits
   
-    expect_lt(results[i,]$sh_exp, 1e-04)
+    expect_lt(results[i,]$sh_exp, 1e-03)
   
     # strikeout double plays
   
-    expect_lt(results[i,]$so_dp_exp, 1e-04)
+    expect_lt(results[i,]$so_dp_exp, 1e-03)
   
     # triple plays
   
-    expect_lt(results[i,]$tp_exp, 1e-04)
+    expect_lt(results[i,]$tp_exp, 1e-03)
   }
 }
 
