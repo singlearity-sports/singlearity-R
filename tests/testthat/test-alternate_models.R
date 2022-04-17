@@ -11,7 +11,7 @@ test_that("alternate_models", {
   batters_list <- c('Mookie Betts', 'Mike Trout')
   pitchers_list <- c('Clayton Kershaw', 'Gerrit Cole')
   state <- State$new()
-  atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Progressive Field')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Indians')[[1]])
+  atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Progressive Field')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Cleveland')[[1]])
 
   matchups <- list()
   candidate_batters <- list()
