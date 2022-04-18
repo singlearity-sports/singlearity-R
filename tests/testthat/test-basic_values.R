@@ -14,7 +14,7 @@ test_that("basic_values", {
   state <- State$new(on_1b = TRUE, on_2b = TRUE, on_3b = TRUE,
                      pitch_number = 20, inning = 1, outs = 0,
                      top = TRUE, bat_score = 0, fld_score = 0)
-  atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Progressive Field')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Indians')[[1]])
+  atmosphere = Atmosphere$new(venue = sing$GetVenues(stadium.name = 'Progressive Field')[[1]], temperature = 70, home_team = sing$GetTeams(name = 'Cleveland')[[1]])
 
   matchups <- list()
   candidate_batters <- list()
